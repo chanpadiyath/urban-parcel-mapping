@@ -1,3 +1,4 @@
+import { memo } from "react";
 import {
   ENCROACHMENT_COLORS,
   INFO_SECTIONS,
@@ -39,7 +40,7 @@ function formatRow(key: keyof ParcelProperties, raw: unknown): string {
   return String(raw);
 }
 
-export default function InfoPanel({ parcel, onClose }: InfoPanelProps) {
+function InfoPanel({ parcel, onClose }: InfoPanelProps) {
   if (!parcel) return null;
   const m = deriveMetrics(parcel);
   const encColor = ENCROACHMENT_COLORS[m.encroachmentLevel];
@@ -153,3 +154,5 @@ function Row({ label, value, sub }: { label: string; value: string; sub?: string
     </div>
   );
 }
+
+export default memo(InfoPanel);

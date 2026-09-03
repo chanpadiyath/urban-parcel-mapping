@@ -1,3 +1,4 @@
+import { memo } from "react";
 import {
   AREA_THRESHOLDS,
   ENCROACHMENT_COLORS,
@@ -45,7 +46,7 @@ interface ControlPanelProps {
   activeFilterCount: number;
 }
 
-export default function ControlPanel({
+function ControlPanel({
   stats,
   query,
   onQueryChange,
@@ -211,3 +212,5 @@ function Stat({ label, value, sub }: { label: string; value: string; sub?: strin
     </div>
   );
 }
+
+export default memo(ControlPanel);
