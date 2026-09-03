@@ -8,26 +8,29 @@ import ControlPanel, {
 import {
   EMPTY_FILTERS,
   FILTER_FIELDS,
+  type BuildingCollection,
   type FilterKey,
   type Filters,
   type ParcelCollection,
   type ParcelFeature,
   type ParcelProperties,
   type StyleMode,
+  type ViewMode,
 } from "./types";
 import { deriveMetrics } from "./metrics";
 import { geometryBounds, type BBox } from "./geo";
 
-const DATA_URL = `${import.meta.env.BASE_URL}demo-parcels.geojson`;
+const PARCELS_URL = `${import.meta.env.BASE_URL}demo-parcels.geojson`;
+const BUILDINGS_URL = `${import.meta.env.BASE_URL}demo-buildings.geojson`;
 const MAX_RESULTS = 12;
 const SEVERE = new Set(["Moderate", "Significant", "Critical"]);
 
 type LoadState =
   | { status: "loading" }
   | { status: "error"; message: string }
-  | { status: "ready"; data: ParcelCollection };
+  | { status: "ready"; data: ParcelCollection; buildings: BuildingCollection };
 
-function isParcelCollection(value: unknown): value is ParcelCollection {
+function isFeatureCollection(value: unknown): value is { features: unknown[] } {
   if (typeof value !== "object" || value === null) return false;
   const v = value as Record<string, unknown>;
   return v.type === "FeatureCollection" && Array.isArray(v.features);
@@ -50,6 +53,7 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
   const [styleMode, setStyleMode] = useState<StyleMode>("land_use");
+  const [viewMode, setViewMode] = useState<ViewMode>("3d");
   const [focusBounds, setFocusBounds] = useState<BBox | null>(null);
   const [view, setView] = useState<ViewState | null>(null);
 
@@ -58,16 +62,26 @@ export default function App() {
     const controller = new AbortController();
     setLoad({ status: "loading" });
 
-    fetch(DATA_URL, { signal: controller.signal })
-      .then(async (res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${DATA_URL}`);
+    const grab = (url: string) =>
+      fetch(url, { signal: controller.signal }).then(async (res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${url}`);
         const json: unknown = await res.json();
-        if (!isParcelCollection(json)) throw new Error("Response is not a GeoJSON FeatureCollection");
-        if (json.features.length === 0) throw new Error("Parcel dataset contains no features");
+        if (!isFeatureCollection(json)) throw new Error(`${url} is not a GeoJSON FeatureCollection`);
         return json;
-      })
-      .then((data) => {
-        if (!cancelled) setLoad({ status: "ready", data });
+      });
+
+    Promise.all([grab(PARCELS_URL), grab(BUILDINGS_URL)])
+      .then(([parcels, buildings]) => {
+        if ((parcels as { features: unknown[] }).features.length === 0) {
+          throw new Error("Parcel dataset contains no features");
+        }
+        if (!cancelled) {
+          setLoad({
+            status: "ready",
+            data: parcels as ParcelCollection,
+            buildings: buildings as BuildingCollection,
+          });
+        }
       })
       .catch((err: unknown) => {
         if (cancelled || controller.signal.aborted) return;
@@ -124,16 +138,24 @@ export default function App() {
   );
 
   const stats: OverviewStats = useMemo(() => {
-    const n = visible.length;
-    if (n === 0) {
-      return { visible: 0, total: features.length, avgBuiltUpPct: null, encroachedShare: null, vacantShare: null };
-    }
+    const base: OverviewStats = {
+      visible: visible.length,
+      total: features.length,
+      totalAreaSqm: 0,
+      builtUpAreaSqm: 0,
+      avgBuiltUpPct: null,
+      encroachedShare: null,
+      vacantShare: null,
+    };
+    if (visible.length === 0) return base;
     let builtSum = 0;
     let builtCount = 0;
     let encroached = 0;
     let vacant = 0;
     for (const f of visible) {
       const m = deriveMetrics(f.properties);
+      base.totalAreaSqm += m.parcelArea;
+      base.builtUpAreaSqm += m.builtUpArea;
       if (m.builtUpPct !== null) {
         builtSum += m.builtUpPct;
         builtCount += 1;
@@ -141,13 +163,10 @@ export default function App() {
       if (SEVERE.has(m.encroachmentLevel)) encroached += 1;
       if (f.properties.development_status === "Vacant") vacant += 1;
     }
-    return {
-      visible: n,
-      total: features.length,
-      avgBuiltUpPct: builtCount ? builtSum / builtCount : null,
-      encroachedShare: (encroached / n) * 100,
-      vacantShare: (vacant / n) * 100,
-    };
+    base.avgBuiltUpPct = builtCount ? builtSum / builtCount : null;
+    base.encroachedShare = (encroached / visible.length) * 100;
+    base.vacantShare = (vacant / visible.length) * 100;
+    return base;
   }, [visible, features.length]);
 
   const results = useMemo<SearchHit[]>(() => {
@@ -158,19 +177,13 @@ export default function App() {
       const p = f.properties;
       const hay = `${p.parcel_id} ${p.address ?? ""} ${p.locality ?? ""}`.toLowerCase();
       if (hay.includes(q)) {
-        hits.push({
-          parcel_id: p.parcel_id,
-          address: p.address,
-          locality: p.locality,
-          land_use: p.land_use,
-        });
+        hits.push({ parcel_id: p.parcel_id, address: p.address, locality: p.locality, land_use: p.land_use });
         if (hits.length >= MAX_RESULTS) break;
       }
     }
     return hits;
   }, [query, visible]);
 
-  // Drop selection if a filter change hides it.
   useEffect(() => {
     if (selected && !passesFilters(selected, filters)) setSelected(null);
   }, [filters, selected]);
@@ -216,8 +229,8 @@ export default function App() {
                 ? "Loading dataset…"
                 : "Dataset error"}
           </span>
-          <span className="app__badge" title="This map does not show real parcels.">
-            DEMO DATA
+          <span className="app__badge" title="Synthetic data; building heights estimated.">
+            PROTOTYPE DATASET
           </span>
         </div>
       </header>
@@ -235,6 +248,8 @@ export default function App() {
               selectedId={selectedId}
               styleMode={styleMode}
               onStyleModeChange={setStyleMode}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
               filters={filters}
               filterOptions={filterOptions}
               onFilterChange={handleFilterChange}
@@ -268,8 +283,10 @@ export default function App() {
           {load.status === "ready" && (
             <MapView
               parcels={load.data}
+              buildings={load.buildings}
               selectedId={selectedId}
               styleMode={styleMode}
+              viewMode={viewMode}
               visibleIds={visibleIds}
               focusBounds={focusBounds}
               rightPanelOpen={infoOpen}
@@ -292,10 +309,13 @@ export default function App() {
         </span>
         <span className="app__status-item">z {view ? view.zoom.toFixed(1) : "—"}</span>
         <span className="app__status-item">
+          tilt {view ? `${Math.round(view.pitch)}°` : "—"} · {viewMode.toUpperCase()}
+        </span>
+        <span className="app__status-item">
           {load.status === "ready" ? `${visible.length}/${features.length} parcels` : "—"}
         </span>
         <span className="app__status-sep">·</span>
-        <span className="app__status-item">Prototype dataset — synthetic, not cadastral</span>
+        <span className="app__status-item">Prototype dataset — synthetic; buildings estimated</span>
         <span className="app__status-item app__status-item--push">© OpenStreetMap contributors</span>
       </footer>
     </div>

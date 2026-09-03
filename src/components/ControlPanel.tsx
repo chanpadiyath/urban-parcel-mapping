@@ -7,8 +7,9 @@ import {
   type FilterKey,
   type Filters,
   type StyleMode,
+  type ViewMode,
 } from "../types";
-import { fmtPct } from "../metrics";
+import { fmtArea, fmtPct } from "../metrics";
 
 export interface SearchHit {
   parcel_id: string;
@@ -20,6 +21,8 @@ export interface SearchHit {
 export interface OverviewStats {
   visible: number;
   total: number;
+  totalAreaSqm: number;
+  builtUpAreaSqm: number;
   avgBuiltUpPct: number | null;
   encroachedShare: number | null;
   vacantShare: number | null;
@@ -37,6 +40,8 @@ interface ControlPanelProps {
 
   styleMode: StyleMode;
   onStyleModeChange: (m: StyleMode) => void;
+  viewMode: ViewMode;
+  onViewModeChange: (m: ViewMode) => void;
 
   filters: Filters;
   filterOptions: Record<FilterKey, string[]>;
@@ -56,6 +61,8 @@ function ControlPanel({
   selectedId,
   styleMode,
   onStyleModeChange,
+  viewMode,
+  onViewModeChange,
   filters,
   filterOptions,
   onFilterChange,
@@ -74,10 +81,38 @@ function ControlPanel({
         <h2 className="panel__heading">Overview</h2>
         <div className="stats">
           <Stat label="Parcels shown" value={`${stats.visible}`} sub={`of ${stats.total}`} />
+          <Stat label="Total area" value={fmtArea(stats.totalAreaSqm)} />
+          <Stat label="Built-up area" value={fmtArea(stats.builtUpAreaSqm)} />
           <Stat label="Avg built-up" value={fmtPct(stats.avgBuiltUpPct)} />
           <Stat label="Encroached" value={fmtPct(stats.encroachedShare)} sub="mod.+ severity" />
           <Stat label="Vacant" value={fmtPct(stats.vacantShare)} />
         </div>
+      </section>
+
+      <section className="panel__section">
+        <h2 className="panel__heading">View</h2>
+        <div className="segmented" role="group" aria-label="Map view mode">
+          <button
+            type="button"
+            className={"segmented__btn" + (viewMode === "2d" ? " is-active" : "")}
+            onClick={() => onViewModeChange("2d")}
+          >
+            2D
+          </button>
+          <button
+            type="button"
+            className={"segmented__btn" + (viewMode === "3d" ? " is-active" : "")}
+            onClick={() => onViewModeChange("3d")}
+          >
+            3D
+          </button>
+        </div>
+        {viewMode === "3d" && (
+          <p className="legend__note">
+            Right-drag or Ctrl-drag to rotate &amp; tilt. Buildings are estimated
+            (floors × 3.2 m).
+          </p>
+        )}
       </section>
 
       <section className="panel__section">
@@ -194,6 +229,12 @@ function ControlPanel({
               {name}
             </li>
           ))}
+          {viewMode === "3d" && (
+            <li className="legend__item">
+              <span className="legend__swatch" style={{ background: "#cfd4da" }} aria-hidden="true" />
+              Building (estimated extrusion)
+            </li>
+          )}
         </ul>
         <p className="legend__note">Selected: dark outline · Hover: mid outline</p>
       </section>

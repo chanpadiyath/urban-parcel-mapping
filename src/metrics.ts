@@ -1,5 +1,8 @@
 import { ENCROACHMENT_LEVELS, type EncroachmentLevel, type ParcelProperties } from "./types";
 
+/** Assumed storey height for estimated building extrusion (metres). */
+export const FLOOR_HEIGHT_M = 3.2;
+
 /** Everything the UI derives from a parcel's raw areas. All guarded against
  *  zero / missing / non-finite inputs so a bad record never crashes a render. */
 export interface ParcelMetrics {
@@ -13,6 +16,8 @@ export interface ParcelMetrics {
   encroachmentPct: number | null;
   groundCoveragePct: number | null;
   far: number | null;
+  estBuildingHeightM: number | null;
+  floors: number;
   encroachmentLevel: EncroachmentLevel;
 }
 
@@ -57,6 +62,7 @@ export function deriveMetrics(props: ParcelProperties): ParcelMetrics {
   const groundCoveragePct = pct(builtUpArea, parcelArea);
   const far =
     parcelArea > 0 && floors > 0 ? round2((builtUpArea * floors) / parcelArea) : null;
+  const estBuildingHeightM = floors > 0 ? round2(floors * FLOOR_HEIGHT_M) : null;
 
   return {
     parcelArea,
@@ -69,6 +75,8 @@ export function deriveMetrics(props: ParcelProperties): ParcelMetrics {
     encroachmentPct,
     groundCoveragePct,
     far,
+    estBuildingHeightM,
+    floors,
     encroachmentLevel,
   };
 }

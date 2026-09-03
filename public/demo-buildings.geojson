@@ -1,0 +1,3914 @@
+{
+  "type": "FeatureCollection",
+  "name": "demo-buildings",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "metadata": {
+    "generated_by": "scripts/generate-demo-parcels.mjs",
+    "generated_at": "2026-09-03T20:50:22.583Z",
+    "note": "SYNTHETIC DEMO DATA — not real parcels",
+    "disclaimer": "Building footprints and heights are ESTIMATED demo geometry (centred rectangle sized to the built-up area; height = floors x 3.2 m). They are not surveyed structures.",
+    "feature_count": 95
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "UPI-0002",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67855751374117,
+              45.519854082295055
+            ],
+            [
+              -122.6781095514092,
+              45.519854082295055
+            ],
+            [
+              -122.6781095514092,
+              45.520324861291016
+            ],
+            [
+              -122.67855751374117,
+              45.520324861291016
+            ],
+            [
+              -122.67855751374117,
+              45.519854082295055
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0002",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1827,
+        "land_use": "Commercial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0003",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6778234792466,
+              45.5199248216328
+            ],
+            [
+              -122.67751013871793,
+              45.5199248216328
+            ],
+            [
+              -122.67751013871793,
+              45.52025412195327
+            ],
+            [
+              -122.6778234792466,
+              45.52025412195327
+            ],
+            [
+              -122.6778234792466,
+              45.5199248216328
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0003",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 893.9,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0004",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67718508320625,
+              45.51989505123516
+            ],
+            [
+              -122.67681508757248,
+              45.51989505123516
+            ],
+            [
+              -122.67681508757248,
+              45.52028389235091
+            ],
+            [
+              -122.67718508320625,
+              45.52028389235091
+            ],
+            [
+              -122.67718508320625,
+              45.51989505123516
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0004",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 1246.4,
+        "land_use": "Commercial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0005",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6765004248008,
+              45.51991389954546
+            ],
+            [
+              -122.6761662987921,
+              45.51991389954546
+            ],
+            [
+              -122.6761662987921,
+              45.52026504404061
+            ],
+            [
+              -122.6765004248008,
+              45.52026504404061
+            ],
+            [
+              -122.6765004248008,
+              45.51991389954546
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0005",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 1016.4,
+        "land_use": "Institutional",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0006",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67584157827258,
+              45.51990562126772
+            ],
+            [
+              -122.67549169813452,
+              45.51990562126772
+            ],
+            [
+              -122.67549169813452,
+              45.52027332231835
+            ],
+            [
+              -122.67584157827258,
+              45.52027332231835
+            ],
+            [
+              -122.67584157827258,
+              45.51990562126772
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0006",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1114.5,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0007",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67516376755329,
+              45.51991727310954
+            ],
+            [
+              -122.67483606166802,
+              45.51991727310954
+            ],
+            [
+              -122.67483606166802,
+              45.52026167047653
+            ],
+            [
+              -122.67516376755329,
+              45.52026167047653
+            ],
+            [
+              -122.67516376755329,
+              45.51991727310954
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0007",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 977.7,
+        "land_use": "Industrial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0008",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67448437008628,
+              45.51993059251901
+            ],
+            [
+              -122.6741820119492,
+              45.51993059251901
+            ],
+            [
+              -122.6741820119492,
+              45.52024835106706
+            ],
+            [
+              -122.67448437008628,
+              45.52024835106706
+            ],
+            [
+              -122.67448437008628,
+              45.51993059251901
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0008",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 832.3,
+        "land_use": "Institutional",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0009",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67384928709477,
+              45.51989734032459
+            ],
+            [
+              -122.6734836477549,
+              45.51989734032459
+            ],
+            [
+              -122.6734836477549,
+              45.52028160326148
+            ],
+            [
+              -122.67384928709477,
+              45.52028160326148
+            ],
+            [
+              -122.67384928709477,
+              45.51989734032459
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0009",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 1217.2,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0010",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67321285618924,
+              45.519865504699276
+            ],
+            [
+              -122.67278663147461,
+              45.519865504699276
+            ],
+            [
+              -122.67278663147461,
+              45.520313438886795
+            ],
+            [
+              -122.67321285618924,
+              45.520313438886795
+            ],
+            [
+              -122.67321285618924,
+              45.519865504699276
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0010",
+        "floors": 5,
+        "height_m": 16,
+        "height_basis": "Estimated: 5 floors x 3.2 m",
+        "footprint_area_sqm": 1654,
+        "land_use": "Commercial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0011",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67919359121092,
+              45.52053307340413
+            ],
+            [
+              -122.67880692112524,
+              45.52053307340413
+            ],
+            [
+              -122.67880692112524,
+              45.52093943827392
+            ],
+            [
+              -122.67919359121092,
+              45.52093943827392
+            ],
+            [
+              -122.67919359121092,
+              45.52053307340413
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0011",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 1361.2,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0012",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67852090884166,
+              45.520539335686806
+            ],
+            [
+              -122.6781461563087,
+              45.520539335686806
+            ],
+            [
+              -122.6781461563087,
+              45.520933175991246
+            ],
+            [
+              -122.67852090884166,
+              45.520933175991246
+            ],
+            [
+              -122.67852090884166,
+              45.520539335686806
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0012",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1278.6,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0013",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67784324823383,
+              45.520550829771324
+            ],
+            [
+              -122.6774903697307,
+              45.520550829771324
+            ],
+            [
+              -122.6774903697307,
+              45.52092168190673
+            ],
+            [
+              -122.67784324823383,
+              45.52092168190673
+            ],
+            [
+              -122.67784324823383,
+              45.520550829771324
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0013",
+        "floors": 5,
+        "height_m": 16,
+        "height_basis": "Estimated: 5 floors x 3.2 m",
+        "footprint_area_sqm": 1133.7,
+        "land_use": "Commercial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0014",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67721738030033,
+              45.52050789315602
+            ],
+            [
+              -122.6767827904784,
+              45.52050789315602
+            ],
+            [
+              -122.6767827904784,
+              45.52096461852203
+            ],
+            [
+              -122.67721738030033,
+              45.52096461852203
+            ],
+            [
+              -122.67721738030033,
+              45.52050789315602
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0014",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 1719.5,
+        "land_use": "Commercial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0015",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67652481767193,
+              45.52053504828563
+            ],
+            [
+              -122.67614190592097,
+              45.52053504828563
+            ],
+            [
+              -122.67614190592097,
+              45.52093746339242
+            ],
+            [
+              -122.67652481767193,
+              45.52093746339242
+            ],
+            [
+              -122.67652481767193,
+              45.52053504828563
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0015",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 1334.9,
+        "land_use": "Mixed Use",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0016",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6758543241311,
+              45.520539010253366
+            ],
+            [
+              -122.67547895227601,
+              45.520539010253366
+            ],
+            [
+              -122.67547895227601,
+              45.520933501424686
+            ],
+            [
+              -122.6758543241311,
+              45.520933501424686
+            ],
+            [
+              -122.6758543241311,
+              45.520539010253366
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0016",
+        "floors": 4,
+        "height_m": 12.8,
+        "height_basis": "Estimated: 4 floors x 3.2 m",
+        "footprint_area_sqm": 1282.8,
+        "land_use": "Commercial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0017",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67517292371826,
+              45.52055443462738
+            ],
+            [
+              -122.67482690550304,
+              45.52055443462738
+            ],
+            [
+              -122.67482690550304,
+              45.52091807705067
+            ],
+            [
+              -122.67517292371826,
+              45.52091807705067
+            ],
+            [
+              -122.67517292371826,
+              45.52055443462738
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0017",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 1090.1,
+        "land_use": "Mixed Use",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0018",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67453892993946,
+              45.52052003774192
+            ],
+            [
+              -122.67412745209602,
+              45.52052003774192
+            ],
+            [
+              -122.67412745209602,
+              45.520952473936134
+            ],
+            [
+              -122.67453892993946,
+              45.520952473936134
+            ],
+            [
+              -122.67453892993946,
+              45.52052003774192
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0018",
+        "floors": 4,
+        "height_m": 12.8,
+        "height_basis": "Estimated: 4 floors x 3.2 m",
+        "footprint_area_sqm": 1541.5,
+        "land_use": "Mixed Use",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0019",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6738459187773,
+              45.520547664251055
+            ],
+            [
+              -122.67348701607237,
+              45.520547664251055
+            ],
+            [
+              -122.67348701607237,
+              45.520924847427
+            ],
+            [
+              -122.6738459187773,
+              45.520924847427
+            ],
+            [
+              -122.6738459187773,
+              45.520547664251055
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0019",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1172.7,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0021",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67915444681542,
+              45.521220995639425
+            ],
+            [
+              -122.67884606552074,
+              45.521220995639425
+            ],
+            [
+              -122.67884606552074,
+              45.52154508413062
+            ],
+            [
+              -122.67915444681542,
+              45.52154508413062
+            ],
+            [
+              -122.67915444681542,
+              45.521220995639425
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0021",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 865.8,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0022",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67855203001649,
+              45.5211534134216
+            ],
+            [
+              -122.67811503513387,
+              45.5211534134216
+            ],
+            [
+              -122.67811503513387,
+              45.521612666348446
+            ],
+            [
+              -122.67855203001649,
+              45.521612666348446
+            ],
+            [
+              -122.67855203001649,
+              45.5211534134216
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0022",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 1738.6,
+        "land_use": "Mixed Use",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0023",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67783972454257,
+              45.521201316985454
+            ],
+            [
+              -122.67749389342197,
+              45.521201316985454
+            ],
+            [
+              -122.67749389342197,
+              45.52156476278459
+            ],
+            [
+              -122.67783972454257,
+              45.52156476278459
+            ],
+            [
+              -122.67783972454257,
+              45.521201316985454
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0023",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1088.9,
+        "land_use": "Mixed Use",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0024",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67716827825481,
+              45.521206280227645
+            ],
+            [
+              -122.67683189252392,
+              45.521206280227645
+            ],
+            [
+              -122.67683189252392,
+              45.5215597995424
+            ],
+            [
+              -122.67716827825481,
+              45.5215597995424
+            ],
+            [
+              -122.67716827825481,
+              45.521206280227645
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0024",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1030.2,
+        "land_use": "Institutional",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0025",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6765119518515,
+              45.52119535346409
+            ],
+            [
+              -122.67615477174141,
+              45.52119535346409
+            ],
+            [
+              -122.67615477174141,
+              45.52157072630596
+            ],
+            [
+              -122.6765119518515,
+              45.52157072630596
+            ],
+            [
+              -122.6765119518515,
+              45.52119535346409
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0025",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 1161.5,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0026",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67584607665083,
+              45.52119446185956
+            ],
+            [
+              -122.67548719975628,
+              45.52119446185956
+            ],
+            [
+              -122.67548719975628,
+              45.52157161791049
+            ],
+            [
+              -122.67584607665083,
+              45.52157161791049
+            ],
+            [
+              -122.67584607665083,
+              45.52119446185956
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0026",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 1172.6,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0027",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67520832124103,
+              45.521164018201276
+            ],
+            [
+              -122.67479150798027,
+              45.521164018201276
+            ],
+            [
+              -122.67479150798027,
+              45.52160206156877
+            ],
+            [
+              -122.67520832124103,
+              45.52160206156877
+            ],
+            [
+              -122.67520832124103,
+              45.521164018201276
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0027",
+        "floors": 4,
+        "height_m": 12.8,
+        "height_basis": "Estimated: 4 floors x 3.2 m",
+        "footprint_area_sqm": 1581.7,
+        "land_use": "Commercial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0028",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67451540824597,
+              45.52119154154324
+            ],
+            [
+              -122.67415097378951,
+              45.52119154154324
+            ],
+            [
+              -122.67415097378951,
+              45.52157453822681
+            ],
+            [
+              -122.67451540824597,
+              45.52157453822681
+            ],
+            [
+              -122.67451540824597,
+              45.52119154154324
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0028",
+        "floors": 4,
+        "height_m": 12.8,
+        "height_basis": "Estimated: 4 floors x 3.2 m",
+        "footprint_area_sqm": 1209.2,
+        "land_use": "Mixed Use",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0029",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67388480167867,
+              45.521153584920924
+            ],
+            [
+              -122.67344813317101,
+              45.521153584920924
+            ],
+            [
+              -122.67344813317101,
+              45.52161249484912
+            ],
+            [
+              -122.67388480167867,
+              45.52161249484912
+            ],
+            [
+              -122.67388480167867,
+              45.521153584920924
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0029",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1736,
+        "land_use": "Mixed Use",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0030",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67319464904146,
+              45.52117820730803
+            ],
+            [
+              -122.67280483862238,
+              45.52117820730803
+            ],
+            [
+              -122.67280483862238,
+              45.521587872462014
+            ],
+            [
+              -122.67319464904146,
+              45.521587872462014
+            ],
+            [
+              -122.67319464904146,
+              45.52117820730803
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0030",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1383.4,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0031",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67917094454336,
+              45.52185044165666
+            ],
+            [
+              -122.6788295677928,
+              45.52185044165666
+            ],
+            [
+              -122.6788295677928,
+              45.52220920620537
+            ],
+            [
+              -122.67917094454336,
+              45.52220920620537
+            ],
+            [
+              -122.67917094454336,
+              45.52185044165666
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0031",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 1061,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0032",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67853901969664,
+              45.52181387045943
+            ],
+            [
+              -122.67812804545372,
+              45.52181387045943
+            ],
+            [
+              -122.67812804545372,
+              45.522245777402595
+            ],
+            [
+              -122.67853901969664,
+              45.522245777402595
+            ],
+            [
+              -122.67853901969664,
+              45.52181387045943
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0032",
+        "floors": 4,
+        "height_m": 12.8,
+        "height_basis": "Estimated: 4 floors x 3.2 m",
+        "footprint_area_sqm": 1537.7,
+        "land_use": "Commercial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0033",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67786503703013,
+              45.52182149926912
+            ],
+            [
+              -122.6774685809344,
+              45.52182149926912
+            ],
+            [
+              -122.6774685809344,
+              45.522238148592905
+            ],
+            [
+              -122.67786503703013,
+              45.522238148592905
+            ],
+            [
+              -122.67786503703013,
+              45.52182149926912
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0033",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1431,
+        "land_use": "Industrial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0034",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67719879206025,
+              45.52182099626776
+            ],
+            [
+              -122.67680137871848,
+              45.52182099626776
+            ],
+            [
+              -122.67680137871848,
+              45.522238651594265
+            ],
+            [
+              -122.67719879206025,
+              45.522238651594265
+            ],
+            [
+              -122.67719879206025,
+              45.52182099626776
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0034",
+        "floors": 4,
+        "height_m": 12.8,
+        "height_basis": "Estimated: 4 floors x 3.2 m",
+        "footprint_area_sqm": 1437.9,
+        "land_use": "Mixed Use",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0035",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67648684923826,
+              45.52186851870825
+            ],
+            [
+              -122.67617987435464,
+              45.52186851870825
+            ],
+            [
+              -122.67617987435464,
+              45.522191129153775
+            ],
+            [
+              -122.67648684923826,
+              45.522191129153775
+            ],
+            [
+              -122.67648684923826,
+              45.52186851870825
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0035",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 857.9,
+        "land_use": "Institutional",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0036",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67582474716397,
+              45.52186366179566
+            ],
+            [
+              -122.67550852924313,
+              45.52186366179566
+            ],
+            [
+              -122.67550852924313,
+              45.522195986066365
+            ],
+            [
+              -122.67582474716397,
+              45.522195986066365
+            ],
+            [
+              -122.67582474716397,
+              45.52186366179566
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0036",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 910.4,
+        "land_use": "Institutional",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0037",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6750630801988,
+              45.521963441045564
+            ],
+            [
+              -122.6749367490225,
+              45.521963441045564
+            ],
+            [
+              -122.6749367490225,
+              45.522096206816464
+            ],
+            [
+              -122.6750630801988,
+              45.522096206816464
+            ],
+            [
+              -122.6750630801988,
+              45.521963441045564
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0037",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 145.3,
+        "land_use": "Recreational",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0038",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6745079740714,
+              45.52184613841854
+            ],
+            [
+              -122.67415840796407,
+              45.52184613841854
+            ],
+            [
+              -122.67415840796407,
+              45.52221350944349
+            ],
+            [
+              -122.6745079740714,
+              45.52221350944349
+            ],
+            [
+              -122.6745079740714,
+              45.52184613841854
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0038",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1112.5,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0039",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6738702035178,
+              45.52181571067542
+            ],
+            [
+              -122.67346273133188,
+              45.52181571067542
+            ],
+            [
+              -122.67346273133188,
+              45.52224393718661
+            ],
+            [
+              -122.6738702035178,
+              45.52224393718661
+            ],
+            [
+              -122.6738702035178,
+              45.52181571067542
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0039",
+        "floors": 4,
+        "height_m": 12.8,
+        "height_basis": "Estimated: 4 floors x 3.2 m",
+        "footprint_area_sqm": 1511.6,
+        "land_use": "Mixed Use",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0040",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67316113898174,
+              45.52186020822639
+            ],
+            [
+              -122.6728383486821,
+              45.52186020822639
+            ],
+            [
+              -122.6728383486821,
+              45.522199439635635
+            ],
+            [
+              -122.67316113898174,
+              45.522199439635635
+            ],
+            [
+              -122.67316113898174,
+              45.52186020822639
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0040",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 948.6,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0041",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67917791573582,
+              45.52248989943713
+            ],
+            [
+              -122.67882259660034,
+              45.52248989943713
+            ],
+            [
+              -122.67882259660034,
+              45.52286331651689
+            ],
+            [
+              -122.67917791573582,
+              45.52286331651689
+            ],
+            [
+              -122.67917791573582,
+              45.52248989943713
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0041",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 1149.4,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0042",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67854720546548,
+              45.5224520517999
+            ],
+            [
+              -122.67811985968488,
+              45.5224520517999
+            ],
+            [
+              -122.67811985968488,
+              45.52290116415412
+            ],
+            [
+              -122.67854720546548,
+              45.52290116415412
+            ],
+            [
+              -122.67854720546548,
+              45.5224520517999
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0042",
+        "floors": 4,
+        "height_m": 12.8,
+        "height_basis": "Estimated: 4 floors x 3.2 m",
+        "footprint_area_sqm": 1662.6,
+        "land_use": "Mixed Use",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0043",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67775688782595,
+              45.52258194102722
+            ],
+            [
+              -122.67757673013858,
+              45.52258194102722
+            ],
+            [
+              -122.67757673013858,
+              45.522771274926804
+            ],
+            [
+              -122.67775688782595,
+              45.522771274926804
+            ],
+            [
+              -122.67775688782595,
+              45.52258194102722
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0043",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 295.5,
+        "land_use": "Public/Semi-Public",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0044",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67713351496118,
+              45.52253638225853
+            ],
+            [
+              -122.67686665581755,
+              45.52253638225853
+            ],
+            [
+              -122.67686665581755,
+              45.522816833695494
+            ],
+            [
+              -122.67713351496118,
+              45.522816833695494
+            ],
+            [
+              -122.67713351496118,
+              45.52253638225853
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0044",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 648.3,
+        "land_use": "Public/Semi-Public",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0045",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67650841782964,
+              45.522492635580996
+            ],
+            [
+              -122.67615830576327,
+              45.522492635580996
+            ],
+            [
+              -122.67615830576327,
+              45.52286058037303
+            ],
+            [
+              -122.67650841782964,
+              45.52286058037303
+            ],
+            [
+              -122.67650841782964,
+              45.522492635580996
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0045",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1116,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0046",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67585440942156,
+              45.52247927275667
+            ],
+            [
+              -122.67547886698554,
+              45.52247927275667
+            ],
+            [
+              -122.67547886698554,
+              45.522873943197354
+            ],
+            [
+              -122.67585440942156,
+              45.522873943197354
+            ],
+            [
+              -122.67585440942156,
+              45.52247927275667
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0046",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1284,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0047",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67517055477732,
+              45.522497276366735
+            ],
+            [
+              -122.67482927444398,
+              45.522497276366735
+            ],
+            [
+              -122.67482927444398,
+              45.52285593958729
+            ],
+            [
+              -122.67517055477732,
+              45.52285593958729
+            ],
+            [
+              -122.67517055477732,
+              45.522497276366735
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0047",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1060.4,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0048",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67452260115023,
+              45.52247755036516
+            ],
+            [
+              -122.67414378088525,
+              45.52247755036516
+            ],
+            [
+              -122.67414378088525,
+              45.52287566558886
+            ],
+            [
+              -122.67452260115023,
+              45.52287566558886
+            ],
+            [
+              -122.67452260115023,
+              45.52247755036516
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0048",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 1306.5,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0049",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67373663730817,
+              45.52260286403725
+            ],
+            [
+              -122.67359629754151,
+              45.52260286403725
+            ],
+            [
+              -122.67359629754151,
+              45.52275035191677
+            ],
+            [
+              -122.67373663730817,
+              45.52275035191677
+            ],
+            [
+              -122.67373663730817,
+              45.52260286403725
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0049",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 179.3,
+        "land_use": "Recreational",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0050",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6731751457162,
+              45.5224922721142
+            ],
+            [
+              -122.67282434194765,
+              45.5224922721142
+            ],
+            [
+              -122.67282434194765,
+              45.522860943839824
+            ],
+            [
+              -122.6731751457162,
+              45.522860943839824
+            ],
+            [
+              -122.6731751457162,
+              45.5224922721142
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0050",
+        "floors": 4,
+        "height_m": 12.8,
+        "height_basis": "Estimated: 4 floors x 3.2 m",
+        "footprint_area_sqm": 1120.4,
+        "land_use": "Commercial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0051",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67920952788297,
+              45.52310346119224
+            ],
+            [
+              -122.67879098445319,
+              45.52310346119224
+            ],
+            [
+              -122.67879098445319,
+              45.52354332285376
+            ],
+            [
+              -122.67920952788297,
+              45.52354332285376
+            ],
+            [
+              -122.67920952788297,
+              45.52310346119224
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0051",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1594.8,
+        "land_use": "Industrial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0052",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67851929703244,
+              45.52312816577644
+            ],
+            [
+              -122.67814776811792,
+              45.52312816577644
+            ],
+            [
+              -122.67814776811792,
+              45.52351861826956
+            ],
+            [
+              -122.67851929703244,
+              45.52351861826956
+            ],
+            [
+              -122.67851929703244,
+              45.52312816577644
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0052",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1256.6,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0053",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6778524479822,
+              45.52312829762385
+            ],
+            [
+              -122.67748116998233,
+              45.52312829762385
+            ],
+            [
+              -122.67748116998233,
+              45.523518486422155
+            ],
+            [
+              -122.6778524479822,
+              45.523518486422155
+            ],
+            [
+              -122.6778524479822,
+              45.52312829762385
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0053",
+        "floors": 4,
+        "height_m": 12.8,
+        "height_basis": "Estimated: 4 floors x 3.2 m",
+        "footprint_area_sqm": 1255,
+        "land_use": "Mixed Use",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0054",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67718905353445,
+              45.5231247989109
+            ],
+            [
+              -122.67681111724428,
+              45.5231247989109
+            ],
+            [
+              -122.67681111724428,
+              45.523521985135105
+            ],
+            [
+              -122.67718905353445,
+              45.523521985135105
+            ],
+            [
+              -122.67718905353445,
+              45.5231247989109
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0054",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 1300.4,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0055",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6764380067198,
+              45.523213417079944
+            ],
+            [
+              -122.6762287168731,
+              45.523213417079944
+            ],
+            [
+              -122.6762287168731,
+              45.52343336696606
+            ],
+            [
+              -122.6764380067198,
+              45.52343336696606
+            ],
+            [
+              -122.6764380067198,
+              45.523213417079944
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0055",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 398.8,
+        "land_use": "Public/Semi-Public",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0056",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67583859756928,
+              45.52314267402114
+            ],
+            [
+              -122.67549467883782,
+              45.52314267402114
+            ],
+            [
+              -122.67549467883782,
+              45.52350411002487
+            ],
+            [
+              -122.67583859756928,
+              45.52350411002487
+            ],
+            [
+              -122.67583859756928,
+              45.52314267402114
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0056",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 1076.8,
+        "land_use": "Industrial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0057",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67519220584673,
+              45.52312130656047
+            ],
+            [
+              -122.67480762337458,
+              45.52312130656047
+            ],
+            [
+              -122.67480762337458,
+              45.523525477485535
+            ],
+            [
+              -122.67519220584673,
+              45.523525477485535
+            ],
+            [
+              -122.67519220584673,
+              45.52312130656047
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0057",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1346.5,
+        "land_use": "Mixed Use",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0058",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67452038493184,
+              45.52312666351116
+            ],
+            [
+              -122.67414599710364,
+              45.52312666351116
+            ],
+            [
+              -122.67414599710364,
+              45.52352012053485
+            ],
+            [
+              -122.67452038493184,
+              45.52352012053485
+            ],
+            [
+              -122.67452038493184,
+              45.52312666351116
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0058",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 1276.1,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0059",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6738782347336,
+              45.52310083848695
+            ],
+            [
+              -122.67345470011607,
+              45.52310083848695
+            ],
+            [
+              -122.67345470011607,
+              45.52354594555906
+            ],
+            [
+              -122.6738782347336,
+              45.52354594555906
+            ],
+            [
+              -122.6738782347336,
+              45.52310083848695
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0059",
+        "floors": 4,
+        "height_m": 12.8,
+        "height_basis": "Estimated: 4 floors x 3.2 m",
+        "footprint_area_sqm": 1633.1,
+        "land_use": "Mixed Use",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0060",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67314829850757,
+              45.52316727081357
+            ],
+            [
+              -122.67285118915628,
+              45.52316727081357
+            ],
+            [
+              -122.67285118915628,
+              45.52347951323243
+            ],
+            [
+              -122.67314829850757,
+              45.52347951323243
+            ],
+            [
+              -122.67314829850757,
+              45.52316727081357
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0060",
+        "floors": 4,
+        "height_m": 12.8,
+        "height_basis": "Estimated: 4 floors x 3.2 m",
+        "footprint_area_sqm": 803.6,
+        "land_use": "Institutional",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0061",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67919967762852,
+              45.52376059720886
+            ],
+            [
+              -122.67880083470764,
+              45.52376059720886
+            ],
+            [
+              -122.67880083470764,
+              45.524179754929136
+            ],
+            [
+              -122.67919967762852,
+              45.524179754929136
+            ],
+            [
+              -122.67919967762852,
+              45.52376059720886
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0061",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1448.2,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0062",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67851319081925,
+              45.52378136705155
+            ],
+            [
+              -122.67815387433112,
+              45.52378136705155
+            ],
+            [
+              -122.67815387433112,
+              45.52415898508645
+            ],
+            [
+              -122.67851319081925,
+              45.52415898508645
+            ],
+            [
+              -122.67851319081925,
+              45.52378136705155
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0062",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1175.4,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0063",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67786065399353,
+              45.523766457690776
+            ],
+            [
+              -122.677472963971,
+              45.523766457690776
+            ],
+            [
+              -122.677472963971,
+              45.52417389444722
+            ],
+            [
+              -122.67786065399353,
+              45.52417389444722
+            ],
+            [
+              -122.67786065399353,
+              45.523766457690776
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0063",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1368.3,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0064",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67714796310418,
+              45.523814766300966
+            ],
+            [
+              -122.67685220767456,
+              45.523814766300966
+            ],
+            [
+              -122.67685220767456,
+              45.524125585837034
+            ],
+            [
+              -122.67714796310418,
+              45.524125585837034
+            ],
+            [
+              -122.67714796310418,
+              45.523814766300966
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0064",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 796.3,
+        "land_use": "Public/Semi-Public",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0066",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67586209744061,
+              45.52376476124545
+            ],
+            [
+              -122.67547117896649,
+              45.52376476124545
+            ],
+            [
+              -122.67547117896649,
+              45.52417559089255
+            ],
+            [
+              -122.67586209744061,
+              45.52417559089255
+            ],
+            [
+              -122.67586209744061,
+              45.52376476124545
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0066",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1391.2,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0067",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67506241913688,
+              45.52390448791623
+            ],
+            [
+              -122.67493741008442,
+              45.52390448791623
+            ],
+            [
+              -122.67493741008442,
+              45.52403586422177
+            ],
+            [
+              -122.67506241913688,
+              45.52403586422177
+            ],
+            [
+              -122.67506241913688,
+              45.52390448791623
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0067",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 142.3,
+        "land_use": "Recreational",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0068",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67438878950841,
+              45.52391174570611
+            ],
+            [
+              -122.67427759252706,
+              45.52391174570611
+            ],
+            [
+              -122.67427759252706,
+              45.52402860643189
+            ],
+            [
+              -122.67438878950841,
+              45.52402860643189
+            ],
+            [
+              -122.67438878950841,
+              45.52391174570611
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0068",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 112.6,
+        "land_use": "Recreational",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0069",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67384750862314,
+              45.52377991365746
+            ],
+            [
+              -122.67348542622653,
+              45.52377991365746
+            ],
+            [
+              -122.67348542622653,
+              45.52416043848054
+            ],
+            [
+              -122.67384750862314,
+              45.52416043848054
+            ],
+            [
+              -122.67384750862314,
+              45.52377991365746
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0069",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1193.5,
+        "land_use": "Industrial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0070",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67315792542566,
+              45.5238039376008
+            ],
+            [
+              -122.67284156223819,
+              45.5238039376008
+            ],
+            [
+              -122.67284156223819,
+              45.524136414537196
+            ],
+            [
+              -122.67315792542566,
+              45.524136414537196
+            ],
+            [
+              -122.67315792542566,
+              45.5238039376008
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0070",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 911.2,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0071",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67917496210893,
+              45.52443335564302
+            ],
+            [
+              -122.67882555022723,
+              45.52443335564302
+            ],
+            [
+              -122.67882555022723,
+              45.52480056458696
+            ],
+            [
+              -122.67917496210893,
+              45.52480056458696
+            ],
+            [
+              -122.67917496210893,
+              45.52443335564302
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0071",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1111.5,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0072",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67851885348175,
+              45.524422200011074
+            ],
+            [
+              -122.67814821166861,
+              45.524422200011074
+            ],
+            [
+              -122.67814821166861,
+              45.524811720218906
+            ],
+            [
+              -122.67851885348175,
+              45.524811720218906
+            ],
+            [
+              -122.67851885348175,
+              45.524422200011074
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0072",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1250.6,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0073",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6778191106074,
+              45.52445690110769
+            ],
+            [
+              -122.67751450735713,
+              45.52445690110769
+            ],
+            [
+              -122.67751450735713,
+              45.52477701912229
+            ],
+            [
+              -122.6778191106074,
+              45.52477701912229
+            ],
+            [
+              -122.6778191106074,
+              45.52445690110769
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0073",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 844.7,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0074",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67718065372846,
+              45.524427194647416
+            ],
+            [
+              -122.67681951705028,
+              45.524427194647416
+            ],
+            [
+              -122.67681951705028,
+              45.524806725582565
+            ],
+            [
+              -122.67718065372846,
+              45.524806725582565
+            ],
+            [
+              -122.67718065372846,
+              45.524427194647416
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0074",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1187.3,
+        "land_use": "Industrial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0075",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6764731127669,
+              45.524470091021634
+            ],
+            [
+              -122.676193610826,
+              45.524470091021634
+            ],
+            [
+              -122.676193610826,
+              45.52476382920835
+            ],
+            [
+              -122.6764731127669,
+              45.52476382920835
+            ],
+            [
+              -122.6764731127669,
+              45.524470091021634
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0075",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 711.2,
+        "land_use": "Institutional",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0076",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67575420169236,
+              45.52452493663802
+            ],
+            [
+              -122.67557907471475,
+              45.52452493663802
+            ],
+            [
+              -122.67557907471475,
+              45.524708983591964
+            ],
+            [
+              -122.67575420169236,
+              45.524708983591964
+            ],
+            [
+              -122.67575420169236,
+              45.52452493663802
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0076",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 279.2,
+        "land_use": "Recreational",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0077",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67520260789165,
+              45.52440394278629
+            ],
+            [
+              -122.67479722132965,
+              45.52440394278629
+            ],
+            [
+              -122.67479722132965,
+              45.52482997744369
+            ],
+            [
+              -122.67520260789165,
+              45.52482997744369
+            ],
+            [
+              -122.67520260789165,
+              45.52440394278629
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0077",
+        "floors": 6,
+        "height_m": 19.2,
+        "height_basis": "Estimated: 6 floors x 3.2 m",
+        "footprint_area_sqm": 1496.1,
+        "land_use": "Commercial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0078",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67453861982355,
+              45.52440106792933
+            ],
+            [
+              -122.67412776221192,
+              45.52440106792933
+            ],
+            [
+              -122.67412776221192,
+              45.52483285230065
+            ],
+            [
+              -122.67453861982355,
+              45.52483285230065
+            ],
+            [
+              -122.67453861982355,
+              45.52440106792933
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0078",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1536.7,
+        "land_use": "Mixed Use",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0079",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67384164853422,
+              45.52443285627209
+            ],
+            [
+              -122.67349128631545,
+              45.52443285627209
+            ],
+            [
+              -122.67349128631545,
+              45.52480106395789
+            ],
+            [
+              -122.67384164853422,
+              45.52480106395789
+            ],
+            [
+              -122.67384164853422,
+              45.52443285627209
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0079",
+        "floors": 4,
+        "height_m": 12.8,
+        "height_basis": "Estimated: 4 floors x 3.2 m",
+        "footprint_area_sqm": 1117.5,
+        "land_use": "Commercial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0080",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67316525485502,
+              45.5244430188978
+            ],
+            [
+              -122.67283423280882,
+              45.5244430188978
+            ],
+            [
+              -122.67283423280882,
+              45.52479090133218
+            ],
+            [
+              -122.67316525485502,
+              45.52479090133218
+            ],
+            [
+              -122.67316525485502,
+              45.5244430188978
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0080",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 997.5,
+        "land_use": "Institutional",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0081",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67920458419049,
+              45.52504900882641
+            ],
+            [
+              -122.67879592814568,
+              45.52504900882641
+            ],
+            [
+              -122.67879592814568,
+              45.525478479495554
+            ],
+            [
+              -122.67920458419049,
+              45.525478479495554
+            ],
+            [
+              -122.67920458419049,
+              45.52504900882641
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0081",
+        "floors": 4,
+        "height_m": 12.8,
+        "height_basis": "Estimated: 4 floors x 3.2 m",
+        "footprint_area_sqm": 1520.3,
+        "land_use": "Commercial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0082",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67855060575968,
+              45.52503561449793
+            ],
+            [
+              -122.67811645939068,
+              45.52503561449793
+            ],
+            [
+              -122.67811645939068,
+              45.52549187382403
+            ],
+            [
+              -122.67855060575968,
+              45.52549187382403
+            ],
+            [
+              -122.67855060575968,
+              45.52503561449793
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0082",
+        "floors": 6,
+        "height_m": 19.2,
+        "height_basis": "Estimated: 6 floors x 3.2 m",
+        "footprint_area_sqm": 1715.9,
+        "land_use": "Commercial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0083",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67787682887706,
+              45.525043027042265
+            ],
+            [
+              -122.67745678908747,
+              45.525043027042265
+            ],
+            [
+              -122.67745678908747,
+              45.525484461279696
+            ],
+            [
+              -122.67787682887706,
+              45.525484461279696
+            ],
+            [
+              -122.67787682887706,
+              45.525043027042265
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0083",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1606.2,
+        "land_use": "Commercial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0085",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67651893660882,
+              45.52506871721875
+            ],
+            [
+              -122.67614778698409,
+              45.52506871721875
+            ],
+            [
+              -122.67614778698409,
+              45.52545877110321
+            ],
+            [
+              -122.67651893660882,
+              45.52545877110321
+            ],
+            [
+              -122.67651893660882,
+              45.52506871721875
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0085",
+        "floors": 5,
+        "height_m": 16,
+        "height_basis": "Estimated: 5 floors x 3.2 m",
+        "footprint_area_sqm": 1254,
+        "land_use": "Commercial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0086",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67586409000195,
+              45.52505623528631
+            ],
+            [
+              -122.67546918640515,
+              45.52505623528631
+            ],
+            [
+              -122.67546918640515,
+              45.525471253035654
+            ],
+            [
+              -122.67586409000195,
+              45.525471253035654
+            ],
+            [
+              -122.67586409000195,
+              45.52505623528631
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0086",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 1419.7,
+        "land_use": "Mixed Use",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0087",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6751404321104,
+              45.525116069495674
+            ],
+            [
+              -122.67485939711091,
+              45.525116069495674
+            ],
+            [
+              -122.67485939711091,
+              45.52541141882629
+            ],
+            [
+              -122.6751404321104,
+              45.52541141882629
+            ],
+            [
+              -122.6751404321104,
+              45.525116069495674
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0087",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 719,
+        "land_use": "Institutional",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0088",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67448839477645,
+              45.52510063520186
+            ],
+            [
+              -122.67417798725903,
+              45.52510063520186
+            ],
+            [
+              -122.67417798725903,
+              45.5254268531201
+            ],
+            [
+              -122.67448839477645,
+              45.5254268531201
+            ],
+            [
+              -122.67448839477645,
+              45.52510063520186
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0088",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 877.2,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0089",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67385850742828,
+              45.52506192272745
+            ],
+            [
+              -122.6734744274214,
+              45.52506192272745
+            ],
+            [
+              -122.6734744274214,
+              45.52546556559451
+            ],
+            [
+              -122.67385850742828,
+              45.52546556559451
+            ],
+            [
+              -122.67385850742828,
+              45.52506192272745
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0089",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1342.9,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0090",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67314528541918,
+              45.5251107895096
+            ],
+            [
+              -122.67285420224466,
+              45.5251107895096
+            ],
+            [
+              -122.67285420224466,
+              45.525416698812364
+            ],
+            [
+              -122.67314528541918,
+              45.525416698812364
+            ],
+            [
+              -122.67314528541918,
+              45.5251107895096
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0090",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 771.3,
+        "land_use": "Institutional",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0091",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67916476256485,
+              45.5257376427861
+            ],
+            [
+              -122.67883574977131,
+              45.5257376427861
+            ],
+            [
+              -122.67883574977131,
+              45.52608341362786
+            ],
+            [
+              -122.67916476256485,
+              45.52608341362786
+            ],
+            [
+              -122.67916476256485,
+              45.5257376427861
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0091",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 985.4,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0092",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67851411023719,
+              45.52572075294163
+            ],
+            [
+              -122.67815295491317,
+              45.52572075294163
+            ],
+            [
+              -122.67815295491317,
+              45.526100303472326
+            ],
+            [
+              -122.67851411023719,
+              45.526100303472326
+            ],
+            [
+              -122.67851411023719,
+              45.52572075294163
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0092",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 1187.4,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0093",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67773036998906,
+              45.5258437297625
+            ],
+            [
+              -122.67760324797547,
+              45.5258437297625
+            ],
+            [
+              -122.67760324797547,
+              45.52597732665146
+            ],
+            [
+              -122.67773036998906,
+              45.52597732665146
+            ],
+            [
+              -122.67773036998906,
+              45.5258437297625
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0093",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 147.1,
+        "land_use": "Recreational",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0094",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67707700231362,
+              45.52582969357025
+            ],
+            [
+              -122.67692316846511,
+              45.52582969357025
+            ],
+            [
+              -122.67692316846511,
+              45.525991362843705
+            ],
+            [
+              -122.67707700231362,
+              45.525991362843705
+            ],
+            [
+              -122.67707700231362,
+              45.52582969357025
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0094",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 215.4,
+        "land_use": "Recreational",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0095",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67648840800213,
+              45.52574758482574
+            ],
+            [
+              -122.67617831559078,
+              45.52574758482574
+            ],
+            [
+              -122.67617831559078,
+              45.52607347158822
+            ],
+            [
+              -122.67648840800213,
+              45.52607347158822
+            ],
+            [
+              -122.67648840800213,
+              45.52574758482574
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0095",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 875.4,
+        "land_use": "Institutional",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0096",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67586647410981,
+              45.5257005137915
+            ],
+            [
+              -122.6754668022973,
+              45.5257005137915
+            ],
+            [
+              -122.6754668022973,
+              45.52612054262246
+            ],
+            [
+              -122.67586647410981,
+              45.52612054262246
+            ],
+            [
+              -122.67586647410981,
+              45.5257005137915
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0096",
+        "floors": 2,
+        "height_m": 6.4,
+        "height_basis": "Estimated: 2 floors x 3.2 m",
+        "footprint_area_sqm": 1454.2,
+        "land_use": "Residential",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0097",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67518460585622,
+              45.52571642983543
+            ],
+            [
+              -122.67481522336509,
+              45.52571642983543
+            ],
+            [
+              -122.67481522336509,
+              45.52610462657853
+            ],
+            [
+              -122.67518460585622,
+              45.52610462657853
+            ],
+            [
+              -122.67518460585622,
+              45.52571642983543
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0097",
+        "floors": 3,
+        "height_m": 9.6,
+        "height_basis": "Estimated: 3 floors x 3.2 m",
+        "footprint_area_sqm": 1242.1,
+        "land_use": "Mixed Use",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0098",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6745080758138,
+              45.52572673576993
+            ],
+            [
+              -122.67415830622167,
+              45.52572673576993
+            ],
+            [
+              -122.67415830622167,
+              45.52609432064403
+            ],
+            [
+              -122.6745080758138,
+              45.52609432064403
+            ],
+            [
+              -122.6745080758138,
+              45.52572673576993
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0098",
+        "floors": 1,
+        "height_m": 3.2,
+        "height_basis": "Estimated: 1 floors x 3.2 m",
+        "footprint_area_sqm": 1113.7,
+        "land_use": "Industrial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UPI-0099",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67386833668353,
+              45.52569837687161
+            ],
+            [
+              -122.67346459816615,
+              45.52569837687161
+            ],
+            [
+              -122.67346459816615,
+              45.52612267954235
+            ],
+            [
+              -122.67386833668353,
+              45.52612267954235
+            ],
+            [
+              -122.67386833668353,
+              45.52569837687161
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "UPI-0099",
+        "floors": 5,
+        "height_m": 16,
+        "height_basis": "Estimated: 5 floors x 3.2 m",
+        "footprint_area_sqm": 1483.9,
+        "land_use": "Commercial",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels",
+        "data_quality": "DEMO DATA"
+      }
+    }
+  ]
+}

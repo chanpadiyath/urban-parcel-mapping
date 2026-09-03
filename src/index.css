@@ -258,11 +258,13 @@ body {
 .stat {
   background: var(--surface-2);
   padding: 8px 10px;
+  min-width: 0;
 }
 .stat__value {
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--accent-deep);
+  overflow-wrap: anywhere;
 }
 .stat__label {
   font-size: 10px;

@@ -121,6 +121,11 @@ function InfoPanel({ parcel, onClose }: InfoPanelProps) {
           <Row label="Ground coverage" value={fmtPct(m.groundCoveragePct)} />
           <Row label="Floor area ratio (FAR)" value={m.far === null ? "—" : m.far.toFixed(2)} sub="estimated" />
           <Row label="Built-up ratio" value={fmtPct(m.builtUpPct)} />
+          <Row
+            label="Building height"
+            value={m.estBuildingHeightM === null ? "—" : `${m.estBuildingHeightM.toFixed(1)} m`}
+            sub={m.floors > 0 ? `${m.floors} floors × 3.2 m · estimated` : undefined}
+          />
         </dl>
       </section>
 

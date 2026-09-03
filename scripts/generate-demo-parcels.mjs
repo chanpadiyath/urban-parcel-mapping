@@ -25,6 +25,10 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_PATH = resolve(__dirname, "../public/demo-parcels.geojson");
+const BUILDINGS_OUT_PATH = resolve(__dirname, "../public/demo-buildings.geojson");
+
+// Assumed storey height for the ESTIMATED building extrusion (metres).
+const FLOOR_HEIGHT_M = 3.2;
 
 // --- Configuration ---------------------------------------------------
 const CENTER_LNG = -122.676;
@@ -193,6 +197,7 @@ const originLng = CENTER_LNG - dLng((COLS * stepXm - ROAD_GAP_M) / 2, CENTER_LAT
 const originLat = CENTER_LAT - dLat((ROWS * stepYm - ROAD_GAP_M) / 2);
 
 const features = [];
+const buildings = [];
 let seq = 0;
 
 for (let row = 0; row < ROWS; row++) {
@@ -281,6 +286,40 @@ for (let row = 0; row < ROWS; row++) {
         data_quality: DATA_QUALITY,
       },
     });
+
+    // --- ESTIMATED building footprint (developed parcels only) ---------
+    // A centred rectangle whose plan area ~= built-up area, extruded to
+    // floors x assumed storey height. This is a demo estimate, not a survey.
+    if (floors > 0 && builtUp > 50) {
+      const footprintArea = Math.min(builtUp, 0.85 * areaSqM);
+      const s = Math.sqrt(footprintArea / areaSqM); // linear scale factor
+      const cx = (west + east) / 2;
+      const cy = (south + north) / 2;
+      const hw = ((east - west) / 2) * s;
+      const hh = ((north - south) / 2) * s;
+      const fp = [
+        [cx - hw, cy - hh],
+        [cx + hw, cy - hh],
+        [cx + hw, cy + hh],
+        [cx - hw, cy + hh],
+        [cx - hw, cy - hh],
+      ];
+      buildings.push({
+        type: "Feature",
+        id: parcelId,
+        geometry: { type: "Polygon", coordinates: [fp] },
+        properties: {
+          parcel_id: parcelId,
+          floors,
+          height_m: round1(floors * FLOOR_HEIGHT_M),
+          height_basis: `Estimated: ${floors} floors x ${FLOOR_HEIGHT_M} m`,
+          footprint_area_sqm: round1(footprintArea),
+          land_use: landUse,
+          data_source: DATA_SOURCE,
+          data_quality: DATA_QUALITY,
+        },
+      });
+    }
   }
 }
 
@@ -302,7 +341,28 @@ const collection = {
   features,
 };
 
+const buildingCollection = {
+  type: "FeatureCollection",
+  name: "demo-buildings",
+  crs: {
+    type: "name",
+    properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
+  },
+  metadata: {
+    generated_by: "scripts/generate-demo-parcels.mjs",
+    generated_at: new Date().toISOString(),
+    note: DATA_SOURCE,
+    disclaimer:
+      "Building footprints and heights are ESTIMATED demo geometry (centred rectangle sized to the built-up area; height = floors x 3.2 m). They are not surveyed structures.",
+    feature_count: buildings.length,
+  },
+  features: buildings,
+};
+
 mkdirSync(dirname(OUT_PATH), { recursive: true });
 writeFileSync(OUT_PATH, JSON.stringify(collection, null, 2) + "\n", "utf8");
+writeFileSync(BUILDINGS_OUT_PATH, JSON.stringify(buildingCollection, null, 2) + "\n", "utf8");
 const kb = (JSON.stringify(collection).length / 1024).toFixed(1);
+const bkb = (JSON.stringify(buildingCollection).length / 1024).toFixed(1);
 console.log(`Wrote ${features.length} synthetic parcels -> ${OUT_PATH} (${kb} KB)`);
+console.log(`Wrote ${buildings.length} estimated buildings -> ${BUILDINGS_OUT_PATH} (${bkb} KB)`);

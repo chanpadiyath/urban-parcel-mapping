@@ -41,6 +41,21 @@ export type ParcelGeometry = Polygon | MultiPolygon;
 export type ParcelFeature = Feature<ParcelGeometry, ParcelProperties>;
 export type ParcelCollection = FeatureCollection<ParcelGeometry, ParcelProperties>;
 
+/** Estimated building footprints (demo geometry — not surveyed). */
+export interface BuildingProperties {
+  parcel_id: string;
+  floors?: number;
+  height_m?: number;
+  height_basis?: string;
+  footprint_area_sqm?: number;
+  land_use?: string;
+  [key: string]: string | number | boolean | null | undefined;
+}
+export type BuildingCollection = FeatureCollection<Polygon, BuildingProperties>;
+
+/** Map camera mode. */
+export type ViewMode = "2d" | "3d";
+
 /** Land-use categories and their map / legend colours (muted, print-safe). */
 export const LAND_USE_COLORS: Record<string, string> = {
   Residential: "#8fb3d9",
