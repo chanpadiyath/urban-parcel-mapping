@@ -14,18 +14,37 @@ source behind them.
 - **CRS:** EPSG:4326 / CRS84 (`[longitude, latitude]`).
 - **Areas:** computed geodesically in the generator (spherical-excess formula
   on a mean-radius sphere), not from raw degrees. Reported in m² and acres.
-- **Attributes per feature:** `parcel_id`, `address`, `land_use`, `zoning`,
-  `status`, `area_sqm`, `area_acres`, `assessed_value_usd`, `owner`,
-  `jurisdiction`, `last_updated`, `data_source`. Every feature carries
-  `data_source = "SYNTHETIC DEMO DATA — not real parcels"`.
+- **Stored attributes per feature:** `parcel_id`, `address`, `locality`,
+  `ward`, `zone`, `land_use`, `zoning_code`, `zoning_description`,
+  `permitted_use`, `development_status`, `area_sqm`, `area_acres`,
+  `built_up_area_sqm`, `floors`, `row_area_sqm`, `encroachment_area_sqm`,
+  `encroachment_status`, `assessed_value_usd`, `owner`, `jurisdiction`,
+  `last_updated`, `data_source`, `data_quality`. Every feature carries
+  `data_source = "SYNTHETIC DEMO DATA — not real parcels"` and
+  `data_quality = "DEMO DATA"`.
+- **Derived at runtime, not stored** (`src/metrics.ts`): built-up %, open /
+  vacant area and %, encroachment %, ground coverage %, and floor area ratio
+  (`built_up_area × floors ÷ parcel_area`). All guarded against zero /
+  missing / non-finite inputs.
+- **`encroachment_area_sqm` / `encroachment_status`:** **fabricated demo
+  values.** They do **not** represent officially detected encroachment, and no
+  encroachment geometry is generated — only the metric. ~60% of parcels have
+  none; the rest are spread across Minor / Moderate / Significant / Critical.
 - **`assessed_value_usd`:** a **fabricated demo figure** (indicative $/m² by
-  land use × area × deterministic jitter), not a real assessment. Exempt
-  parcels are set to 0. Labelled "(demo)" wherever it is displayed.
+  land use × area + a built-up premium × deterministic jitter), not a real
+  assessment. Labelled "(demo)" wherever displayed.
+- **Planning metrics (FAR, ground coverage, built-up ratio):** demo analysis
+  derived from the fabricated areas — not official planning determinations.
+  Labelled "Demo analysis" / "estimated" in the UI.
 - **Land-use classes:** Residential, Commercial, Mixed Use, Industrial,
-  Parks / Open Space, Civic / Institutional. **Status values:** Active,
-  Pending Review, Exempt, Subdivision Proposed. All fabricated.
+  Institutional, Public/Semi-Public, Recreational, Vacant.
+  **Development statuses:** Developed, Partially Developed, Under Development,
+  Vacant, Encroached, Requires Review.
+  **Encroachment levels:** None, Minor, Moderate, Significant, Critical.
+  All fabricated.
 - All non-geometric values are deterministic, so regenerating the file
-  produces the same data (only the metadata timestamp changes).
+  produces the same data (only the metadata timestamp changes). The file's
+  `metadata.disclaimer` restates the above.
 - **Licence:** none required — generated in-repo, released with the project.
 
 ### PII

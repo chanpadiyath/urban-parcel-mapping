@@ -1,12 +1,14 @@
-# Urban Parcel Mapping — Prototype
+# Urban Parcel Intelligence — Prototype
 
-Interactive web map of urban land parcels, built as an internal **SIS / Urban
-Parcel Mapping concept prototype**. It demonstrates the core GIS workflow:
-navigate parcels → select one → inspect its attributes, plus search and
-attribute filtering.
+Interactive **Urban Parcel Intelligence / Spatial Information System** concept
+prototype. It demonstrates the core municipal-planning workflow: navigate
+parcels → select one → inspect its planning intelligence (area breakdown,
+built-up ratio, encroachment, zoning, FAR, development status), plus search,
+multi-facet filtering, a dataset overview, and an encroachment map view.
 
-The map shows **synthetic demo parcels**, not real cadastral data. See
-[`DATA.md`](./DATA.md).
+The map shows **synthetic demo parcels**, not real cadastral data, and the
+encroachment / planning figures are fabricated for demonstration — not official
+determinations. See [`DATA.md`](./DATA.md).
 
 ## Quick start
 
@@ -35,20 +37,22 @@ any static file server or sub-path. No backend.
 
 | Capability | Status |
 |---|---|
-| Application shell — header, control sidebar, map, docked info panel, footer | ✅ |
-| Interactive base map — pan / zoom / nav + scale controls | ✅ |
-| Parcel layer from local GeoJSON, coloured by land use | ✅ 100 synthetic parcels |
-| Hover feedback on parcels | ✅ (lighter outline + fill) |
-| Click a parcel → select + highlight (bold dark outline) | ✅ MapLibre `feature-state` |
-| Parcel info panel — address, land use, zoning, status, area (m²/ac), assessed value (demo), owner, dates | ✅ missing values shown as `—` |
-| Search by parcel ID or address → result list → pick → map flies to parcel + selects it | ✅ |
-| Filters — land use / zoning / status dropdowns; "showing X of Y"; selection cleared if filtered out | ✅ |
-| Legend — land-use colour key | ✅ |
-| Loading / error / empty-result states | ✅ |
-| Click empty map or × to clear selection | ✅ |
+| Application shell — SIS header (brand + live dataset indicator + DEMO DATA badge), control sidebar, map, docked info panel, status bar | ✅ |
+| Interactive base map — pan / zoom / navigation + fullscreen + scale controls, "Reset view" button | ✅ |
+| Parcel layer from local GeoJSON — 100 synthetic parcels | ✅ |
+| Two map colouring modes — by **land use** or by **encroachment severity** (toggle) | ✅ |
+| Hover feedback (mid outline) + click → select + highlight (dark outline) | ✅ MapLibre `feature-state` |
+| Parcel info panel — sectioned: badges (status + encroachment + DEMO DATA), **Area analysis** (composition bar + parcel/built-up/open/encroachment/RoW areas with %), **Development intelligence** (ground coverage, FAR est., built-up ratio), Parcel overview, Planning, Assessment | ✅ derived at runtime, missing → `—`, disclaimer shown |
+| Dataset **Overview** strip — parcels shown / avg built-up % / encroached share / vacant share, computed from the (filtered) dataset | ✅ |
+| Search by parcel ID / address / locality → result list with count → pick → map flies + selects | ✅ |
+| Filters — land use, zoning, development status, encroachment, minimum area; "N of 100 match filters"; selection cleared if filtered out | ✅ |
+| Encroachment visualisation — metric-only (colour by severity), no fabricated geometry | ✅ |
+| Legend — switches between land-use and encroachment keys | ✅ |
+| Status bar — cursor lat/lng, zoom, visible/total parcels, "Prototype dataset", attribution | ✅ |
+| Loading (spinner) / error (with **Retry**) / empty-result states | ✅ |
 
-Not built (deferred): statistics/charts, measurement/drawing/export, real data
-ingest pipeline, automated test framework, auth, backend, deploy pipeline.
+Not built (deferred): time-series charts, measurement/drawing/export tools,
+real-data ingest pipeline, automated test runner, auth, backend, deploy pipeline.
 
 ## Architecture
 
@@ -56,18 +60,22 @@ Single-page React app, no backend.
 
 ```
 public/demo-parcels.geojson         generated synthetic data, fetched at runtime
-src/App.tsx                          data load, selection/search/filter state, layout
-src/components/MapView.tsx           MapLibre GL map, parcel layers, hover/click, filter, fly-to
-src/components/ControlPanel.tsx      search box + results, filter selects, legend
-src/components/InfoPanel.tsx         selected-parcel attribute panel
-src/types.ts                         ParcelProperties schema, land-use colours, filter fields
+src/App.tsx                          data load; selection / search / filter / style-mode state; layout; overview stats
+src/components/MapView.tsx           MapLibre GL map, parcel layers, hover/click, id-list filter, colour mode, fly-to, reset view
+src/components/ControlPanel.tsx      overview strip, search + results, colour-mode toggle, filter selects, legend
+src/components/InfoPanel.tsx         sectioned parcel intelligence panel (uses metrics.ts)
+src/metrics.ts                       derived metrics (built-up %, open area, encroachment %, FAR, ground coverage) + formatters, all zero/missing-guarded
+src/types.ts                         schema, colour maps, filter fields, info-panel sections
 src/geo.ts                           bounding-box helpers
 scripts/generate-demo-parcels.mjs   re-runnable synthetic data generator
 ```
 
-Data flow is one-directional: map/search interactions update React state in
-`App`; `App` passes `selectedId`, a MapLibre `filter` expression, and a
-`focusBounds` box down to `MapView`, which reflects them into the map.
+Data flow is one-directional: map / search / filter interactions update React
+state in `App`; `App` derives an overview-stats object and a list of visible
+parcel IDs, and passes `selectedId`, `styleMode`, `visibleIds`, and a
+`focusBounds` box to `MapView`, which reflects them into the map. Filtering
+uses an `["in", parcel_id, [...]]` expression so any derived predicate works
+without changing the data.
 
 ## Tech decisions log
 
@@ -78,11 +86,26 @@ Data flow is one-directional: map/search interactions update React state in
 | 2026-09-04 | No backend | Dataset is ~65 KB static GeoJSON; an API would add cost with no benefit. |
 | 2026-09-04 | Demo data in `public/`, generated by `scripts/` | Single source, fetched at runtime, works offline. `data/` reserved for future real-data samples. |
 | 2026-09-04 | OpenStreetMap raster tiles as base map | Keyless. Low-volume prototype use; usage policy noted in `DATA.md`. Override with `VITE_BASEMAP_TILE_URL`. |
-| 2026-09-04 | Parcels coloured by `land_use` (categorical) | Makes the map read as a real GIS product and gives the legend meaning. Selection shown via outline, not colour, so land use stays visible when selected. |
+| 2026-09-04 | Parcels coloured by `land_use` / `encroachment` (categorical, toggle) | Reads as a real GIS product; selection shown via outline not colour, so the category stays visible when selected. |
+| 2026-09-04 | Derived metrics computed at runtime in `metrics.ts`, not stored | Keeps the dataset to raw measured quantities; percentages/FAR/coverage are computed with zero/missing guards so a bad record can't crash a render. |
+| 2026-09-04 | Filtering via `["in", parcel_id, [...]]` id-list expression | One mechanism handles equality filters, the area threshold, and any future derived predicate; `App` already needs the JS-filtered set for the overview stats. |
+
+## Demo flow (~45 s)
+
+1. App loads → SIS header, left panel (Overview / Search / Map colouring / Filters / Legend), map fits to the parcel grid.
+2. Overview strip shows parcels shown, avg built-up %, encroached share, vacant share.
+3. Hover a parcel → mid outline; click → dark outline + info panel opens.
+4. Info panel: status + encroachment + DEMO DATA badges; **Area analysis** composition bar and area rows with %; **Development intelligence** (ground coverage, FAR est.); Planning; Assessment; disclaimer.
+5. **Map colouring → Encroachment** → parcels recolour by severity, legend switches.
+6. Search `riverside` or `UPI-004` → results with count → pick one → map flies + selects.
+7. **Filters → Development status = Encroached**, **Encroachment = Significant** → map narrows, Overview + "N of 100 match filters" update; if the selected parcel is filtered out the panel closes. **Clear** resets.
+8. Bottom status bar tracks cursor lat/lng + zoom + visible count. **Reset view** returns to full extent.
 
 ## Notes
 
-- The production JS bundle is ~960 KB (~270 KB gzip); almost all of it is
+- The production JS bundle is ~970 KB (~272 KB gzip); almost all of it is
   MapLibre GL. Acceptable for a prototype; code-splitting is a later concern.
-- No automated test runner is wired up yet. A headless SSR smoke test was used
-  during development to verify the component render paths.
+- No automated test runner is wired up. A headless SSR smoke test
+  (`renderToString` of the real modules via Vite SSR + `metrics.ts` unit
+  assertions, 31 checks) was used during development to verify render paths and
+  the derived-metric maths.

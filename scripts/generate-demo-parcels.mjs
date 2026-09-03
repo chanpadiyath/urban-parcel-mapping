@@ -1,20 +1,22 @@
 /**
  * generate-demo-parcels.mjs
  * -------------------------------------------------------------------------
- * Produces SYNTHETIC demo parcel data for the Urban Parcel Mapping prototype.
- * There is no real cadastral source behind this file. See DATA.md.
+ * Produces the SYNTHETIC demo dataset for the Urban Parcel Intelligence
+ * prototype. There is no real cadastral source behind this file — every
+ * attribute is fabricated for demonstration. See DATA.md.
  *
  * Output: public/demo-parcels.geojson  (GeoJSON FeatureCollection, EPSG:4326)
- * Re-runnable: `npm run gen:data` (also runs automatically before dev/build).
+ * Re-runnable: `npm run gen:data` (also runs before dev / build).
  *
- * Geometry: a regular grid of rectangular parcels separated by road gaps,
- * placed around a fictional town centre ("City of Demoville"). Parcel
- * dimensions are defined in metres and converted to degrees with a local
- * metres-per-degree approximation.
+ * Geometry: a regular 10x10 grid of rectangular parcels around a fictional
+ * town centre ("City of Demoville"). Parcel dimensions are metres, converted
+ * to degrees with a local metres-per-degree approximation.
  *
- * Areas are computed geodesically (spherical excess), never from raw degrees.
- * All non-geometric attribute values are deterministic so the file is stable
- * across regenerations (only the metadata timestamp changes).
+ * Areas are geodesic (spherical excess), never from raw degrees. All
+ * non-geometric values are deterministic, so regenerating yields the same
+ * data (only the metadata timestamp changes). Percentages that the UI can
+ * derive (built-up %, open %, encroachment %) are NOT stored here — the app
+ * computes them from the raw areas at runtime.
  */
 
 import { writeFileSync, mkdirSync } from "node:fs";
@@ -24,13 +26,9 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_PATH = resolve(__dirname, "../public/demo-parcels.geojson");
 
-// --- Configuration -----------------------------------------------------
-
-// Fictional town centre. Arbitrary land near Portland, OR — corresponds to no
-// real property boundaries.
+// --- Configuration ---------------------------------------------------
 const CENTER_LNG = -122.676;
 const CENTER_LAT = 45.523;
-
 const COLS = 10;
 const ROWS = 10;
 const PARCEL_W_M = 40;
@@ -38,52 +36,98 @@ const PARCEL_H_M = 60;
 const ROAD_GAP_M = 12;
 
 const DATA_SOURCE = "SYNTHETIC DEMO DATA — not real parcels";
+const DATA_QUALITY = "DEMO DATA";
 const JURISDICTION = "City of Demoville (fictional)";
 const LAST_UPDATED = "2026-09-01";
 
-// zoning code -> land-use class + indicative assessed rate (demo $/m²)
-const ZONING = [
-  { code: "R-1", landUse: "Residential", rate: 185 },
-  { code: "R-2", landUse: "Residential", rate: 205 },
-  { code: "C-1", landUse: "Commercial", rate: 320 },
-  { code: "C-2", landUse: "Commercial", rate: 360 },
-  { code: "MU", landUse: "Mixed Use", rate: 270 },
-  { code: "M-1", landUse: "Industrial", rate: 135 },
-  { code: "OS", landUse: "Parks / Open Space", rate: 12 },
-  { code: "CF", landUse: "Civic / Institutional", rate: 95 },
+const LOCALITIES = [
+  "Riverside",
+  "Old Town",
+  "Harbourgate",
+  "Meadowbrook",
+  "Kingsford",
 ];
-
-const STATUSES = [
-  "Active",
-  "Active",
-  "Active",
-  "Active",
-  "Pending Review",
-  "Exempt",
-  "Subdivision Proposed",
-];
-
+const ZONES = ["North Zone", "Central Zone", "South Zone", "East Zone", "West Zone"];
 const STREET_NAMES = [
-  "Alder St",
-  "Birch Ave",
-  "Cedar Way",
-  "Douglas Blvd",
-  "Elm Ct",
-  "Fir Loop",
-  "Grove Pl",
-  "Hazel Row",
-  "Ironwood Dr",
-  "Juniper Ln",
+  "Alder St", "Birch Ave", "Cedar Way", "Douglas Blvd", "Elm Ct",
+  "Fir Loop", "Grove Pl", "Hazel Row", "Ironwood Dr", "Juniper Ln",
 ];
 
-// --- Geo helpers -----------------------------------------------------
+// land use -> planning profile (all fabricated demo values)
+const LAND_USE_PROFILE = {
+  Residential: {
+    weight: 30,
+    zoning_code: "R-2",
+    zoning_description: "Medium Density Residential",
+    permitted_use: "Dwellings, community facilities, home occupations",
+    coverage: [0.35, 0.62],
+    floors: [1, 3],
+  },
+  Commercial: {
+    weight: 16,
+    zoning_code: "C-2",
+    zoning_description: "General Commercial",
+    permitted_use: "Retail, offices, personal services, hospitality",
+    coverage: [0.45, 0.8],
+    floors: [2, 6],
+  },
+  "Mixed Use": {
+    weight: 12,
+    zoning_code: "MU",
+    zoning_description: "Mixed Use Corridor",
+    permitted_use: "Residential above ground-floor commercial",
+    coverage: [0.45, 0.75],
+    floors: [2, 5],
+  },
+  Industrial: {
+    weight: 10,
+    zoning_code: "I-1",
+    zoning_description: "Light Industrial",
+    permitted_use: "Manufacturing, warehousing, logistics",
+    coverage: [0.4, 0.7],
+    floors: [1, 2],
+  },
+  Institutional: {
+    weight: 9,
+    zoning_code: "PS-1",
+    zoning_description: "Public & Semi-Public",
+    permitted_use: "Schools, health facilities, civic buildings",
+    coverage: [0.28, 0.5],
+    floors: [1, 4],
+  },
+  "Public/Semi-Public": {
+    weight: 6,
+    zoning_code: "PS-2",
+    zoning_description: "Public Utility & Infrastructure",
+    permitted_use: "Utilities, transit, municipal works",
+    coverage: [0.1, 0.35],
+    floors: [1, 2],
+  },
+  Recreational: {
+    weight: 8,
+    zoning_code: "OS",
+    zoning_description: "Open Space & Recreation",
+    permitted_use: "Parks, playgrounds, greenways",
+    coverage: [0.02, 0.12],
+    floors: [1, 1],
+  },
+  Vacant: {
+    weight: 9,
+    zoning_code: "R-2",
+    zoning_description: "Medium Density Residential (undeveloped)",
+    permitted_use: "As per underlying zone",
+    coverage: [0, 0.03],
+    floors: [0, 0],
+  },
+};
+const LAND_USES = Object.keys(LAND_USE_PROFILE);
 
+// --- Geo helpers ---------------------------------------------------
 const EARTH_RADIUS_M = 6371008.8;
 const DEG2RAD = Math.PI / 180;
-const metresPerDegLat = () => 111320;
-const metresPerDegLng = (atLat) => 111320 * Math.cos(atLat * DEG2RAD);
+const mPerDegLat = () => 111320;
+const mPerDegLng = (lat) => 111320 * Math.cos(lat * DEG2RAD);
 
-/** Geodesic area (m²) of a closed [lng,lat] ring via spherical excess. */
 function ringAreaSqM(ring) {
   let total = 0;
   for (let i = 0; i < ring.length - 1; i++) {
@@ -96,24 +140,57 @@ function ringAreaSqM(ring) {
   return Math.abs((total * EARTH_RADIUS_M * EARTH_RADIUS_M) / 2);
 }
 
-// Deterministic 0..1 hash so demo values are stable between runs.
+// deterministic pseudo-random in [0,1)
 function unit(seed) {
   const x = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
   return x - Math.floor(x);
 }
+const lerp = (a, b, t) => a + (b - a) * t;
+const round1 = (n) => Math.round(n * 10) / 10;
 
-// --- Build features -------------------------------------------------
+function pickLandUse(seq) {
+  const totalWeight = LAND_USES.reduce(
+    (s, k) => s + LAND_USE_PROFILE[k].weight,
+    0,
+  );
+  let r = unit(seq * 3.17) * totalWeight;
+  for (const k of LAND_USES) {
+    r -= LAND_USE_PROFILE[k].weight;
+    if (r <= 0) return k;
+  }
+  return "Residential";
+}
 
-const dLat = (m) => m / metresPerDegLat();
-const dLng = (m, atLat) => m / metresPerDegLng(atLat);
+function encroachmentFor(seq, parcelArea) {
+  const roll = unit(seq * 5.53);
+  // ~62% of parcels have no encroachment
+  let band;
+  if (roll < 0.62) return { area: 0, status: "None" };
+  else if (roll < 0.78) band = ["Minor", 0.5, 4.5];
+  else if (roll < 0.9) band = ["Moderate", 5, 14];
+  else if (roll < 0.97) band = ["Significant", 15, 29];
+  else band = ["Critical", 30, 46];
+  const pct = lerp(band[1], band[2], unit(seq * 9.13));
+  return { area: (pct / 100) * parcelArea, status: band[0] };
+}
+
+function developmentStatus(builtPct, encStatus, seq) {
+  if (encStatus === "Critical" || encStatus === "Significant") return "Encroached";
+  if (builtPct < 3) return "Vacant";
+  if (unit(seq * 12.7) < 0.08) return "Requires Review";
+  if (builtPct < 22) return unit(seq * 4.4) < 0.5 ? "Under Development" : "Partially Developed";
+  if (builtPct < 55) return "Partially Developed";
+  return "Developed";
+}
+
+// --- Build features ---------------------------------------------
+const dLat = (m) => m / mPerDegLat();
+const dLng = (m, lat) => m / mPerDegLng(lat);
 
 const stepXm = PARCEL_W_M + ROAD_GAP_M;
 const stepYm = PARCEL_H_M + ROAD_GAP_M;
-const gridWm = COLS * stepXm - ROAD_GAP_M;
-const gridHm = ROWS * stepYm - ROAD_GAP_M;
-
-const originLng = CENTER_LNG - dLng(gridWm / 2, CENTER_LAT);
-const originLat = CENTER_LAT - dLat(gridHm / 2);
+const originLng = CENTER_LNG - dLng((COLS * stepXm - ROAD_GAP_M) / 2, CENTER_LAT);
+const originLat = CENTER_LAT - dLat((ROWS * stepYm - ROAD_GAP_M) / 2);
 
 const features = [];
 let seq = 0;
@@ -121,14 +198,12 @@ let seq = 0;
 for (let row = 0; row < ROWS; row++) {
   for (let col = 0; col < COLS; col++) {
     seq += 1;
-    const parcelId = `DEM-${String(seq).padStart(4, "0")}`;
+    const parcelId = `UPI-${String(seq).padStart(4, "0")}`;
 
     const west = originLng + dLng(col * stepXm, CENTER_LAT);
     const east = west + dLng(PARCEL_W_M, CENTER_LAT);
     const south = originLat + dLat(row * stepYm);
     const north = south + dLat(PARCEL_H_M);
-
-    // Exterior ring: counter-clockwise (RFC 7946 right-hand rule), closed.
     const ring = [
       [west, south],
       [east, south],
@@ -137,18 +212,39 @@ for (let row = 0; row < ROWS; row++) {
       [west, south],
     ];
 
-    const zoning = ZONING[(row * 3 + col * 5 + Math.floor(row / 2)) % ZONING.length];
     const areaSqM = ringAreaSqM(ring);
-    const status =
-      zoning.code === "CF"
-        ? "Exempt"
-        : STATUSES[Math.floor(unit(seq) * STATUSES.length)];
+    const landUse = pickLandUse(seq);
+    const profile = LAND_USE_PROFILE[landUse];
 
-    const assessedValue =
-      status === "Exempt"
+    let coverage = lerp(profile.coverage[0], profile.coverage[1], unit(seq * 7.7));
+    let builtUp = coverage * areaSqM;
+
+    const enc = encroachmentFor(seq, areaSqM);
+    let encArea = enc.area;
+
+    // keep built-up + encroachment within the parcel
+    if (builtUp + encArea > 0.95 * areaSqM) {
+      builtUp = Math.max(0, 0.95 * areaSqM - encArea);
+    }
+    const builtPct = (builtUp / areaSqM) * 100;
+
+    const floors =
+      profile.floors[1] === 0
         ? 0
-        : Math.round((zoning.rate * areaSqM * (0.85 + unit(seq * 7) * 0.4)) / 1000) *
-          1000;
+        : Math.round(lerp(profile.floors[0], profile.floors[1], unit(seq * 6.1)));
+
+    const rowArea = lerp(0.03, 0.09, unit(seq * 2.9)) * areaSqM; // notional RoW
+
+    const devStatus =
+      landUse === "Vacant"
+        ? "Vacant"
+        : developmentStatus(builtPct, enc.status, seq);
+
+    const baseRate = { Residential: 190, Commercial: 340, "Mixed Use": 275, Industrial: 140, Institutional: 90, "Public/Semi-Public": 40, Recreational: 20, Vacant: 110 }[landUse];
+    const assessedValue =
+      devStatus === "Vacant"
+        ? Math.round((baseRate * 0.4 * areaSqM) / 1000) * 1000
+        : Math.round(((baseRate * areaSqM + builtUp * 260 * Math.max(1, floors) * 0.15) * (0.9 + unit(seq * 8.2) * 0.3)) / 1000) * 1000;
 
     const houseNumber = 100 + row * 100 + col * 2;
 
@@ -159,16 +255,30 @@ for (let row = 0; row < ROWS; row++) {
       properties: {
         parcel_id: parcelId,
         address: `${houseNumber} ${STREET_NAMES[row % STREET_NAMES.length]}`,
-        land_use: zoning.landUse,
-        zoning: zoning.code,
-        status,
-        area_sqm: Math.round(areaSqM * 10) / 10,
+        locality: LOCALITIES[(row + Math.floor(col / 3)) % LOCALITIES.length],
+        ward: `Ward ${((row + col) % 6) + 1}`,
+        zone: ZONES[Math.floor(col / 2) % ZONES.length],
+
+        land_use: landUse,
+        zoning_code: profile.zoning_code,
+        zoning_description: profile.zoning_description,
+        permitted_use: profile.permitted_use,
+        development_status: devStatus,
+
+        area_sqm: round1(areaSqM),
         area_acres: Math.round((areaSqM / 4046.8564224) * 1000) / 1000,
+        built_up_area_sqm: round1(builtUp),
+        floors,
+        row_area_sqm: round1(rowArea),
+        encroachment_area_sqm: round1(encArea),
+        encroachment_status: enc.status,
+
         assessed_value_usd: assessedValue,
         owner: "City of Demoville (synthetic — no personal data)",
         jurisdiction: JURISDICTION,
         last_updated: LAST_UPDATED,
         data_source: DATA_SOURCE,
+        data_quality: DATA_QUALITY,
       },
     });
   }
@@ -179,13 +289,14 @@ const collection = {
   name: "demo-parcels",
   crs: {
     type: "name",
-    properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" }, // EPSG:4326, lng/lat
+    properties: { name: "urn:ogc:def:crs:OGC:1.3:CRS84" },
   },
   metadata: {
     generated_by: "scripts/generate-demo-parcels.mjs",
     generated_at: new Date().toISOString(),
     note: DATA_SOURCE,
-    assessed_value_note: "assessed_value_usd is a fabricated demo figure, not a real assessment",
+    disclaimer:
+      "All attributes are fabricated for demonstration. Encroachment values do NOT represent officially detected encroachment. Planning metrics (FAR, ground coverage, built-up %) are demo analysis, not official determinations.",
     feature_count: features.length,
   },
   features,
@@ -193,6 +304,5 @@ const collection = {
 
 mkdirSync(dirname(OUT_PATH), { recursive: true });
 writeFileSync(OUT_PATH, JSON.stringify(collection, null, 2) + "\n", "utf8");
-
 const kb = (JSON.stringify(collection).length / 1024).toFixed(1);
 console.log(`Wrote ${features.length} synthetic parcels -> ${OUT_PATH} (${kb} KB)`);

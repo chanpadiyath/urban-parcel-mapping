@@ -6,10 +6,12 @@ import maplibregl, {
 } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import {
+  ENCROACHMENT_COLORS,
   LAND_USE_COLORS,
   LAND_USE_FALLBACK_COLOR,
   type ParcelCollection,
   type ParcelProperties,
+  type StyleMode,
 } from "../types";
 import { featuresBounds, type BBox } from "../geo";
 
@@ -21,8 +23,8 @@ const SRC = "parcels";
 const FILL = "parcels-fill";
 const LINE = "parcels-outline";
 
-const SELECTED_LINE = "#111827";
-const HOVER_LINE = "#334155";
+const SELECTED_LINE = "#12305a";
+const HOVER_LINE = "#3b5573";
 const DEFAULT_LINE = "#ffffff";
 
 const baseStyle: StyleSpecification = {
@@ -35,54 +37,67 @@ const baseStyle: StyleSpecification = {
       attribution: "© OpenStreetMap contributors",
     },
   },
-  layers: [{ id: "osm", type: "raster", source: "osm" }],
+  layers: [
+    { id: "osm", type: "raster", source: "osm", paint: { "raster-saturation": -0.4 } },
+  ],
 };
 
-// fill-color: categorical by land_use.
-const fillColorExpr: ExpressionSpecification = [
+const landUseColor = [
   "match",
   ["get", "land_use"],
   ...Object.entries(LAND_USE_COLORS).flatMap(([k, v]) => [k, v]),
   LAND_USE_FALLBACK_COLOR,
 ] as unknown as ExpressionSpecification;
 
-const isSelected: ExpressionSpecification = [
-  "boolean",
-  ["feature-state", "selected"],
-  false,
-];
-const isHover: ExpressionSpecification = [
-  "boolean",
-  ["feature-state", "hover"],
-  false,
-];
+const encroachmentColor = [
+  "match",
+  ["get", "encroachment_status"],
+  ...Object.entries(ENCROACHMENT_COLORS).flatMap(([k, v]) => [k, v]),
+  ENCROACHMENT_COLORS.None,
+] as unknown as ExpressionSpecification;
+
+const isSelected: ExpressionSpecification = ["boolean", ["feature-state", "selected"], false];
+const isHover: ExpressionSpecification = ["boolean", ["feature-state", "hover"], false];
+
+export interface ViewState {
+  lng: number;
+  lat: number;
+  zoom: number;
+}
 
 interface MapViewProps {
   parcels: ParcelCollection;
   selectedId: string | null;
-  filter: FilterSpecification | null;
+  styleMode: StyleMode;
+  visibleIds: string[] | null;
   focusBounds: BBox | null;
   rightPanelOpen: boolean;
   onSelect: (properties: ParcelProperties | null) => void;
+  onViewState?: (v: ViewState) => void;
 }
 
 export default function MapView({
   parcels,
   selectedId,
-  filter,
+  styleMode,
+  visibleIds,
   focusBounds,
   rightPanelOpen,
   onSelect,
+  onViewState,
 }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const readyRef = useRef(false);
+  const homeRef = useRef<BBox | null>(null);
   const selRef = useRef<string | null>(null);
   const hoverRef = useRef<string | null>(null);
   const onSelectRef = useRef(onSelect);
+  const onViewStateRef = useRef(onViewState);
   onSelectRef.current = onSelect;
+  onViewStateRef.current = onViewState;
 
-  // --- init (once) ---------------------------------------------------
+  // --- init (once) -------------------------------------------------
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -94,101 +109,76 @@ export default function MapView({
       attributionControl: { compact: false },
     });
     mapRef.current = map;
-    map.addControl(
-      new maplibregl.NavigationControl({ showZoom: true, visualizePitch: false }),
-      "top-right",
-    );
+    map.addControl(new maplibregl.NavigationControl({ showZoom: true }), "top-right");
+    map.addControl(new maplibregl.FullscreenControl(), "top-right");
     map.addControl(new maplibregl.ScaleControl({ unit: "metric" }), "bottom-left");
 
     const setHover = (id: string | null) => {
       if (hoverRef.current === id) return;
-      if (hoverRef.current) {
-        map.setFeatureState(
-          { source: SRC, id: hoverRef.current },
-          { hover: false },
-        );
-      }
+      if (hoverRef.current) map.setFeatureState({ source: SRC, id: hoverRef.current }, { hover: false });
       if (id) map.setFeatureState({ source: SRC, id }, { hover: true });
       hoverRef.current = id;
     };
 
+    const emitView = () => {
+      const c = map.getCenter();
+      onViewStateRef.current?.({ lng: c.lng, lat: c.lat, zoom: map.getZoom() });
+    };
+
     map.on("load", () => {
-      map.addSource(SRC, {
-        type: "geojson",
-        data: parcels,
-        promoteId: "parcel_id",
-      });
+      map.addSource(SRC, { type: "geojson", data: parcels, promoteId: "parcel_id" });
 
       map.addLayer({
         id: FILL,
         type: "fill",
         source: SRC,
         paint: {
-          "fill-color": fillColorExpr,
-          "fill-opacity": [
-            "case",
-            isSelected,
-            0.85,
-            isHover,
-            0.7,
-            0.55,
-          ],
+          "fill-color": styleMode === "encroachment" ? encroachmentColor : landUseColor,
+          "fill-opacity": ["case", isSelected, 0.8, isHover, 0.62, 0.42],
         },
       });
-
       map.addLayer({
         id: LINE,
         type: "line",
         source: SRC,
         paint: {
-          "line-color": [
-            "case",
-            isSelected,
-            SELECTED_LINE,
-            isHover,
-            HOVER_LINE,
-            DEFAULT_LINE,
-          ],
-          "line-width": ["case", isSelected, 3, isHover, 1.8, 0.8],
+          "line-color": ["case", isSelected, SELECTED_LINE, isHover, HOVER_LINE, DEFAULT_LINE],
+          "line-width": ["case", isSelected, 2.6, isHover, 1.6, 0.7],
         },
       });
 
       const b = featuresBounds(parcels.features);
-      if (b) map.fitBounds(b, { padding: 48, duration: 0 });
+      homeRef.current = b;
+      if (b) map.fitBounds(b, { padding: 44, duration: 0 });
 
       readyRef.current = true;
-      if (filter) {
-        map.setFilter(FILL, filter);
-        map.setFilter(LINE, filter);
+      if (visibleIds) {
+        map.setFilter(FILL, ["in", ["get", "parcel_id"], ["literal", visibleIds]] as FilterSpecification);
+        map.setFilter(LINE, ["in", ["get", "parcel_id"], ["literal", visibleIds]] as FilterSpecification);
       }
-      if (selRef.current) {
-        map.setFeatureState(
-          { source: SRC, id: selRef.current },
-          { selected: true },
-        );
-      }
+      if (selRef.current) map.setFeatureState({ source: SRC, id: selRef.current }, { selected: true });
+      emitView();
     });
 
     map.on("click", FILL, (e) => {
       const f = e.features?.[0];
       if (f) onSelectRef.current(f.properties as ParcelProperties);
     });
-
     map.on("click", (e) => {
-      const hits = map.queryRenderedFeatures(e.point, { layers: [FILL] });
-      if (hits.length === 0) onSelectRef.current(null);
+      if (map.queryRenderedFeatures(e.point, { layers: [FILL] }).length === 0) {
+        onSelectRef.current(null);
+      }
     });
-
     map.on("mousemove", FILL, (e) => {
       map.getCanvas().style.cursor = "pointer";
       const f = e.features?.[0];
-      const id = typeof f?.id === "string" ? f.id : null;
-      setHover(id);
+      setHover(typeof f?.id === "string" ? f.id : null);
     });
     map.on("mouseleave", FILL, () => {
       map.getCanvas().style.cursor = "";
       setHover(null);
     });
+    map.on("move", emitView);
 
     return () => {
       readyRef.current = false;
@@ -200,34 +190,45 @@ export default function MapView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // --- selection -> feature-state ----------------------------------
+  // selection -> feature-state
   useEffect(() => {
     const map = mapRef.current;
     selRef.current = selectedId;
     if (!map || !readyRef.current) return;
-    // Clear any previously-selected feature, then set the new one.
     map.removeFeatureState({ source: SRC }, "selected");
-    if (selectedId) {
-      map.setFeatureState({ source: SRC, id: selectedId }, { selected: true });
-    }
+    if (selectedId) map.setFeatureState({ source: SRC, id: selectedId }, { selected: true });
   }, [selectedId]);
 
-  // --- filter -----------------------------------------------------
+  // style mode -> fill colour
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !readyRef.current) return;
-    map.setFilter(FILL, filter);
-    map.setFilter(LINE, filter);
-  }, [filter]);
+    map.setPaintProperty(
+      FILL,
+      "fill-color",
+      styleMode === "encroachment" ? encroachmentColor : landUseColor,
+    );
+  }, [styleMode]);
 
-  // --- focus (search result) ------------------------------------
+  // filter -> visible parcels
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !readyRef.current) return;
+    const f: FilterSpecification | null = visibleIds
+      ? (["in", ["get", "parcel_id"], ["literal", visibleIds]] as FilterSpecification)
+      : null;
+    map.setFilter(FILL, f);
+    map.setFilter(LINE, f);
+  }, [visibleIds]);
+
+  // search focus
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !readyRef.current || !focusBounds) return;
-    map.fitBounds(focusBounds, { padding: 96, maxZoom: 18, duration: 500 });
+    map.fitBounds(focusBounds, { padding: 110, maxZoom: 18, duration: 500 });
   }, [focusBounds]);
 
-  // --- resize when the side panel opens/closes -----------------
+  // resize when the info panel opens/closes
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
@@ -235,12 +236,19 @@ export default function MapView({
     return () => window.clearTimeout(id);
   }, [rightPanelOpen]);
 
+  const resetView = () => {
+    const map = mapRef.current;
+    if (map && homeRef.current) {
+      map.fitBounds(homeRef.current, { padding: 44, duration: 400 });
+    }
+  };
+
   return (
-    <div
-      ref={containerRef}
-      className="map-canvas"
-      role="application"
-      aria-label="Parcel map"
-    />
+    <div className="map-wrap">
+      <div ref={containerRef} className="map-canvas" role="application" aria-label="Parcel map" />
+      <button type="button" className="map-home" onClick={resetView} title="Reset to full extent">
+        Reset view
+      </button>
+    </div>
   );
 }
