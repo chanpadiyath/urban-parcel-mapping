@@ -1,0 +1,4519 @@
+{
+  "type": "FeatureCollection",
+  "name": "demo-parcels",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "metadata": {
+    "generated_by": "scripts/generate-demo-parcels.mjs",
+    "generated_at": "2026-09-03T19:51:06.895Z",
+    "note": "SYNTHETIC DEMO DATA — not real parcels",
+    "assessed_value_note": "assessed_value_usd is a fabricated demo figure, not a real assessment",
+    "feature_count": 100
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "DEM-0001",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6792566883192,
+              45.51981997844054
+            ],
+            [
+              -122.67874382401696,
+              45.51981997844054
+            ],
+            [
+              -122.67874382401696,
+              45.52035896514553
+            ],
+            [
+              -122.6792566883192,
+              45.52035896514553
+            ],
+            [
+              -122.6792566883192,
+              45.51981997844054
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0001",
+        "address": "100 Alder St",
+        "land_use": "Residential",
+        "zoning": "R-1",
+        "status": "Active",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 539000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0002",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6785899647263,
+              45.51981997844054
+            ],
+            [
+              -122.67807710042406,
+              45.51981997844054
+            ],
+            [
+              -122.67807710042406,
+              45.52035896514553
+            ],
+            [
+              -122.6785899647263,
+              45.52035896514553
+            ],
+            [
+              -122.6785899647263,
+              45.51981997844054
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0002",
+        "address": "102 Alder St",
+        "land_use": "Industrial",
+        "zoning": "M-1",
+        "status": "Exempt",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0003",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67792324113339,
+              45.51981997844054
+            ],
+            [
+              -122.67741037683115,
+              45.51981997844054
+            ],
+            [
+              -122.67741037683115,
+              45.52035896514553
+            ],
+            [
+              -122.67792324113339,
+              45.52035896514553
+            ],
+            [
+              -122.67792324113339,
+              45.51981997844054
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0003",
+        "address": "104 Alder St",
+        "land_use": "Commercial",
+        "zoning": "C-1",
+        "status": "Pending Review",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 684000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0004",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67725651754048,
+              45.51981997844054
+            ],
+            [
+              -122.67674365323825,
+              45.51981997844054
+            ],
+            [
+              -122.67674365323825,
+              45.52035896514553
+            ],
+            [
+              -122.67725651754048,
+              45.52035896514553
+            ],
+            [
+              -122.67725651754048,
+              45.51981997844054
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0004",
+        "address": "106 Alder St",
+        "land_use": "Civic / Institutional",
+        "zoning": "CF",
+        "status": "Exempt",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0005",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67658979394757,
+              45.51981997844054
+            ],
+            [
+              -122.67607692964533,
+              45.51981997844054
+            ],
+            [
+              -122.67607692964533,
+              45.52035896514553
+            ],
+            [
+              -122.67658979394757,
+              45.52035896514553
+            ],
+            [
+              -122.67658979394757,
+              45.51981997844054
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0005",
+        "address": "108 Alder St",
+        "land_use": "Mixed Use",
+        "zoning": "MU",
+        "status": "Active",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 560000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0006",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67592307035467,
+              45.51981997844054
+            ],
+            [
+              -122.67541020605243,
+              45.51981997844054
+            ],
+            [
+              -122.67541020605243,
+              45.52035896514553
+            ],
+            [
+              -122.67592307035467,
+              45.52035896514553
+            ],
+            [
+              -122.67592307035467,
+              45.51981997844054
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0006",
+        "address": "110 Alder St",
+        "land_use": "Residential",
+        "zoning": "R-2",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 474000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0007",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67525634676177,
+              45.51981997844054
+            ],
+            [
+              -122.67474348245953,
+              45.51981997844054
+            ],
+            [
+              -122.67474348245953,
+              45.52035896514553
+            ],
+            [
+              -122.67525634676177,
+              45.52035896514553
+            ],
+            [
+              -122.67525634676177,
+              45.51981997844054
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0007",
+        "address": "112 Alder St",
+        "land_use": "Parks / Open Space",
+        "zoning": "OS",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 31000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0008",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67458962316886,
+              45.51981997844054
+            ],
+            [
+              -122.67407675886662,
+              45.51981997844054
+            ],
+            [
+              -122.67407675886662,
+              45.52035896514553
+            ],
+            [
+              -122.67458962316886,
+              45.52035896514553
+            ],
+            [
+              -122.67458962316886,
+              45.51981997844054
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0008",
+        "address": "114 Alder St",
+        "land_use": "Commercial",
+        "zoning": "C-2",
+        "status": "Exempt",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0009",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67392289957596,
+              45.51981997844054
+            ],
+            [
+              -122.67341003527372,
+              45.51981997844054
+            ],
+            [
+              -122.67341003527372,
+              45.52035896514553
+            ],
+            [
+              -122.67392289957596,
+              45.52035896514553
+            ],
+            [
+              -122.67392289957596,
+              45.51981997844054
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0009",
+        "address": "116 Alder St",
+        "land_use": "Residential",
+        "zoning": "R-1",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 523000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0010",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67325617598304,
+              45.51981997844054
+            ],
+            [
+              -122.6727433116808,
+              45.51981997844054
+            ],
+            [
+              -122.6727433116808,
+              45.52035896514553
+            ],
+            [
+              -122.67325617598304,
+              45.52035896514553
+            ],
+            [
+              -122.67325617598304,
+              45.51981997844054
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0010",
+        "address": "118 Alder St",
+        "land_use": "Industrial",
+        "zoning": "M-1",
+        "status": "Exempt",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0011",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6792566883192,
+              45.52046676248653
+            ],
+            [
+              -122.67874382401696,
+              45.52046676248653
+            ],
+            [
+              -122.67874382401696,
+              45.521005749191524
+            ],
+            [
+              -122.6792566883192,
+              45.521005749191524
+            ],
+            [
+              -122.6792566883192,
+              45.52046676248653
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0011",
+        "address": "200 Birch Ave",
+        "land_use": "Commercial",
+        "zoning": "C-2",
+        "status": "Pending Review",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 970000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0012",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6785899647263,
+              45.52046676248653
+            ],
+            [
+              -122.67807710042406,
+              45.52046676248653
+            ],
+            [
+              -122.67807710042406,
+              45.521005749191524
+            ],
+            [
+              -122.6785899647263,
+              45.521005749191524
+            ],
+            [
+              -122.6785899647263,
+              45.52046676248653
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0012",
+        "address": "202 Birch Ave",
+        "land_use": "Residential",
+        "zoning": "R-1",
+        "status": "Active",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 381000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0013",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67792324113339,
+              45.52046676248653
+            ],
+            [
+              -122.67741037683115,
+              45.52046676248653
+            ],
+            [
+              -122.67741037683115,
+              45.521005749191524
+            ],
+            [
+              -122.67792324113339,
+              45.521005749191524
+            ],
+            [
+              -122.67792324113339,
+              45.52046676248653
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0013",
+        "address": "204 Birch Ave",
+        "land_use": "Industrial",
+        "zoning": "M-1",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 338000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0014",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67725651754048,
+              45.52046676248653
+            ],
+            [
+              -122.67674365323825,
+              45.52046676248653
+            ],
+            [
+              -122.67674365323825,
+              45.521005749191524
+            ],
+            [
+              -122.67725651754048,
+              45.521005749191524
+            ],
+            [
+              -122.67725651754048,
+              45.52046676248653
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0014",
+        "address": "206 Birch Ave",
+        "land_use": "Commercial",
+        "zoning": "C-1",
+        "status": "Active",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 814000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0015",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67658979394757,
+              45.52046676248653
+            ],
+            [
+              -122.67607692964533,
+              45.52046676248653
+            ],
+            [
+              -122.67607692964533,
+              45.521005749191524
+            ],
+            [
+              -122.67658979394757,
+              45.521005749191524
+            ],
+            [
+              -122.67658979394757,
+              45.52046676248653
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0015",
+        "address": "208 Birch Ave",
+        "land_use": "Civic / Institutional",
+        "zoning": "CF",
+        "status": "Exempt",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0016",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67592307035467,
+              45.52046676248653
+            ],
+            [
+              -122.67541020605243,
+              45.52046676248653
+            ],
+            [
+              -122.67541020605243,
+              45.521005749191524
+            ],
+            [
+              -122.67592307035467,
+              45.521005749191524
+            ],
+            [
+              -122.67592307035467,
+              45.52046676248653
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0016",
+        "address": "210 Birch Ave",
+        "land_use": "Mixed Use",
+        "zoning": "MU",
+        "status": "Active",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 577000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0017",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67525634676177,
+              45.52046676248653
+            ],
+            [
+              -122.67474348245953,
+              45.52046676248653
+            ],
+            [
+              -122.67474348245953,
+              45.521005749191524
+            ],
+            [
+              -122.67525634676177,
+              45.521005749191524
+            ],
+            [
+              -122.67525634676177,
+              45.52046676248653
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0017",
+        "address": "212 Birch Ave",
+        "land_use": "Residential",
+        "zoning": "R-2",
+        "status": "Active",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 492000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0018",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67458962316886,
+              45.52046676248653
+            ],
+            [
+              -122.67407675886662,
+              45.52046676248653
+            ],
+            [
+              -122.67407675886662,
+              45.521005749191524
+            ],
+            [
+              -122.67458962316886,
+              45.521005749191524
+            ],
+            [
+              -122.67458962316886,
+              45.52046676248653
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0018",
+        "address": "214 Birch Ave",
+        "land_use": "Parks / Open Space",
+        "zoning": "OS",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 29000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0019",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67392289957596,
+              45.52046676248653
+            ],
+            [
+              -122.67341003527372,
+              45.52046676248653
+            ],
+            [
+              -122.67341003527372,
+              45.521005749191524
+            ],
+            [
+              -122.67392289957596,
+              45.521005749191524
+            ],
+            [
+              -122.67392289957596,
+              45.52046676248653
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0019",
+        "address": "216 Birch Ave",
+        "land_use": "Commercial",
+        "zoning": "C-2",
+        "status": "Active",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 791000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0020",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67325617598304,
+              45.52046676248653
+            ],
+            [
+              -122.6727433116808,
+              45.52046676248653
+            ],
+            [
+              -122.6727433116808,
+              45.521005749191524
+            ],
+            [
+              -122.67325617598304,
+              45.521005749191524
+            ],
+            [
+              -122.67325617598304,
+              45.52046676248653
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0020",
+        "address": "218 Birch Ave",
+        "land_use": "Residential",
+        "zoning": "R-1",
+        "status": "Exempt",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0021",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6792566883192,
+              45.521113546532526
+            ],
+            [
+              -122.67874382401696,
+              45.521113546532526
+            ],
+            [
+              -122.67874382401696,
+              45.52165253323752
+            ],
+            [
+              -122.6792566883192,
+              45.52165253323752
+            ],
+            [
+              -122.6792566883192,
+              45.521113546532526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0021",
+        "address": "300 Cedar Way",
+        "land_use": "Civic / Institutional",
+        "zoning": "CF",
+        "status": "Exempt",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0022",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6785899647263,
+              45.521113546532526
+            ],
+            [
+              -122.67807710042406,
+              45.521113546532526
+            ],
+            [
+              -122.67807710042406,
+              45.52165253323752
+            ],
+            [
+              -122.6785899647263,
+              45.52165253323752
+            ],
+            [
+              -122.6785899647263,
+              45.521113546532526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0022",
+        "address": "302 Cedar Way",
+        "land_use": "Mixed Use",
+        "zoning": "MU",
+        "status": "Active",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 724000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0023",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67792324113339,
+              45.521113546532526
+            ],
+            [
+              -122.67741037683115,
+              45.521113546532526
+            ],
+            [
+              -122.67741037683115,
+              45.52165253323752
+            ],
+            [
+              -122.67792324113339,
+              45.52165253323752
+            ],
+            [
+              -122.67792324113339,
+              45.521113546532526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0023",
+        "address": "304 Cedar Way",
+        "land_use": "Residential",
+        "zoning": "R-2",
+        "status": "Exempt",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0024",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67725651754048,
+              45.521113546532526
+            ],
+            [
+              -122.67674365323825,
+              45.521113546532526
+            ],
+            [
+              -122.67674365323825,
+              45.52165253323752
+            ],
+            [
+              -122.67725651754048,
+              45.52165253323752
+            ],
+            [
+              -122.67725651754048,
+              45.521113546532526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0024",
+        "address": "306 Cedar Way",
+        "land_use": "Parks / Open Space",
+        "zoning": "OS",
+        "status": "Active",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 33000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0025",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67658979394757,
+              45.521113546532526
+            ],
+            [
+              -122.67607692964533,
+              45.521113546532526
+            ],
+            [
+              -122.67607692964533,
+              45.52165253323752
+            ],
+            [
+              -122.67658979394757,
+              45.52165253323752
+            ],
+            [
+              -122.67658979394757,
+              45.521113546532526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0025",
+        "address": "308 Cedar Way",
+        "land_use": "Commercial",
+        "zoning": "C-2",
+        "status": "Active",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 855000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0026",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67592307035467,
+              45.521113546532526
+            ],
+            [
+              -122.67541020605243,
+              45.521113546532526
+            ],
+            [
+              -122.67541020605243,
+              45.52165253323752
+            ],
+            [
+              -122.67592307035467,
+              45.52165253323752
+            ],
+            [
+              -122.67592307035467,
+              45.521113546532526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0026",
+        "address": "310 Cedar Way",
+        "land_use": "Residential",
+        "zoning": "R-1",
+        "status": "Pending Review",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 377000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0027",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67525634676177,
+              45.521113546532526
+            ],
+            [
+              -122.67474348245953,
+              45.521113546532526
+            ],
+            [
+              -122.67474348245953,
+              45.52165253323752
+            ],
+            [
+              -122.67525634676177,
+              45.52165253323752
+            ],
+            [
+              -122.67525634676177,
+              45.521113546532526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0027",
+        "address": "312 Cedar Way",
+        "land_use": "Industrial",
+        "zoning": "M-1",
+        "status": "Active",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 391000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0028",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67458962316886,
+              45.521113546532526
+            ],
+            [
+              -122.67407675886662,
+              45.521113546532526
+            ],
+            [
+              -122.67407675886662,
+              45.52165253323752
+            ],
+            [
+              -122.67458962316886,
+              45.52165253323752
+            ],
+            [
+              -122.67458962316886,
+              45.521113546532526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0028",
+        "address": "314 Cedar Way",
+        "land_use": "Commercial",
+        "zoning": "C-1",
+        "status": "Active",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 819000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0029",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67392289957596,
+              45.521113546532526
+            ],
+            [
+              -122.67341003527372,
+              45.521113546532526
+            ],
+            [
+              -122.67341003527372,
+              45.52165253323752
+            ],
+            [
+              -122.67392289957596,
+              45.52165253323752
+            ],
+            [
+              -122.67392289957596,
+              45.521113546532526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0029",
+        "address": "316 Cedar Way",
+        "land_use": "Civic / Institutional",
+        "zoning": "CF",
+        "status": "Exempt",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0030",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67325617598304,
+              45.521113546532526
+            ],
+            [
+              -122.6727433116808,
+              45.521113546532526
+            ],
+            [
+              -122.6727433116808,
+              45.52165253323752
+            ],
+            [
+              -122.67325617598304,
+              45.52165253323752
+            ],
+            [
+              -122.67325617598304,
+              45.521113546532526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0030",
+        "address": "318 Cedar Way",
+        "land_use": "Mixed Use",
+        "zoning": "MU",
+        "status": "Active",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 759000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0031",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6792566883192,
+              45.521760330578516
+            ],
+            [
+              -122.67874382401696,
+              45.521760330578516
+            ],
+            [
+              -122.67874382401696,
+              45.52229931728351
+            ],
+            [
+              -122.6792566883192,
+              45.52229931728351
+            ],
+            [
+              -122.6792566883192,
+              45.521760330578516
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0031",
+        "address": "400 Douglas Blvd",
+        "land_use": "Commercial",
+        "zoning": "C-1",
+        "status": "Pending Review",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 799000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0032",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6785899647263,
+              45.521760330578516
+            ],
+            [
+              -122.67807710042406,
+              45.521760330578516
+            ],
+            [
+              -122.67807710042406,
+              45.52229931728351
+            ],
+            [
+              -122.6785899647263,
+              45.52229931728351
+            ],
+            [
+              -122.6785899647263,
+              45.521760330578516
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0032",
+        "address": "402 Douglas Blvd",
+        "land_use": "Civic / Institutional",
+        "zoning": "CF",
+        "status": "Exempt",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0033",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67792324113339,
+              45.521760330578516
+            ],
+            [
+              -122.67741037683115,
+              45.521760330578516
+            ],
+            [
+              -122.67741037683115,
+              45.52229931728351
+            ],
+            [
+              -122.67792324113339,
+              45.52229931728351
+            ],
+            [
+              -122.67792324113339,
+              45.521760330578516
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0033",
+        "address": "404 Douglas Blvd",
+        "land_use": "Mixed Use",
+        "zoning": "MU",
+        "status": "Active",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 768000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0034",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67725651754048,
+              45.521760330578516
+            ],
+            [
+              -122.67674365323825,
+              45.521760330578516
+            ],
+            [
+              -122.67674365323825,
+              45.52229931728351
+            ],
+            [
+              -122.67725651754048,
+              45.52229931728351
+            ],
+            [
+              -122.67725651754048,
+              45.521760330578516
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0034",
+        "address": "406 Douglas Blvd",
+        "land_use": "Residential",
+        "zoning": "R-2",
+        "status": "Exempt",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0035",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67658979394757,
+              45.521760330578516
+            ],
+            [
+              -122.67607692964533,
+              45.521760330578516
+            ],
+            [
+              -122.67607692964533,
+              45.52229931728351
+            ],
+            [
+              -122.67658979394757,
+              45.52229931728351
+            ],
+            [
+              -122.67658979394757,
+              45.521760330578516
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0035",
+        "address": "408 Douglas Blvd",
+        "land_use": "Parks / Open Space",
+        "zoning": "OS",
+        "status": "Active",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 35000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0036",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67592307035467,
+              45.521760330578516
+            ],
+            [
+              -122.67541020605243,
+              45.521760330578516
+            ],
+            [
+              -122.67541020605243,
+              45.52229931728351
+            ],
+            [
+              -122.67592307035467,
+              45.52229931728351
+            ],
+            [
+              -122.67592307035467,
+              45.521760330578516
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0036",
+        "address": "410 Douglas Blvd",
+        "land_use": "Commercial",
+        "zoning": "C-2",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 1070000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0037",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67525634676177,
+              45.521760330578516
+            ],
+            [
+              -122.67474348245953,
+              45.521760330578516
+            ],
+            [
+              -122.67474348245953,
+              45.52229931728351
+            ],
+            [
+              -122.67525634676177,
+              45.52229931728351
+            ],
+            [
+              -122.67525634676177,
+              45.521760330578516
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0037",
+        "address": "412 Douglas Blvd",
+        "land_use": "Residential",
+        "zoning": "R-1",
+        "status": "Active",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 403000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0038",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67458962316886,
+              45.521760330578516
+            ],
+            [
+              -122.67407675886662,
+              45.521760330578516
+            ],
+            [
+              -122.67407675886662,
+              45.52229931728351
+            ],
+            [
+              -122.67458962316886,
+              45.52229931728351
+            ],
+            [
+              -122.67458962316886,
+              45.521760330578516
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0038",
+        "address": "414 Douglas Blvd",
+        "land_use": "Industrial",
+        "zoning": "M-1",
+        "status": "Active",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 355000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0039",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67392289957596,
+              45.521760330578516
+            ],
+            [
+              -122.67341003527372,
+              45.521760330578516
+            ],
+            [
+              -122.67341003527372,
+              45.52229931728351
+            ],
+            [
+              -122.67392289957596,
+              45.52229931728351
+            ],
+            [
+              -122.67392289957596,
+              45.521760330578516
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0039",
+        "address": "416 Douglas Blvd",
+        "land_use": "Commercial",
+        "zoning": "C-1",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 941000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0040",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67325617598304,
+              45.521760330578516
+            ],
+            [
+              -122.6727433116808,
+              45.521760330578516
+            ],
+            [
+              -122.6727433116808,
+              45.52229931728351
+            ],
+            [
+              -122.67325617598304,
+              45.52229931728351
+            ],
+            [
+              -122.67325617598304,
+              45.521760330578516
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0040",
+        "address": "418 Douglas Blvd",
+        "land_use": "Civic / Institutional",
+        "zoning": "CF",
+        "status": "Exempt",
+        "area_sqm": 2394.7,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0041",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6792566883192,
+              45.522407114624514
+            ],
+            [
+              -122.67874382401696,
+              45.522407114624514
+            ],
+            [
+              -122.67874382401696,
+              45.52294610132951
+            ],
+            [
+              -122.6792566883192,
+              45.52294610132951
+            ],
+            [
+              -122.6792566883192,
+              45.522407114624514
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0041",
+        "address": "500 Elm Ct",
+        "land_use": "Parks / Open Space",
+        "zoning": "OS",
+        "status": "Active",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 30000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0042",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6785899647263,
+              45.522407114624514
+            ],
+            [
+              -122.67807710042406,
+              45.522407114624514
+            ],
+            [
+              -122.67807710042406,
+              45.52294610132951
+            ],
+            [
+              -122.6785899647263,
+              45.52294610132951
+            ],
+            [
+              -122.6785899647263,
+              45.522407114624514
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0042",
+        "address": "502 Elm Ct",
+        "land_use": "Commercial",
+        "zoning": "C-2",
+        "status": "Active",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 791000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0043",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67792324113339,
+              45.522407114624514
+            ],
+            [
+              -122.67741037683115,
+              45.522407114624514
+            ],
+            [
+              -122.67741037683115,
+              45.52294610132951
+            ],
+            [
+              -122.67792324113339,
+              45.52294610132951
+            ],
+            [
+              -122.67792324113339,
+              45.522407114624514
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0043",
+        "address": "504 Elm Ct",
+        "land_use": "Residential",
+        "zoning": "R-1",
+        "status": "Active",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 532000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0044",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67725651754048,
+              45.522407114624514
+            ],
+            [
+              -122.67674365323825,
+              45.522407114624514
+            ],
+            [
+              -122.67674365323825,
+              45.52294610132951
+            ],
+            [
+              -122.67725651754048,
+              45.52294610132951
+            ],
+            [
+              -122.67725651754048,
+              45.522407114624514
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0044",
+        "address": "506 Elm Ct",
+        "land_use": "Industrial",
+        "zoning": "M-1",
+        "status": "Active",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 297000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0045",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67658979394757,
+              45.522407114624514
+            ],
+            [
+              -122.67607692964533,
+              45.522407114624514
+            ],
+            [
+              -122.67607692964533,
+              45.52294610132951
+            ],
+            [
+              -122.67658979394757,
+              45.52294610132951
+            ],
+            [
+              -122.67658979394757,
+              45.522407114624514
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0045",
+        "address": "508 Elm Ct",
+        "land_use": "Commercial",
+        "zoning": "C-1",
+        "status": "Exempt",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0046",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67592307035467,
+              45.522407114624514
+            ],
+            [
+              -122.67541020605243,
+              45.522407114624514
+            ],
+            [
+              -122.67541020605243,
+              45.52294610132951
+            ],
+            [
+              -122.67592307035467,
+              45.52294610132951
+            ],
+            [
+              -122.67592307035467,
+              45.522407114624514
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0046",
+        "address": "510 Elm Ct",
+        "land_use": "Civic / Institutional",
+        "zoning": "CF",
+        "status": "Exempt",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0047",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67525634676177,
+              45.522407114624514
+            ],
+            [
+              -122.67474348245953,
+              45.522407114624514
+            ],
+            [
+              -122.67474348245953,
+              45.52294610132951
+            ],
+            [
+              -122.67525634676177,
+              45.52294610132951
+            ],
+            [
+              -122.67525634676177,
+              45.522407114624514
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0047",
+        "address": "512 Elm Ct",
+        "land_use": "Mixed Use",
+        "zoning": "MU",
+        "status": "Active",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 578000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0048",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67458962316886,
+              45.522407114624514
+            ],
+            [
+              -122.67407675886662,
+              45.522407114624514
+            ],
+            [
+              -122.67407675886662,
+              45.52294610132951
+            ],
+            [
+              -122.67458962316886,
+              45.52294610132951
+            ],
+            [
+              -122.67458962316886,
+              45.522407114624514
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0048",
+        "address": "514 Elm Ct",
+        "land_use": "Residential",
+        "zoning": "R-2",
+        "status": "Active",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 539000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0049",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67392289957596,
+              45.522407114624514
+            ],
+            [
+              -122.67341003527372,
+              45.522407114624514
+            ],
+            [
+              -122.67341003527372,
+              45.52294610132951
+            ],
+            [
+              -122.67392289957596,
+              45.52294610132951
+            ],
+            [
+              -122.67392289957596,
+              45.522407114624514
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0049",
+        "address": "516 Elm Ct",
+        "land_use": "Parks / Open Space",
+        "zoning": "OS",
+        "status": "Pending Review",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 28000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0050",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67325617598304,
+              45.522407114624514
+            ],
+            [
+              -122.6727433116808,
+              45.522407114624514
+            ],
+            [
+              -122.6727433116808,
+              45.52294610132951
+            ],
+            [
+              -122.67325617598304,
+              45.52294610132951
+            ],
+            [
+              -122.67325617598304,
+              45.522407114624514
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0050",
+        "address": "518 Elm Ct",
+        "land_use": "Commercial",
+        "zoning": "C-2",
+        "status": "Active",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 824000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0051",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6792566883192,
+              45.523053898670504
+            ],
+            [
+              -122.67874382401696,
+              45.523053898670504
+            ],
+            [
+              -122.67874382401696,
+              45.5235928853755
+            ],
+            [
+              -122.6792566883192,
+              45.5235928853755
+            ],
+            [
+              -122.6792566883192,
+              45.523053898670504
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0051",
+        "address": "600 Fir Loop",
+        "land_use": "Residential",
+        "zoning": "R-2",
+        "status": "Active",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 526000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0052",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6785899647263,
+              45.523053898670504
+            ],
+            [
+              -122.67807710042406,
+              45.523053898670504
+            ],
+            [
+              -122.67807710042406,
+              45.5235928853755
+            ],
+            [
+              -122.6785899647263,
+              45.5235928853755
+            ],
+            [
+              -122.6785899647263,
+              45.523053898670504
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0052",
+        "address": "602 Fir Loop",
+        "land_use": "Parks / Open Space",
+        "zoning": "OS",
+        "status": "Active",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 36000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0053",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67792324113339,
+              45.523053898670504
+            ],
+            [
+              -122.67741037683115,
+              45.523053898670504
+            ],
+            [
+              -122.67741037683115,
+              45.5235928853755
+            ],
+            [
+              -122.67792324113339,
+              45.5235928853755
+            ],
+            [
+              -122.67792324113339,
+              45.523053898670504
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0053",
+        "address": "604 Fir Loop",
+        "land_use": "Commercial",
+        "zoning": "C-2",
+        "status": "Active",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 1028000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0054",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67725651754048,
+              45.523053898670504
+            ],
+            [
+              -122.67674365323825,
+              45.523053898670504
+            ],
+            [
+              -122.67674365323825,
+              45.5235928853755
+            ],
+            [
+              -122.67725651754048,
+              45.5235928853755
+            ],
+            [
+              -122.67725651754048,
+              45.523053898670504
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0054",
+        "address": "606 Fir Loop",
+        "land_use": "Residential",
+        "zoning": "R-1",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 434000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0055",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67658979394757,
+              45.523053898670504
+            ],
+            [
+              -122.67607692964533,
+              45.523053898670504
+            ],
+            [
+              -122.67607692964533,
+              45.5235928853755
+            ],
+            [
+              -122.67658979394757,
+              45.5235928853755
+            ],
+            [
+              -122.67658979394757,
+              45.523053898670504
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0055",
+        "address": "608 Fir Loop",
+        "land_use": "Industrial",
+        "zoning": "M-1",
+        "status": "Active",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 281000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0056",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67592307035467,
+              45.523053898670504
+            ],
+            [
+              -122.67541020605243,
+              45.523053898670504
+            ],
+            [
+              -122.67541020605243,
+              45.5235928853755
+            ],
+            [
+              -122.67592307035467,
+              45.5235928853755
+            ],
+            [
+              -122.67592307035467,
+              45.523053898670504
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0056",
+        "address": "610 Fir Loop",
+        "land_use": "Commercial",
+        "zoning": "C-1",
+        "status": "Active",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 685000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0057",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67525634676177,
+              45.523053898670504
+            ],
+            [
+              -122.67474348245953,
+              45.523053898670504
+            ],
+            [
+              -122.67474348245953,
+              45.5235928853755
+            ],
+            [
+              -122.67525634676177,
+              45.5235928853755
+            ],
+            [
+              -122.67525634676177,
+              45.523053898670504
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0057",
+        "address": "612 Fir Loop",
+        "land_use": "Civic / Institutional",
+        "zoning": "CF",
+        "status": "Exempt",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0058",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67458962316886,
+              45.523053898670504
+            ],
+            [
+              -122.67407675886662,
+              45.523053898670504
+            ],
+            [
+              -122.67407675886662,
+              45.5235928853755
+            ],
+            [
+              -122.67458962316886,
+              45.5235928853755
+            ],
+            [
+              -122.67458962316886,
+              45.523053898670504
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0058",
+        "address": "614 Fir Loop",
+        "land_use": "Mixed Use",
+        "zoning": "MU",
+        "status": "Active",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 702000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0059",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67392289957596,
+              45.523053898670504
+            ],
+            [
+              -122.67341003527372,
+              45.523053898670504
+            ],
+            [
+              -122.67341003527372,
+              45.5235928853755
+            ],
+            [
+              -122.67392289957596,
+              45.5235928853755
+            ],
+            [
+              -122.67392289957596,
+              45.523053898670504
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0059",
+        "address": "616 Fir Loop",
+        "land_use": "Residential",
+        "zoning": "R-2",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 466000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0060",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67325617598304,
+              45.523053898670504
+            ],
+            [
+              -122.6727433116808,
+              45.523053898670504
+            ],
+            [
+              -122.6727433116808,
+              45.5235928853755
+            ],
+            [
+              -122.67325617598304,
+              45.5235928853755
+            ],
+            [
+              -122.67325617598304,
+              45.523053898670504
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0060",
+        "address": "618 Fir Loop",
+        "land_use": "Parks / Open Space",
+        "zoning": "OS",
+        "status": "Active",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 30000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0061",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6792566883192,
+              45.5237006827165
+            ],
+            [
+              -122.67874382401696,
+              45.5237006827165
+            ],
+            [
+              -122.67874382401696,
+              45.5242396694215
+            ],
+            [
+              -122.6792566883192,
+              45.5242396694215
+            ],
+            [
+              -122.6792566883192,
+              45.5237006827165
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0061",
+        "address": "700 Grove Pl",
+        "land_use": "Industrial",
+        "zoning": "M-1",
+        "status": "Exempt",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0062",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6785899647263,
+              45.5237006827165
+            ],
+            [
+              -122.67807710042406,
+              45.5237006827165
+            ],
+            [
+              -122.67807710042406,
+              45.5242396694215
+            ],
+            [
+              -122.6785899647263,
+              45.5242396694215
+            ],
+            [
+              -122.6785899647263,
+              45.5237006827165
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0062",
+        "address": "702 Grove Pl",
+        "land_use": "Commercial",
+        "zoning": "C-1",
+        "status": "Active",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 798000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0063",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67792324113339,
+              45.5237006827165
+            ],
+            [
+              -122.67741037683115,
+              45.5237006827165
+            ],
+            [
+              -122.67741037683115,
+              45.5242396694215
+            ],
+            [
+              -122.67792324113339,
+              45.5242396694215
+            ],
+            [
+              -122.67792324113339,
+              45.5237006827165
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0063",
+        "address": "704 Grove Pl",
+        "land_use": "Civic / Institutional",
+        "zoning": "CF",
+        "status": "Exempt",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0064",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67725651754048,
+              45.5237006827165
+            ],
+            [
+              -122.67674365323825,
+              45.5237006827165
+            ],
+            [
+              -122.67674365323825,
+              45.5242396694215
+            ],
+            [
+              -122.67725651754048,
+              45.5242396694215
+            ],
+            [
+              -122.67725651754048,
+              45.5237006827165
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0064",
+        "address": "706 Grove Pl",
+        "land_use": "Mixed Use",
+        "zoning": "MU",
+        "status": "Pending Review",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 564000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0065",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67658979394757,
+              45.5237006827165
+            ],
+            [
+              -122.67607692964533,
+              45.5237006827165
+            ],
+            [
+              -122.67607692964533,
+              45.5242396694215
+            ],
+            [
+              -122.67658979394757,
+              45.5242396694215
+            ],
+            [
+              -122.67658979394757,
+              45.5237006827165
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0065",
+        "address": "708 Grove Pl",
+        "land_use": "Residential",
+        "zoning": "R-2",
+        "status": "Pending Review",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 547000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0066",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67592307035467,
+              45.5237006827165
+            ],
+            [
+              -122.67541020605243,
+              45.5237006827165
+            ],
+            [
+              -122.67541020605243,
+              45.5242396694215
+            ],
+            [
+              -122.67592307035467,
+              45.5242396694215
+            ],
+            [
+              -122.67592307035467,
+              45.5237006827165
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0066",
+        "address": "710 Grove Pl",
+        "land_use": "Parks / Open Space",
+        "zoning": "OS",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 27000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0067",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67525634676177,
+              45.5237006827165
+            ],
+            [
+              -122.67474348245953,
+              45.5237006827165
+            ],
+            [
+              -122.67474348245953,
+              45.5242396694215
+            ],
+            [
+              -122.67525634676177,
+              45.5242396694215
+            ],
+            [
+              -122.67525634676177,
+              45.5237006827165
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0067",
+        "address": "712 Grove Pl",
+        "land_use": "Commercial",
+        "zoning": "C-2",
+        "status": "Pending Review",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 770000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0068",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67458962316886,
+              45.5237006827165
+            ],
+            [
+              -122.67407675886662,
+              45.5237006827165
+            ],
+            [
+              -122.67407675886662,
+              45.5242396694215
+            ],
+            [
+              -122.67458962316886,
+              45.5242396694215
+            ],
+            [
+              -122.67458962316886,
+              45.5237006827165
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0068",
+        "address": "714 Grove Pl",
+        "land_use": "Residential",
+        "zoning": "R-1",
+        "status": "Active",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 475000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0069",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67392289957596,
+              45.5237006827165
+            ],
+            [
+              -122.67341003527372,
+              45.5237006827165
+            ],
+            [
+              -122.67341003527372,
+              45.5242396694215
+            ],
+            [
+              -122.67392289957596,
+              45.5242396694215
+            ],
+            [
+              -122.67392289957596,
+              45.5237006827165
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0069",
+        "address": "716 Grove Pl",
+        "land_use": "Industrial",
+        "zoning": "M-1",
+        "status": "Active",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 372000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0070",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67325617598304,
+              45.5237006827165
+            ],
+            [
+              -122.6727433116808,
+              45.5237006827165
+            ],
+            [
+              -122.6727433116808,
+              45.5242396694215
+            ],
+            [
+              -122.67325617598304,
+              45.5242396694215
+            ],
+            [
+              -122.67325617598304,
+              45.5237006827165
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0070",
+        "address": "718 Grove Pl",
+        "land_use": "Commercial",
+        "zoning": "C-1",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.6,
+        "area_acres": 0.592,
+        "assessed_value_usd": 801000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0071",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6792566883192,
+              45.52434746676249
+            ],
+            [
+              -122.67874382401696,
+              45.52434746676249
+            ],
+            [
+              -122.67874382401696,
+              45.52488645346749
+            ],
+            [
+              -122.6792566883192,
+              45.52488645346749
+            ],
+            [
+              -122.6792566883192,
+              45.52434746676249
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0071",
+        "address": "800 Hazel Row",
+        "land_use": "Residential",
+        "zoning": "R-1",
+        "status": "Exempt",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0072",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6785899647263,
+              45.52434746676249
+            ],
+            [
+              -122.67807710042406,
+              45.52434746676249
+            ],
+            [
+              -122.67807710042406,
+              45.52488645346749
+            ],
+            [
+              -122.6785899647263,
+              45.52488645346749
+            ],
+            [
+              -122.6785899647263,
+              45.52434746676249
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0072",
+        "address": "802 Hazel Row",
+        "land_use": "Industrial",
+        "zoning": "M-1",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 359000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0073",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67792324113339,
+              45.52434746676249
+            ],
+            [
+              -122.67741037683115,
+              45.52434746676249
+            ],
+            [
+              -122.67741037683115,
+              45.52488645346749
+            ],
+            [
+              -122.67792324113339,
+              45.52488645346749
+            ],
+            [
+              -122.67792324113339,
+              45.52434746676249
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0073",
+        "address": "804 Hazel Row",
+        "land_use": "Commercial",
+        "zoning": "C-1",
+        "status": "Active",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 896000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0074",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67725651754048,
+              45.52434746676249
+            ],
+            [
+              -122.67674365323825,
+              45.52434746676249
+            ],
+            [
+              -122.67674365323825,
+              45.52488645346749
+            ],
+            [
+              -122.67725651754048,
+              45.52488645346749
+            ],
+            [
+              -122.67725651754048,
+              45.52434746676249
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0074",
+        "address": "806 Hazel Row",
+        "land_use": "Civic / Institutional",
+        "zoning": "CF",
+        "status": "Exempt",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0075",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67658979394757,
+              45.52434746676249
+            ],
+            [
+              -122.67607692964533,
+              45.52434746676249
+            ],
+            [
+              -122.67607692964533,
+              45.52488645346749
+            ],
+            [
+              -122.67658979394757,
+              45.52488645346749
+            ],
+            [
+              -122.67658979394757,
+              45.52434746676249
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0075",
+        "address": "808 Hazel Row",
+        "land_use": "Mixed Use",
+        "zoning": "MU",
+        "status": "Pending Review",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 551000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0076",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67592307035467,
+              45.52434746676249
+            ],
+            [
+              -122.67541020605243,
+              45.52434746676249
+            ],
+            [
+              -122.67541020605243,
+              45.52488645346749
+            ],
+            [
+              -122.67592307035467,
+              45.52488645346749
+            ],
+            [
+              -122.67592307035467,
+              45.52434746676249
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0076",
+        "address": "810 Hazel Row",
+        "land_use": "Residential",
+        "zoning": "R-2",
+        "status": "Active",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 503000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0077",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67525634676177,
+              45.52434746676249
+            ],
+            [
+              -122.67474348245953,
+              45.52434746676249
+            ],
+            [
+              -122.67474348245953,
+              45.52488645346749
+            ],
+            [
+              -122.67525634676177,
+              45.52488645346749
+            ],
+            [
+              -122.67525634676177,
+              45.52434746676249
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0077",
+        "address": "812 Hazel Row",
+        "land_use": "Parks / Open Space",
+        "zoning": "OS",
+        "status": "Pending Review",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 26000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0078",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67458962316886,
+              45.52434746676249
+            ],
+            [
+              -122.67407675886662,
+              45.52434746676249
+            ],
+            [
+              -122.67407675886662,
+              45.52488645346749
+            ],
+            [
+              -122.67458962316886,
+              45.52488645346749
+            ],
+            [
+              -122.67458962316886,
+              45.52434746676249
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0078",
+        "address": "814 Hazel Row",
+        "land_use": "Commercial",
+        "zoning": "C-2",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 924000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0079",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67392289957596,
+              45.52434746676249
+            ],
+            [
+              -122.67341003527372,
+              45.52434746676249
+            ],
+            [
+              -122.67341003527372,
+              45.52488645346749
+            ],
+            [
+              -122.67392289957596,
+              45.52488645346749
+            ],
+            [
+              -122.67392289957596,
+              45.52434746676249
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0079",
+        "address": "816 Hazel Row",
+        "land_use": "Residential",
+        "zoning": "R-1",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 512000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0080",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67325617598304,
+              45.52434746676249
+            ],
+            [
+              -122.6727433116808,
+              45.52434746676249
+            ],
+            [
+              -122.6727433116808,
+              45.52488645346749
+            ],
+            [
+              -122.67325617598304,
+              45.52488645346749
+            ],
+            [
+              -122.67325617598304,
+              45.52434746676249
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0080",
+        "address": "818 Hazel Row",
+        "land_use": "Industrial",
+        "zoning": "M-1",
+        "status": "Active",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 302000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0081",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6792566883192,
+              45.52499425080848
+            ],
+            [
+              -122.67874382401696,
+              45.52499425080848
+            ],
+            [
+              -122.67874382401696,
+              45.52553323751348
+            ],
+            [
+              -122.6792566883192,
+              45.52553323751348
+            ],
+            [
+              -122.6792566883192,
+              45.52499425080848
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0081",
+        "address": "900 Ironwood Dr",
+        "land_use": "Mixed Use",
+        "zoning": "MU",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 560000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0082",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6785899647263,
+              45.52499425080848
+            ],
+            [
+              -122.67807710042406,
+              45.52499425080848
+            ],
+            [
+              -122.67807710042406,
+              45.52553323751348
+            ],
+            [
+              -122.6785899647263,
+              45.52553323751348
+            ],
+            [
+              -122.6785899647263,
+              45.52499425080848
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0082",
+        "address": "902 Ironwood Dr",
+        "land_use": "Residential",
+        "zoning": "R-2",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 512000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0083",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67792324113339,
+              45.52499425080848
+            ],
+            [
+              -122.67741037683115,
+              45.52499425080848
+            ],
+            [
+              -122.67741037683115,
+              45.52553323751348
+            ],
+            [
+              -122.67792324113339,
+              45.52553323751348
+            ],
+            [
+              -122.67792324113339,
+              45.52499425080848
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0083",
+        "address": "904 Ironwood Dr",
+        "land_use": "Parks / Open Space",
+        "zoning": "OS",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 34000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0084",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67725651754048,
+              45.52499425080848
+            ],
+            [
+              -122.67674365323825,
+              45.52499425080848
+            ],
+            [
+              -122.67674365323825,
+              45.52553323751348
+            ],
+            [
+              -122.67725651754048,
+              45.52553323751348
+            ],
+            [
+              -122.67725651754048,
+              45.52499425080848
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0084",
+        "address": "906 Ironwood Dr",
+        "land_use": "Commercial",
+        "zoning": "C-2",
+        "status": "Active",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 760000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0085",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67658979394757,
+              45.52499425080848
+            ],
+            [
+              -122.67607692964533,
+              45.52499425080848
+            ],
+            [
+              -122.67607692964533,
+              45.52553323751348
+            ],
+            [
+              -122.67658979394757,
+              45.52553323751348
+            ],
+            [
+              -122.67658979394757,
+              45.52499425080848
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0085",
+        "address": "908 Ironwood Dr",
+        "land_use": "Residential",
+        "zoning": "R-1",
+        "status": "Active",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 397000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0086",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67592307035467,
+              45.52499425080848
+            ],
+            [
+              -122.67541020605243,
+              45.52499425080848
+            ],
+            [
+              -122.67541020605243,
+              45.52553323751348
+            ],
+            [
+              -122.67592307035467,
+              45.52553323751348
+            ],
+            [
+              -122.67592307035467,
+              45.52499425080848
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0086",
+        "address": "910 Ironwood Dr",
+        "land_use": "Industrial",
+        "zoning": "M-1",
+        "status": "Exempt",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0087",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67525634676177,
+              45.52499425080848
+            ],
+            [
+              -122.67474348245953,
+              45.52499425080848
+            ],
+            [
+              -122.67474348245953,
+              45.52553323751348
+            ],
+            [
+              -122.67525634676177,
+              45.52553323751348
+            ],
+            [
+              -122.67525634676177,
+              45.52499425080848
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0087",
+        "address": "912 Ironwood Dr",
+        "land_use": "Commercial",
+        "zoning": "C-1",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 886000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0088",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67458962316886,
+              45.52499425080848
+            ],
+            [
+              -122.67407675886662,
+              45.52499425080848
+            ],
+            [
+              -122.67407675886662,
+              45.52553323751348
+            ],
+            [
+              -122.67458962316886,
+              45.52553323751348
+            ],
+            [
+              -122.67458962316886,
+              45.52499425080848
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0088",
+        "address": "914 Ironwood Dr",
+        "land_use": "Civic / Institutional",
+        "zoning": "CF",
+        "status": "Exempt",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0089",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67392289957596,
+              45.52499425080848
+            ],
+            [
+              -122.67341003527372,
+              45.52499425080848
+            ],
+            [
+              -122.67341003527372,
+              45.52553323751348
+            ],
+            [
+              -122.67392289957596,
+              45.52553323751348
+            ],
+            [
+              -122.67392289957596,
+              45.52499425080848
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0089",
+        "address": "916 Ironwood Dr",
+        "land_use": "Mixed Use",
+        "zoning": "MU",
+        "status": "Active",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 616000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0090",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67325617598304,
+              45.52499425080848
+            ],
+            [
+              -122.6727433116808,
+              45.52499425080848
+            ],
+            [
+              -122.6727433116808,
+              45.52553323751348
+            ],
+            [
+              -122.67325617598304,
+              45.52553323751348
+            ],
+            [
+              -122.67325617598304,
+              45.52499425080848
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0090",
+        "address": "918 Ironwood Dr",
+        "land_use": "Residential",
+        "zoning": "R-2",
+        "status": "Exempt",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0091",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6792566883192,
+              45.52564103485448
+            ],
+            [
+              -122.67874382401696,
+              45.52564103485448
+            ],
+            [
+              -122.67874382401696,
+              45.526180021559476
+            ],
+            [
+              -122.6792566883192,
+              45.526180021559476
+            ],
+            [
+              -122.6792566883192,
+              45.52564103485448
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0091",
+        "address": "1000 Juniper Ln",
+        "land_use": "Civic / Institutional",
+        "zoning": "CF",
+        "status": "Exempt",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0092",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.6785899647263,
+              45.52564103485448
+            ],
+            [
+              -122.67807710042406,
+              45.52564103485448
+            ],
+            [
+              -122.67807710042406,
+              45.526180021559476
+            ],
+            [
+              -122.6785899647263,
+              45.526180021559476
+            ],
+            [
+              -122.6785899647263,
+              45.52564103485448
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0092",
+        "address": "1002 Juniper Ln",
+        "land_use": "Mixed Use",
+        "zoning": "MU",
+        "status": "Active",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 797000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0093",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67792324113339,
+              45.52564103485448
+            ],
+            [
+              -122.67741037683115,
+              45.52564103485448
+            ],
+            [
+              -122.67741037683115,
+              45.526180021559476
+            ],
+            [
+              -122.67792324113339,
+              45.526180021559476
+            ],
+            [
+              -122.67792324113339,
+              45.52564103485448
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0093",
+        "address": "1004 Juniper Ln",
+        "land_use": "Residential",
+        "zoning": "R-2",
+        "status": "Exempt",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0094",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67725651754048,
+              45.52564103485448
+            ],
+            [
+              -122.67674365323825,
+              45.52564103485448
+            ],
+            [
+              -122.67674365323825,
+              45.526180021559476
+            ],
+            [
+              -122.67725651754048,
+              45.526180021559476
+            ],
+            [
+              -122.67725651754048,
+              45.52564103485448
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0094",
+        "address": "1006 Juniper Ln",
+        "land_use": "Parks / Open Space",
+        "zoning": "OS",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 28000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0095",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67658979394757,
+              45.52564103485448
+            ],
+            [
+              -122.67607692964533,
+              45.52564103485448
+            ],
+            [
+              -122.67607692964533,
+              45.526180021559476
+            ],
+            [
+              -122.67658979394757,
+              45.526180021559476
+            ],
+            [
+              -122.67658979394757,
+              45.52564103485448
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0095",
+        "address": "1008 Juniper Ln",
+        "land_use": "Commercial",
+        "zoning": "C-2",
+        "status": "Pending Review",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 739000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0096",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67592307035467,
+              45.52564103485448
+            ],
+            [
+              -122.67541020605243,
+              45.52564103485448
+            ],
+            [
+              -122.67541020605243,
+              45.526180021559476
+            ],
+            [
+              -122.67592307035467,
+              45.526180021559476
+            ],
+            [
+              -122.67592307035467,
+              45.52564103485448
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0096",
+        "address": "1010 Juniper Ln",
+        "land_use": "Residential",
+        "zoning": "R-1",
+        "status": "Active",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 536000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0097",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67525634676177,
+              45.52564103485448
+            ],
+            [
+              -122.67474348245953,
+              45.52564103485448
+            ],
+            [
+              -122.67474348245953,
+              45.526180021559476
+            ],
+            [
+              -122.67525634676177,
+              45.526180021559476
+            ],
+            [
+              -122.67525634676177,
+              45.52564103485448
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0097",
+        "address": "1012 Juniper Ln",
+        "land_use": "Industrial",
+        "zoning": "M-1",
+        "status": "Exempt",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0098",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67458962316886,
+              45.52564103485448
+            ],
+            [
+              -122.67407675886662,
+              45.52564103485448
+            ],
+            [
+              -122.67407675886662,
+              45.526180021559476
+            ],
+            [
+              -122.67458962316886,
+              45.526180021559476
+            ],
+            [
+              -122.67458962316886,
+              45.52564103485448
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0098",
+        "address": "1014 Juniper Ln",
+        "land_use": "Commercial",
+        "zoning": "C-1",
+        "status": "Active",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 893000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0099",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67392289957596,
+              45.52564103485448
+            ],
+            [
+              -122.67341003527372,
+              45.52564103485448
+            ],
+            [
+              -122.67341003527372,
+              45.526180021559476
+            ],
+            [
+              -122.67392289957596,
+              45.526180021559476
+            ],
+            [
+              -122.67392289957596,
+              45.52564103485448
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0099",
+        "address": "1016 Juniper Ln",
+        "land_use": "Civic / Institutional",
+        "zoning": "CF",
+        "status": "Exempt",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 0,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DEM-0100",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.67325617598304,
+              45.52564103485448
+            ],
+            [
+              -122.6727433116808,
+              45.52564103485448
+            ],
+            [
+              -122.6727433116808,
+              45.526180021559476
+            ],
+            [
+              -122.67325617598304,
+              45.526180021559476
+            ],
+            [
+              -122.67325617598304,
+              45.52564103485448
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "DEM-0100",
+        "address": "1018 Juniper Ln",
+        "land_use": "Mixed Use",
+        "zoning": "MU",
+        "status": "Subdivision Proposed",
+        "area_sqm": 2394.5,
+        "area_acres": 0.592,
+        "assessed_value_usd": 556000,
+        "owner": "City of Demoville (synthetic — no personal data)",
+        "jurisdiction": "City of Demoville (fictional)",
+        "last_updated": "2026-09-01",
+        "data_source": "SYNTHETIC DEMO DATA — not real parcels"
+      }
+    }
+  ]
+}
