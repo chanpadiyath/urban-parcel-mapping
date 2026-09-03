@@ -332,7 +332,6 @@ const collection = {
   },
   metadata: {
     generated_by: "scripts/generate-demo-parcels.mjs",
-    generated_at: new Date().toISOString(),
     note: DATA_SOURCE,
     disclaimer:
       "All attributes are fabricated for demonstration. Encroachment values do NOT represent officially detected encroachment. Planning metrics (FAR, ground coverage, built-up %) are demo analysis, not official determinations.",
@@ -350,7 +349,6 @@ const buildingCollection = {
   },
   metadata: {
     generated_by: "scripts/generate-demo-parcels.mjs",
-    generated_at: new Date().toISOString(),
     note: DATA_SOURCE,
     disclaimer:
       "Building footprints and heights are ESTIMATED demo geometry (centred rectangle sized to the built-up area; height = floors x 3.2 m). They are not surveyed structures.",

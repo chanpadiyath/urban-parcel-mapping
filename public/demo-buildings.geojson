@@ -9,7 +9,6 @@
   },
   "metadata": {
     "generated_by": "scripts/generate-demo-parcels.mjs",
-    "generated_at": "2026-09-03T20:52:13.368Z",
     "note": "SYNTHETIC DEMO DATA — not real parcels",
     "disclaimer": "Building footprints and heights are ESTIMATED demo geometry (centred rectangle sized to the built-up area; height = floors x 3.2 m). They are not surveyed structures.",
     "feature_count": 95

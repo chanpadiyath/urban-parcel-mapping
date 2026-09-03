@@ -9,7 +9,6 @@
   },
   "metadata": {
     "generated_by": "scripts/generate-demo-parcels.mjs",
-    "generated_at": "2026-09-03T20:52:13.368Z",
     "note": "SYNTHETIC DEMO DATA — not real parcels",
     "disclaimer": "All attributes are fabricated for demonstration. Encroachment values do NOT represent officially detected encroachment. Planning metrics (FAR, ground coverage, built-up %) are demo analysis, not official determinations.",
     "feature_count": 100
