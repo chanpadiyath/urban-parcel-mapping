@@ -10,6 +10,7 @@ import {
 } from "../metrics";
 import type { AnalyzeResult } from "../ai/analyze";
 import type { AiRuntimeState } from "../types";
+import type { ParcelReconcile } from "../data/reconcile";
 
 function rel(ts: number | null | undefined, now: number): string {
   if (!ts) return "—";
@@ -28,6 +29,8 @@ interface Props {
   aiLastRanAt: number | null;
   lastSyncTs: number;
   now: number;
+  reconcile: ParcelReconcile | null | undefined;
+  reconcileState: "loading" | "ready" | "unavailable";
   onClose: () => void;
 }
 
@@ -76,7 +79,7 @@ function encPill(level: string) {
 }
 
 function LandTwinPanel({
-  parcel, aiState, aiBusy, aiResult, aiLastRanAt, lastSyncTs, now, onClose,
+  parcel, aiState, aiBusy, aiResult, aiLastRanAt, lastSyncTs, now, reconcile, reconcileState, onClose,
 }: Props) {
   if (!parcel) return null;
   const m = deriveMetrics(parcel);
@@ -215,6 +218,55 @@ function LandTwinPanel({
             </li>
           ))}
         </ul>
+      </section>
+
+      <section className="tw__section">
+        <h3 className="tw__section-title">
+          Cross-check — OpenStreetMap
+          <span className="tw__tag">community data</span>
+        </h3>
+        {reconcileState === "unavailable" && (
+          <p className="tw__muted">Needs the simulation backend (npm run server) with network access.</p>
+        )}
+        {reconcileState === "loading" && <p className="tw__muted">Loading reference comparison…</p>}
+        {reconcileState === "ready" && !reconcile && (
+          <p className="tw__muted">No OSM feature overlaps this parcel.</p>
+        )}
+        {reconcileState === "ready" && reconcile && (
+          <dl className="tw__list">
+            <Row
+              label="OSM building here"
+              value={reconcile.osm_building_present ? `Yes (${reconcile.osm_building_count})` : "No"}
+            />
+            {reconcile.osm_building_present && (
+              <Row
+                label="Footprint: OSM vs ours"
+                value={`${fmtSqm(reconcile.osm_building_area_sqm)} vs ${fmtSqm(reconcile.our_built_up_area_sqm)}`}
+                sub={reconcile.built_up_delta_sqm != null ? `Δ ${reconcile.built_up_delta_sqm} m²` : undefined}
+              />
+            )}
+            <Row
+              label="OSM land use"
+              value={reconcile.osm_landuse ?? "—"}
+              sub={
+                reconcile.landuse_match === null
+                  ? "not comparable"
+                  : reconcile.landuse_match
+                    ? "agrees with ours"
+                    : `differs (ours: ${reconcile.our_land_use})`
+              }
+            />
+            <Row
+              label="Nearest mapped road"
+              value={reconcile.nearest_road_m != null ? `${reconcile.nearest_road_m} m` : "—"}
+              sub={reconcile.nearest_road_name ?? reconcile.nearest_road_class ?? undefined}
+            />
+          </dl>
+        )}
+        <p className="tw__muted" style={{ marginTop: 8 }}>
+          OpenStreetMap, not an official land record. Our boundary is a derived grid, so
+          overlap is indicative.
+        </p>
       </section>
 
       <Section title="Data sources">

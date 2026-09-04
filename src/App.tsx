@@ -18,6 +18,7 @@ import { deriveMetrics } from "./metrics";
 import { geometryBounds, type BBox } from "./geo";
 import { DEMO } from "./config";
 import { resolveDataStack, type DataStack } from "./data/providers";
+import { useReconciliation } from "./data/reconcile";
 import { useLocalLandAI } from "./ai/useLocalLandAI";
 import { parseQuery } from "./ai/analyze";
 import { useLandTwinSync } from "./realtime/useLandTwinSync";
@@ -87,6 +88,10 @@ export default function App() {
   const ai = useLocalLandAI();
   const ready = load.status === "ready";
   const sync = useLandTwinSync(ready);
+  const recon = useReconciliation();
+  const reconResult = recon.state.status === "ready" ? recon.state.data : null;
+  const reconStatus: "loading" | "ready" | "unavailable" =
+    recon.state.status === "ready" ? "ready" : recon.state.status === "loading" ? "loading" : "unavailable";
 
   // clock for relative timestamps
   useEffect(() => {
@@ -349,6 +354,9 @@ export default function App() {
               modeLabel={stack.modeLabel}
               sources={stack.sources}
               dash={dash}
+              reconcile={reconResult}
+              reconcileState={reconStatus}
+              onReconcileRefresh={recon.refresh}
               aiState={ai.state}
               aiBusy={ai.busy}
               aiReason={ai.reason}
@@ -427,6 +435,8 @@ export default function App() {
               aiLastRanAt={ai.lastRanAt}
               lastSyncTs={sync.lastSyncTs}
               now={now}
+              reconcile={selectedId ? reconResult?.perParcel[selectedId] ?? null : null}
+              reconcileState={reconStatus}
               onClose={() => setSelected(null)}
             />
           </div>

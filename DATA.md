@@ -54,6 +54,73 @@ Nothing in this prototype is an official record or a legal determination.
   official land record"` and `data_quality = "DEMO"`; both files carry a
   `metadata.disclaimer`.
 
+## Reference data & cross-check — REAL (OpenStreetMap)
+
+There is **no public API for Indian cadastral parcel geometry**. State
+land-record systems (Tamil Nadu: `eservices.tn.gov.in` — Patta / Chitta /
+A-Register / FMB sketch; `tnreginet.gov.in` — guideline value) are
+CAPTCHA-gated, per-record web forms with no bulk/API access. Automating them
+would mean defeating access controls, which this project does not do.
+
+The closest lawful, automatable reference is **OpenStreetMap**, pulled
+server-side via the **Overpass API**:
+
+- **`server/reference.mjs`** fetches `building`, `landuse` and `highway` ways
+  for the demo bbox (T. Nagar). Tries several Overpass mirrors; caches to
+  `server/.cache/` (24 h TTL, gitignored); ships a committed snapshot at
+  **`server/data/osm-reference.json`** (~206 buildings, ~15 land-use polygons,
+  ~45 roads) so the feature works offline and is reviewable in git.
+- **`server/reconcile.mjs`** compares every synthetic parcel against that
+  reference: is a real OSM building on it, OSM footprint area vs our built-up
+  estimate, does OSM's `landuse` tag agree with ours, true distance to the
+  nearest mapped road.
+- Endpoints: `GET /api/reference/osm`, `GET /api/reference/status`,
+  `POST /api/reference/refresh`, `GET /api/reconcile`.
+- Shown in the UI: sidebar **"OSM cross-check"** card (building-presence rate,
+  land-use agreement rate, median road distance) and a per-parcel
+  **"Cross-check — OpenStreetMap"** section in the Land Twin panel.
+
+**What the numbers mean.** In the current data the agreement is *low*
+(~16 % of parcels sit on an OSM building, ~7 % land-use agreement). That is
+expected and correct: our parcels are a **derived grid at the real location**,
+not real plot boundaries, so they only line up with real OSM features by
+coincidence. The reconciliation is doing its job — it is honestly measuring
+how far the synthetic geometry is from reality.
+
+**OSM caveats.** Community-contributed; completeness and tagging vary by area;
+building polygons can lag the ground; no ownership or legal-boundary data.
+It is a sanity reference, not an authoritative record.
+
+## Getting real cadastral data (production paths)
+
+None of these is a drop-in API; all need process, not just code.
+
+1. **Formal data-sharing request** to the Tamil Nadu **Commissionerate of Land
+   Administration / Survey & Settlement Department** (or **TNeGA**). They hold
+   digitised FMB + Patta; a government/academic/partner MoU can obtain
+   village-level cadastral shapefiles. This is the real source of parcel
+   polygons + survey numbers.
+2. **CMDA Second Master Plan** land-use zoning — published as maps; can be
+   georeferenced and vectorised into a real `land_use` / `zoning` layer for
+   Chennai. Legitimate, just manual.
+3. **Bhuvan (ISRO/NRSC)** WMS/WFS — LULC (Land Use Land Cover) and
+   administrative/ward boundaries. Reachable (`bhuvan-vec1.nrsc.gov.in`,
+   registration for some layers), coarse (not parcel-level) but good for
+   neighbourhood land-use validation. A natural second `LandDataProvider`.
+4. **District e-Adangal / DIGITISE datasets** where a district has published
+   them on its portal or on `data.gov.in`.
+5. **Municipal property-tax GIS** (Greater Chennai Corporation) — parcel-ish
+   property boundaries exist internally; obtainable via the corporation.
+6. **Commercial cadastral vendors** operating under state Revenue-department
+   arrangements, if budget allows.
+
+To wire any of these in: implement `LandDataProvider` in
+`src/data/providers.ts` (or a server-side fetch + `/api` endpoint for
+CAPTCHA/rate-limited sources) returning geometry normalised to
+`ParcelProperties`, and place it ahead of `demoDataProvider`. The mode
+indicator then reports MODE A/B and the reconciliation compares against it
+instead of (or as well as) OSM.
+
 ## Base map — REAL, keyless
 
 | Layer | Source | Attribution |

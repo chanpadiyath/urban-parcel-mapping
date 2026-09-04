@@ -17,6 +17,8 @@ import { readFile, stat } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, extname, join, normalize, resolve } from "node:path";
 import { createEngine } from "./flood-engine.mjs";
+import { ReferenceStore } from "./reference.mjs";
+import { reconcile } from "./reconcile.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.SIM_PORT ?? 8787);
@@ -24,6 +26,8 @@ const DIST = resolve(__dirname, "../dist");
 const PUBLIC = resolve(__dirname, "../public");
 
 const engine = createEngine();
+const refStore = new ReferenceStore(engine.parcels);
+let reconcileCache = null; // { at, refLoadedAt, result }
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -90,11 +94,46 @@ const server = createServer(async (req, res) => {
   if (req.method === "OPTIONS") { cors(res); res.writeHead(204); res.end(); return; }
 
   if (p === "/api/health") {
-    return sendJson(res, 200, { ok: true, listeners: engine.listenerCount, status: engine.status });
+    return sendJson(res, 200, {
+      ok: true,
+      listeners: engine.listenerCount,
+      status: engine.status,
+      reference: refStore.state,
+    });
   }
 
   if (p === "/api/simulation/state") {
     return sendJson(res, 200, engine.snapshot());
+  }
+
+  // --- reference data (real OpenStreetMap) ---
+  if (p === "/api/reference/status") {
+    return sendJson(res, 200, refStore.status());
+  }
+  if (p === "/api/reference/osm") {
+    if (!refStore.fc) return sendJson(res, 503, { error: "reference not loaded", status: refStore.status() });
+    cors(res);
+    res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+    return res.end(JSON.stringify(refStore.fc));
+  }
+  if (p === "/api/reference/refresh" && req.method === "POST") {
+    try {
+      await refStore.refresh();
+      reconcileCache = null;
+      return sendJson(res, 200, refStore.status());
+    } catch (err) {
+      return sendJson(res, 502, { error: String(err && err.message || err), status: refStore.status() });
+    }
+  }
+
+  // --- reconciliation: our synthetic parcels vs OSM ---
+  if (p === "/api/reconcile") {
+    if (!refStore.fc) return sendJson(res, 503, { error: "reference not loaded", status: refStore.status() });
+    const refAt = refStore.fc.meta?.fetched_at ?? refStore.loadedAt;
+    if (!reconcileCache || reconcileCache.refLoadedAt !== refAt) {
+      reconcileCache = { at: Date.now(), refLoadedAt: refAt, result: reconcile(engine.parcels, refStore.fc) };
+    }
+    return sendJson(res, 200, { ...reconcileCache.result, reference_state: refStore.state });
   }
 
   if (p === "/api/simulation/stream") {
@@ -141,6 +180,14 @@ const server = createServer(async (req, res) => {
     if (await serveStatic(req, res, p)) return;
   }
   sendJson(res, 404, { error: "not found" });
+});
+
+refStore.init().then(() => {
+  const c = refStore.fc?.meta?.counts;
+  console.log(
+    `[sim-backend] reference: ${refStore.state}` +
+      (c ? ` (${c.building} buildings, ${c.landuse} land-use, ${c.highway} roads from OSM)` : ""),
+  );
 });
 
 server.listen(PORT, () => {

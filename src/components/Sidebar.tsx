@@ -13,6 +13,7 @@ import {
   type AiRuntimeState,
 } from "../types";
 import type { OperationalMode, SourceStatus } from "../data/providers";
+import type { ReconcileResult } from "../data/reconcile";
 import { fmtPct } from "../metrics";
 
 export interface SearchHit {
@@ -39,6 +40,10 @@ interface SidebarProps {
   sources: SourceStatus[];
 
   dash: DashboardStats;
+
+  reconcile: ReconcileResult | null;
+  reconcileState: "loading" | "ready" | "unavailable";
+  onReconcileRefresh: () => void;
 
   aiState: AiRuntimeState;
   aiBusy: boolean;
@@ -153,8 +158,40 @@ function Sidebar(p: SidebarProps) {
           <div className="kpi"><b>{p.dash.potentialDiscrepancies}</b><span>Potential discrepancies</span></div>
           <div className="kpi"><b>{p.dash.recentChanges}</b><span>Recent changes</span></div>
           <div className="kpi"><b>{p.dash.highConfidence}</b><span>High-confidence parcels</span></div>
-          <div className="kpi"><b className={dotClass ? "" : ""}>{p.aiState === "running" ? "LOCAL" : p.aiState === "fallback" ? "LOCAL*" : "—"}</b><span>AI: {p.aiState}</span></div>
+          <div className="kpi"><b>{p.aiState === "running" ? "LOCAL" : p.aiState === "fallback" ? "LOCAL*" : "—"}</b><span>AI: {p.aiState}</span></div>
         </div>
+      </Card>
+
+      <Card
+        title="OSM cross-check"
+        right={
+          p.reconcileState === "ready"
+            ? <button type="button" className="link" onClick={p.onReconcileRefresh}>Refresh</button>
+            : undefined
+        }
+      >
+        {p.reconcileState === "unavailable" && (
+          <p className="sb__note">
+            Reference comparison needs the backend (`npm run server`) + network. India has
+            no public cadastral API — this compares against OpenStreetMap.
+          </p>
+        )}
+        {p.reconcileState === "loading" && <p className="sb__note">Comparing parcels against OpenStreetMap…</p>}
+        {p.reconcileState === "ready" && p.reconcile && (
+          <>
+            <div className="kpis">
+              <div className="kpi"><b>{p.reconcile.summary.building_presence_rate}%</b><span>parcels w/ OSM building</span></div>
+              <div className="kpi"><b>{p.reconcile.summary.landuse_agreement_rate ?? "—"}%</b><span>land-use agreement</span></div>
+              <div className="kpi"><b>{p.reconcile.summary.median_nearest_road_m ?? "—"} m</b><span>median road distance</span></div>
+              <div className="kpi"><b>{p.reconcile.summary.osm_buildings_in_area}</b><span>OSM buildings in area</span></div>
+            </div>
+            <p className="sb__note">
+              Reference: {p.reconcile.reference_source} · {p.reconcile.reference_state}
+              {p.reconcile.reference_loaded_at ? ` · ${new Date(p.reconcile.reference_loaded_at).toLocaleString()}` : ""}.
+              Low agreement is expected — our parcels are a derived grid, not real plots.
+            </p>
+          </>
+        )}
       </Card>
 
       <Card

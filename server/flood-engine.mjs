@@ -50,6 +50,7 @@ export class FloodEngine {
   constructor(parcelsPath, buildingsPath) {
     const parcels = JSON.parse(readFileSync(parcelsPath, "utf8"));
     const buildings = JSON.parse(readFileSync(buildingsPath, "utf8"));
+    this.parcels = parcels; // raw FeatureCollection (used by reconciliation)
     this.buildingParcelIds = new Set(buildings.features.map((f) => String(f.properties.parcel_id)));
 
     // parcel table + demo elevation surface
