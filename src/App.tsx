@@ -21,8 +21,16 @@ import { resolveDataStack, type DataStack } from "./data/providers";
 import { useLocalLandAI } from "./ai/useLocalLandAI";
 import { parseQuery } from "./ai/analyze";
 import { useLandTwinSync } from "./realtime/useLandTwinSync";
+import SimulationPage from "./pages/SimulationPage";
 
 const MAX_RESULTS = 12;
+
+type Page = "map" | "sim";
+function pageFromHash(): Page {
+  return typeof window !== "undefined" && window.location.hash.replace(/^#/, "").startsWith("/simulation")
+    ? "sim"
+    : "map";
+}
 
 type Load =
   | { status: "loading" }
@@ -64,6 +72,17 @@ export default function App() {
   const [focusBounds, setFocusBounds] = useState<BBox | null>(null);
   const [view, setView] = useState<ViewState | null>(null);
   const [now, setNow] = useState(() => Date.now());
+  const [page, setPage] = useState<Page>(pageFromHash);
+
+  useEffect(() => {
+    const onHash = () => setPage(pageFromHash());
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+  const go = useCallback((p: Page) => {
+    window.location.hash = p === "sim" ? "/simulation" : "/";
+    setPage(p);
+  }, []);
 
   const ai = useLocalLandAI();
   const ready = load.status === "ready";
@@ -296,6 +315,10 @@ export default function App() {
             <span className="app__brand-sub">Land Twin · {DEMO.city}, {DEMO.state}</span>
           </span>
         </div>
+        <nav className="app__nav">
+          <button type="button" className={"app__nav-btn" + (page === "map" ? " is-active" : "")} onClick={() => go("map")}>Parcel Mapping</button>
+          <button type="button" className={"app__nav-btn" + (page === "sim" ? " is-active" : "")} onClick={() => go("sim")}>Land Simulation</button>
+        </nav>
         <div className="app__status-pills">
           <span className="spill"><i className="dot" /> LAND DATA <b>{ready ? "DEMO" : "…"}</b></span>
           <span className="spill"><i className="dot dot--ok" /> IMAGERY <b>{basemap === "satellite" ? "SATELLITE" : "MAP"}</b></span>
@@ -306,6 +329,18 @@ export default function App() {
         </div>
       </header>
 
+      {page === "sim" && ready && stack ? (
+        <SimulationPage
+          parcels={stack.parcels}
+          buildings={stack.buildings}
+          center={[DEMO.lon, DEMO.lat]}
+          zoom={DEMO.zoom}
+        />
+      ) : page === "sim" ? (
+        <div className="app__overlay" role="status">
+          <span className="app__spinner" /> Loading simulation data…
+        </div>
+      ) : (
       <main className={"app__main" + (infoOpen ? " app__main--info" : "")}>
         <div className="app__sidebar">
           {ready && stack ? (
@@ -397,15 +432,27 @@ export default function App() {
           </div>
         )}
       </main>
+      )}
 
       <footer className="app__statusbar">
-        <span>{view ? `${view.lat.toFixed(5)}, ${view.lng.toFixed(5)}` : `${DEMO.lat}, ${DEMO.lon}`}</span>
-        <span>z {view ? view.zoom.toFixed(1) : DEMO.zoom.toFixed(1)}</span>
-        <span>tilt {view ? `${Math.round(view.pitch)}°` : "—"} · {viewMode.toUpperCase()}</span>
-        <span>{ready ? `${visible.length}/${features.length} parcels` : "—"}</span>
-        <span className="sep">·</span>
-        <span>MODE {ready && stack ? stack.mode : "—"} — synthetic demonstration data, not an official land record</span>
-        <span className="push">Esri / © OpenStreetMap contributors</span>
+        {page === "sim" ? (
+          <>
+            <span>LAND SIMULATION</span>
+            <span className="sep">·</span>
+            <span>Client-side deterministic flood model · SIMULATION / DEMO MODE</span>
+            <span className="push">© OpenStreetMap contributors</span>
+          </>
+        ) : (
+          <>
+            <span>{view ? `${view.lat.toFixed(5)}, ${view.lng.toFixed(5)}` : `${DEMO.lat}, ${DEMO.lon}`}</span>
+            <span>z {view ? view.zoom.toFixed(1) : DEMO.zoom.toFixed(1)}</span>
+            <span>tilt {view ? `${Math.round(view.pitch)}°` : "—"} · {viewMode.toUpperCase()}</span>
+            <span>{ready ? `${visible.length}/${features.length} parcels` : "—"}</span>
+            <span className="sep">·</span>
+            <span>MODE {ready && stack ? stack.mode : "—"} — synthetic demonstration data, not an official land record</span>
+            <span className="push">Esri / © OpenStreetMap contributors</span>
+          </>
+        )}
       </footer>
     </div>
   );

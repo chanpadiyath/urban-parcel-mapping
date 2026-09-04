@@ -105,6 +105,29 @@ names) · **Local AI insights** (list) · **Data sources** · disclaimer.
 - **States** — loading spinner, error + **Retry**, empty results.
 - Status bar — cursor lat/lng, zoom, tilt°, 2D/3D, visible/total, MODE.
 
+## Land Simulation page (`#/simulation`)
+
+A separate view (header nav: **Parcel Mapping** / **Land Simulation**) — the
+parcel map is untouched. A **client-side deterministic flood simulation** over
+the real parcel geometry:
+
+- **Controls:** Start / Pause / Reset, Speed ×1/×2/×5, ± Water level, timeline bar.
+- Rising water level vs a **synthesised demo elevation surface** (gradient from
+  a low SW "river/coast" corner + gentle noise — *not* a real DEM). A parcel
+  floods when the level exceeds its demo elevation; depth = level − elevation.
+  Water visibly spreads outward from the low ground as the level rises.
+- **Impact analytics** (from real geometry/attributes): affected parcels,
+  buildings, roads (grid rows/cols touched, approx), area (ha + %), critical
+  infrastructure (Institutional / Public), max depth, sim clock.
+- **Click a flooded parcel** → depth, impact level, land use, building present,
+  encroachment, sim time — showing Parcel Mapping → Land Twin → Simulation.
+- Labelled **SIMULATION / DEMO MODE** throughout. No backend (none exists) —
+  runs deterministically in the browser (fallback Level 3).
+
+Files: `src/sim/flood.ts` (elevation model + impact maths, pure),
+`src/sim/useFloodSim.ts` (timer/state), `src/components/SimMap.tsx` (2D map,
+depth-ramp fill via `feature-state`), `src/pages/SimulationPage.tsx`.
+
 ## Architecture
 
 ```
