@@ -1,101 +1,103 @@
-# Data sources, licences, and PII
+# Data sources, provenance & limitations
 
-## Parcel data — SYNTHETIC
+**This build runs in MODE C — Demonstration.** It does **not** connect to any
+official Indian land-record system, cadastral dataset, satellite
+change-detection service, or weather feed. There is no lawful public API for
+those configured here. The application is architected so such sources can be
+added later (`src/data/providers.ts`), and the UI always states the current
+mode and the state of every source.
 
-The parcels shown in this prototype are **not real**. There is no cadastral
-source behind them.
+Nothing in this prototype is an official record or a legal determination.
 
-- **File:** `public/demo-parcels.geojson`
-- **Generator:** `scripts/generate-demo-parcels.mjs` (`npm run gen:data`)
-- **Contents:** a regular 10×10 grid of rectangular parcels (100 features)
-  arranged around a fictional town centre ("City of Demoville"). Coordinates
-  sit on arbitrary land near Portland, Oregon and correspond to no real
-  property boundaries.
-- **CRS:** EPSG:4326 / CRS84 (`[longitude, latitude]`).
-- **Areas:** computed geodesically in the generator (spherical-excess formula
-  on a mean-radius sphere), not from raw degrees. Reported in m² and acres.
-- **Stored attributes per feature:** `parcel_id`, `address`, `locality`,
-  `ward`, `zone`, `land_use`, `zoning_code`, `zoning_description`,
-  `permitted_use`, `development_status`, `area_sqm`, `area_acres`,
-  `built_up_area_sqm`, `floors`, `row_area_sqm`, `encroachment_area_sqm`,
-  `encroachment_status`, `assessed_value_usd`, `owner`, `jurisdiction`,
-  `last_updated`, `data_source`, `data_quality`. Every feature carries
-  `data_source = "SYNTHETIC DEMO DATA — not real parcels"` and
-  `data_quality = "DEMO DATA"`.
-- **Derived at runtime, not stored** (`src/metrics.ts`): built-up %, open /
-  vacant area and %, encroachment %, ground coverage %, and floor area ratio
-  (`built_up_area × floors ÷ parcel_area`). All guarded against zero /
-  missing / non-finite inputs.
-- **`encroachment_area_sqm` / `encroachment_status`:** **fabricated demo
-  values.** They do **not** represent officially detected encroachment, and no
-  encroachment geometry is generated — only the metric. ~60% of parcels have
-  none; the rest are spread across Minor / Moderate / Significant / Critical.
-- **`assessed_value_usd`:** a **fabricated demo figure** (indicative $/m² by
-  land use × area + a built-up premium × deterministic jitter), not a real
-  assessment. Labelled "(demo)" wherever displayed.
-- **Planning metrics (FAR, ground coverage, built-up ratio):** demo analysis
-  derived from the fabricated areas — not official planning determinations.
-  Labelled "Demo analysis" / "estimated" in the UI.
-- **Land-use classes:** Residential, Commercial, Mixed Use, Industrial,
-  Institutional, Public/Semi-Public, Recreational, Vacant.
-  **Development statuses:** Developed, Partially Developed, Under Development,
-  Vacant, Encroached, Requires Review.
-  **Encroachment levels:** None, Minor, Moderate, Significant, Critical.
-  All fabricated.
-- All non-geometric values are deterministic, so regenerating the file
-  produces the same data (only the metadata timestamp changes). The file's
-  `metadata.disclaimer` restates the above.
-- **Licence:** none required — generated in-repo, released with the project.
+## Parcel data — DERIVED geometry + SYNTHETIC attributes
 
-## Building data — ESTIMATED demo geometry
+- **Files:** `public/demo-parcels.geojson` (144), `public/demo-buildings.geojson` (122).
+- **Generator:** `scripts/generate-demo-parcels.mjs` (`npm run gen:data`),
+  deterministic. Location via env: `DEMO_LAT DEMO_LON DEMO_CITY DEMO_STATE
+  DEMO_LOCALITY` (default: **13.0418, 80.2341 — T. Nagar, Chennai, Tamil Nadu**).
+- **Geometry:** a regular grid of ~2,000 sq ft plots on a road grid, placed at
+  the real Chennai coordinate. It is **derived**, *not* a verified cadastral
+  boundary. `boundary_source` and the `boundary_confidence` field
+  (mostly Medium/Low) say so on every parcel.
+- **CRS:** EPSG:4326 / CRS84. **Areas:** geodesic (spherical excess), reported
+  in sq ft and m².
+- **Identity fields** (`survey_no`, `subdivision_no`, `state`, `district`,
+  `taluk`, `village_ward`, `local_body`, `pin_code`, `address`): **synthetic**,
+  formatted to resemble Tamil Nadu / Greater Chennai Corporation records
+  (e.g. `T.S. No. 1234`, `Ward 121, T. Nagar`, PIN `600017`). They do not
+  correspond to real survey records.
+- **Classification** (`land_use`, `observed_use`, `zoning_code`,
+  `zoning_description`, `permitted use`, `development_status`, `tenure_class`,
+  `agri_status`): **illustrative**. Zoning codes (R1/R2/C2/I1/OSR/PSP…) mimic
+  CMDA-style categories but are not drawn from an official Master Plan.
+- **Area & encroachment intelligence** (`reference_area_sqm`,
+  `discrepancy_area_sqm`, `discrepancy_pct`, `built_up_area_sqm`,
+  `vegetation_pct`, `encroachment_area_sqm`, `encroachment_status`):
+  **fabricated, deterministic**. "Potential discrepancy" = |mapped area −
+  reference area|. Encroachment is a **metric only** — no encroachment polygon
+  is generated, and nothing is claimed to be officially detected. Terms used
+  throughout: "Potential", "Detected boundary/usage discrepancy",
+  "Requires verification".
+- **Time series** (`previous` object): a single fabricated prior snapshot
+  (built-up area, vegetation %, encroachment) dated ~6 months back, so
+  current-vs-previous change can be shown. Not real observations.
+- **Ownership:** `owner_record_available: false`. The UI shows **"Ownership
+  data unavailable"**. No names, contact details, or any personal data are
+  present anywhere in the dataset.
+- **Valuation** (`assessed_value_inr`): a fabricated guideline-style estimate
+  (indicative ₹/sq ft by land use × area + a built-up premium). Labelled
+  "(demo guideline estimate)".
+- **Buildings:** centred rectangle sized to the built-up area; `height_m =
+  floors × 3.2 m`; `height_basis` states this. Estimated massing, not
+  surveyed structures.
+- Every feature carries `data_source = "Demonstration data — synthetic, not an
+  official land record"` and `data_quality = "DEMO"`; both files carry a
+  `metadata.disclaimer`.
 
-- **File:** `public/demo-buildings.geojson` (also generated by
-  `scripts/generate-demo-parcels.mjs`).
-- **Contents:** one footprint per **developed** parcel (95 of 100; parcels
-  with 0 floors — vacant lots, parks — have none). Each footprint is a
-  **centred rectangle sized so its plan area ≈ the parcel's `built_up_area_sqm`**
-  (capped at 85% of the parcel). It is a schematic massing block, **not a
-  surveyed structure outline**.
-- **Height:** `height_m = floors × 3.2 m` (assumed storey height). Each feature
-  carries `height_basis` spelling this out. Rendered as a MapLibre
-  `fill-extrusion`. Range in the demo: 3.2–19.2 m.
-- **Attributes:** `parcel_id` (matches the parcel), `floors`, `height_m`,
-  `height_basis`, `footprint_area_sqm`, `land_use`, `data_source`,
-  `data_quality = "DEMO DATA"`. The file's `metadata.disclaimer` restates that
-  the geometry and heights are estimated.
-- **Not** claimed to be BIM, cadastral, LiDAR-derived, or survey-grade. The UI
-  labels every building-derived value "estimated".
+## Base map — REAL, keyless
 
-### PII
+| Layer | Source | Attribution |
+|---|---|---|
+| Map | `https://tile.openstreetmap.org/{z}/{x}/{y}.png` | © OpenStreetMap contributors (ODbL) |
+| Satellite | `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}` | Imagery © Esri, Maxar, Earthstar Geographics |
 
-None. The `owner` field is a fixed synthetic string
-(`"City of Demoville (synthetic — no personal data)"`). No names, mailing
-addresses, or other personal data are present. If real parcel data is
-introduced later, owner/contact fields must be redacted or aggregated in the
-data-prep script before the dataset is committed or displayed (see
-`CLAUDE.md` §8).
+Override with `VITE_BASEMAP_TILE_URL` / `VITE_SATELLITE_TILE_URL`. The public
+OSM tile server is for low-volume prototype use only
+(<https://operations.osmfoundation.org/policies/tiles/>). No API key. The
+satellite layer is imagery only — there is **no automated change detection**
+over it; "satellite-derived" change values in the UI are demonstration data.
 
-## Base map — OpenStreetMap raster tiles
+## Local Land AI
 
-- **URL template:** `https://tile.openstreetmap.org/{z}/{x}/{y}.png`
-  (override with `VITE_BASEMAP_TILE_URL`).
-- **Attribution:** "© OpenStreetMap contributors", shown in the map
-  attribution control and the page footer. Required by the
-  [ODbL](https://www.openstreetmap.org/copyright).
-- **Usage policy:** the public OSM tile server is acceptable for low-volume
-  prototype and demo use only. For production or heavy use, switch to a
-  dedicated tile provider via `VITE_BASEMAP_TILE_URL`. See
-  <https://operations.osmfoundation.org/policies/tiles/>.
-- **API key:** none.
+- `src/ai/analyze.ts` is a **deterministic rule/heuristic engine**, not a
+  machine-learning model — there are no model weights, and it does not call
+  any external service. It runs on-device (Web Worker, or inline fallback).
+- Output is shaped like a model-backed analyser would be (insight text +
+  confidence + basis + source + `requiresVerification` + timestamp) so a real
+  model can replace it behind `LocalLandAI` without UI changes.
+- All statements are hedged ("potential", "estimated", "appears", "likely").
+  It never emits "confirmed", "illegal", or a legal conclusion. Confidence is
+  derived from the parcel's (synthetic) boundary confidence and rule
+  strength — it is **not** a calibrated probability.
+- Personal ownership data is never sent anywhere (there is none in the
+  dataset, and the AI runs locally regardless).
 
-## Replacing the demo data with a real dataset
+## Real-time behaviour
 
-Not done in P0. When it happens:
+The "real-time" loop (`useLandTwinSync`) is a fixed-cadence heartbeat plus a
+feed of **actual** application events (session start, sync tick, parcel
+analysis, detections surfaced, AI runs). It does **not** synthesise land-data
+updates. Data freshness shown in the UI is the time since the last loop tick,
+not a claim of new authoritative data.
 
-1. Add a documented, re-runnable prep script under `scripts/` that downloads
-   the raw source (raw data is **not** committed).
-2. Reproject to EPSG:4326, clip to the study area, simplify for rendering,
-   normalise field names to the `ParcelProperties` schema in `src/types.ts`.
-3. Validate geometry; drop or fix invalid polygons and log what was dropped.
-4. Redact PII.
-5. Record the source, licence, and attribution requirements in this file.
+## For production integration
+
+1. Implement `LandDataProvider` for a real source in `src/data/providers.ts`
+   (`isAvailable`, `getParcels`, `getBuildings`), returning geometry
+   normalised to `ParcelProperties` (`src/types.ts`). Add it to
+   `ALL_PROVIDERS` ahead of `demoDataProvider`.
+2. Reproject to EPSG:4326, validate geometry, drop/repair invalid polygons.
+3. Redact any personal ownership data before it reaches the client.
+4. Replace the heuristic AI with a real model behind the same `LocalLandAI`
+   interface if desired.
+5. `resolveDataStack()` will then report MODE A / B and mark sources `live`.

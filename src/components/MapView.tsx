@@ -5,10 +5,12 @@ import maplibregl, {
   type ExpressionSpecification,
 } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+import { BASEMAPS, BASEMAP_ATTRIBUTION } from "../config";
 import {
   ENCROACHMENT_COLORS,
   LAND_USE_COLORS,
   LAND_USE_FALLBACK_COLOR,
+  type BasemapId,
   type BuildingCollection,
   type ParcelCollection,
   type ParcelProperties,
@@ -17,37 +19,43 @@ import {
 } from "../types";
 import { featuresBounds, type BBox } from "../geo";
 
-const BASEMAP_TILE_URL =
-  (import.meta.env.VITE_BASEMAP_TILE_URL as string | undefined) ??
-  "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
-
 const SRC = "parcels";
 const FILL = "parcels-fill";
 const LINE = "parcels-outline";
+const AILYR = "parcels-ai";
 const BSRC = "buildings";
 const BLYR = "buildings-3d";
 
-const SELECTED_LINE = "#12305a";
-const HOVER_LINE = "#3b5573";
-const DEFAULT_LINE = "#ffffff";
+const SELECTED_LINE = "#eaf2ff";
+const HOVER_LINE = "#9fc0e8";
+const DEFAULT_LINE = "#c7d2e0";
+const AI_LINE = "#e0533b";
 
-const PITCH_3D = 42;
+const PITCH_3D = 45;
 const BEARING_3D = -18;
 
-const baseStyle: StyleSpecification = {
-  version: 8,
-  sources: {
-    osm: {
-      type: "raster",
-      tiles: [BASEMAP_TILE_URL],
-      tileSize: 256,
-      attribution: "© OpenStreetMap contributors",
+function baseStyle(basemap: BasemapId): StyleSpecification {
+  return {
+    version: 8,
+    sources: {
+      base: {
+        type: "raster",
+        tiles: [BASEMAPS[basemap]],
+        tileSize: 256,
+        attribution: BASEMAP_ATTRIBUTION[basemap],
+        maxzoom: 19,
+      },
     },
-  },
-  layers: [
-    { id: "osm", type: "raster", source: "osm", paint: { "raster-saturation": -0.45 } },
-  ],
-};
+    layers: [
+      {
+        id: "base",
+        type: "raster",
+        source: "base",
+        paint: { "raster-saturation": basemap === "map" ? -0.5 : -0.15, "raster-brightness-max": basemap === "map" ? 0.92 : 1 },
+      },
+    ],
+  };
+}
 
 const landUseColor = [
   "match",
@@ -63,8 +71,24 @@ const encroachmentColor = [
   ENCROACHMENT_COLORS.None,
 ] as unknown as ExpressionSpecification;
 
+// green -> amber -> red as confidence falls
+const confidenceColor = [
+  "interpolate",
+  ["linear"],
+  ["coalesce", ["get", "boundary_confidence"], 0.5],
+  0.3, "#c0392b",
+  0.55, "#d9902f",
+  0.8, "#3f7d52",
+] as unknown as ExpressionSpecification;
+
 const isSelected: ExpressionSpecification = ["boolean", ["feature-state", "selected"], false];
 const isHover: ExpressionSpecification = ["boolean", ["feature-state", "hover"], false];
+
+function fillColor(mode: StyleMode): ExpressionSpecification {
+  if (mode === "encroachment") return encroachmentColor;
+  if (mode === "confidence") return confidenceColor;
+  return landUseColor;
+}
 
 export interface ViewState {
   lng: number;
@@ -74,12 +98,23 @@ export interface ViewState {
   bearing: number;
 }
 
+export interface LayerVisibility {
+  parcels: boolean;
+  landuse: boolean;
+  buildings: boolean;
+  ai: boolean;
+}
+
 interface MapViewProps {
   parcels: ParcelCollection;
   buildings: BuildingCollection;
+  center: [number, number];
+  zoom: number;
   selectedId: string | null;
   styleMode: StyleMode;
   viewMode: ViewMode;
+  basemap: BasemapId;
+  layers: LayerVisibility;
   visibleIds: string[] | null;
   focusBounds: BBox | null;
   rightPanelOpen: boolean;
@@ -87,41 +122,94 @@ interface MapViewProps {
   onViewState?: (v: ViewState) => void;
 }
 
-export default function MapView({
-  parcels,
-  buildings,
-  selectedId,
-  styleMode,
-  viewMode,
-  visibleIds,
-  focusBounds,
-  rightPanelOpen,
-  onSelect,
-  onViewState,
-}: MapViewProps) {
+export default function MapView(props: MapViewProps) {
+  const {
+    parcels, buildings, center, zoom, selectedId, styleMode, viewMode,
+    basemap, layers, visibleIds, focusBounds, rightPanelOpen, onSelect, onViewState,
+  } = props;
+
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const readyRef = useRef(false);
   const homeRef = useRef<BBox | null>(null);
   const selRef = useRef<string | null>(null);
   const hoverRef = useRef<string | null>(null);
+  const styleModeRef = useRef(styleMode);
+  const layersRef = useRef(layers);
   const viewModeRef = useRef<ViewMode>(viewMode);
+  styleModeRef.current = styleMode;
+  layersRef.current = layers;
   viewModeRef.current = viewMode;
   const onSelectRef = useRef(onSelect);
   const onViewStateRef = useRef(onViewState);
   onSelectRef.current = onSelect;
   onViewStateRef.current = onViewState;
 
+  function addParcelLayers(map: maplibregl.Map) {
+    map.addSource(SRC, { type: "geojson", data: parcels, promoteId: "parcel_id" });
+    map.addSource(BSRC, { type: "geojson", data: buildings, promoteId: "parcel_id" });
+
+    map.addLayer({
+      id: FILL,
+      type: "fill",
+      source: SRC,
+      paint: {
+        "fill-color": fillColor(styleModeRef.current),
+        "fill-opacity": ["case", isSelected, 0.72, isHover, 0.5, 0.34],
+      },
+    });
+    map.addLayer({
+      id: LINE,
+      type: "line",
+      source: SRC,
+      paint: {
+        "line-color": ["case", isSelected, SELECTED_LINE, isHover, HOVER_LINE, DEFAULT_LINE],
+        "line-width": ["case", isSelected, 2.8, isHover, 1.6, 0.7],
+      },
+    });
+    // AI detections: parcels with a potential encroachment / discrepancy flag
+    map.addLayer({
+      id: AILYR,
+      type: "line",
+      source: SRC,
+      filter: [
+        "any",
+        ["!=", ["coalesce", ["get", "encroachment_status"], "None"], "None"],
+        [">=", ["coalesce", ["get", "discrepancy_pct"], 0], 5],
+      ] as unknown as FilterSpecification,
+      paint: {
+        "line-color": AI_LINE,
+        "line-width": 2.2,
+        "line-dasharray": [2, 1.5],
+        "line-opacity": 0.9,
+      },
+    });
+    map.addLayer({
+      id: BLYR,
+      type: "fill-extrusion",
+      source: BSRC,
+      layout: { visibility: viewModeRef.current === "3d" ? "visible" : "none" },
+      paint: {
+        "fill-extrusion-color": ["case", isSelected, "#e39a54", isHover, "#aeb9c6", "#c2c9d3"],
+        "fill-extrusion-height": ["coalesce", ["get", "height_m"], 6],
+        "fill-extrusion-base": 0,
+        "fill-extrusion-opacity": 0.82,
+        "fill-extrusion-vertical-gradient": true,
+      },
+    });
+
+    applyLayerVisibility(map, layersRef.current);
+  }
+
   // --- init (once) -------------------------------------------------
   useEffect(() => {
     if (!containerRef.current) return;
-
     const start3D = viewModeRef.current === "3d";
     const map = new maplibregl.Map({
       container: containerRef.current,
-      style: baseStyle,
-      center: [0, 0],
-      zoom: 1,
+      style: baseStyle(basemap),
+      center,
+      zoom,
       pitch: start3D ? PITCH_3D : 0,
       bearing: start3D ? BEARING_3D : 0,
       maxPitch: 70,
@@ -140,97 +228,44 @@ export default function MapView({
       }
       hoverRef.current = id;
     };
-
     const emitView = () => {
       const c = map.getCenter();
-      onViewStateRef.current?.({
-        lng: c.lng,
-        lat: c.lat,
-        zoom: map.getZoom(),
-        pitch: map.getPitch(),
-        bearing: map.getBearing(),
-      });
+      onViewStateRef.current?.({ lng: c.lng, lat: c.lat, zoom: map.getZoom(), pitch: map.getPitch(), bearing: map.getBearing() });
     };
 
     map.on("load", () => {
-      map.addSource(SRC, { type: "geojson", data: parcels, promoteId: "parcel_id" });
-      map.addSource(BSRC, { type: "geojson", data: buildings, promoteId: "parcel_id" });
-
-      map.addLayer({
-        id: FILL,
-        type: "fill",
-        source: SRC,
-        paint: {
-          "fill-color": styleMode === "encroachment" ? encroachmentColor : landUseColor,
-          "fill-opacity": ["case", isSelected, 0.82, isHover, 0.6, 0.4],
-        },
-      });
-      map.addLayer({
-        id: LINE,
-        type: "line",
-        source: SRC,
-        paint: {
-          "line-color": ["case", isSelected, SELECTED_LINE, isHover, HOVER_LINE, DEFAULT_LINE],
-          "line-width": ["case", isSelected, 2.8, isHover, 1.6, 0.7],
-        },
-      });
-      map.addLayer({
-        id: BLYR,
-        type: "fill-extrusion",
-        source: BSRC,
-        layout: { visibility: viewModeRef.current === "3d" ? "visible" : "none" },
-        paint: {
-          "fill-extrusion-color": [
-            "case",
-            isSelected,
-            "#e39a54",
-            isHover,
-            "#b9c3cf",
-            "#cfd4da",
-          ],
-          "fill-extrusion-height": ["coalesce", ["get", "height_m"], 6],
-          "fill-extrusion-base": 0,
-          "fill-extrusion-opacity": 0.82,
-          "fill-extrusion-vertical-gradient": true,
-        },
-      });
-
+      addParcelLayers(map);
       const b = featuresBounds(parcels.features);
       homeRef.current = b;
-      if (b) map.fitBounds(b, { padding: 44, duration: 0, pitch: map.getPitch(), bearing: map.getBearing() });
-
+      if (b) map.fitBounds(b, { padding: 40, duration: 0, pitch: map.getPitch(), bearing: map.getBearing() });
       readyRef.current = true;
       if (visibleIds) applyFilter(map, visibleIds);
-      if (selRef.current) {
-        for (const s of [SRC, BSRC]) map.setFeatureState({ source: s, id: selRef.current }, { selected: true });
-      }
+      if (selRef.current) for (const s of [SRC, BSRC]) map.setFeatureState({ source: s, id: selRef.current }, { selected: true });
       emitView();
     });
 
-    const pickHandler = (e: maplibregl.MapLayerMouseEvent) => {
+    const pick = (e: maplibregl.MapLayerMouseEvent) => {
       const f = e.features?.[0];
       if (f) onSelectRef.current(f.properties as ParcelProperties);
     };
-    map.on("click", FILL, pickHandler);
-    map.on("click", BLYR, pickHandler);
+    map.on("click", FILL, pick);
+    map.on("click", BLYR, pick);
     map.on("click", (e) => {
-      const hits = map.queryRenderedFeatures(e.point, { layers: [FILL, BLYR] });
-      if (hits.length === 0) onSelectRef.current(null);
+      if (map.queryRenderedFeatures(e.point, { layers: [FILL, BLYR] }).length === 0) onSelectRef.current(null);
     });
-
-    const moveHandler = (e: maplibregl.MapLayerMouseEvent) => {
+    const move = (e: maplibregl.MapLayerMouseEvent) => {
       map.getCanvas().style.cursor = "pointer";
       const f = e.features?.[0];
       setHover(typeof f?.id === "string" ? f.id : null);
     };
-    map.on("mousemove", FILL, moveHandler);
-    map.on("mousemove", BLYR, moveHandler);
-    const leaveHandler = () => {
+    map.on("mousemove", FILL, move);
+    map.on("mousemove", BLYR, move);
+    const leave = () => {
       map.getCanvas().style.cursor = "";
       setHover(null);
     };
-    map.on("mouseleave", FILL, leaveHandler);
-    map.on("mouseleave", BLYR, leaveHandler);
+    map.on("mouseleave", FILL, leave);
+    map.on("mouseleave", BLYR, leave);
     map.on("move", emitView);
 
     return () => {
@@ -239,11 +274,24 @@ export default function MapView({
       map.remove();
       mapRef.current = null;
     };
-    // parcels / buildings are stable for this component's lifetime.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // selection -> feature-state (parcels + buildings)
+  // basemap swap -> reload style, then re-add parcel layers
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !readyRef.current) return;
+    readyRef.current = false;
+    map.setStyle(baseStyle(basemap));
+    map.once("styledata", () => {
+      if (!map.getSource(SRC)) addParcelLayers(map);
+      if (visibleIds) applyFilter(map, visibleIds);
+      if (selRef.current) for (const s of [SRC, BSRC]) map.setFeatureState({ source: s, id: selRef.current }, { selected: true });
+      readyRef.current = true;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [basemap]);
+
   useEffect(() => {
     const map = mapRef.current;
     selRef.current = selectedId;
@@ -254,44 +302,37 @@ export default function MapView({
     }
   }, [selectedId]);
 
-  // style mode -> parcel fill colour
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !readyRef.current) return;
-    map.setPaintProperty(
-      FILL,
-      "fill-color",
-      styleMode === "encroachment" ? encroachmentColor : landUseColor,
-    );
+    map.setPaintProperty(FILL, "fill-color", fillColor(styleMode));
   }, [styleMode]);
 
-  // view mode -> camera + building visibility
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !readyRef.current) return;
-    map.setLayoutProperty(BLYR, "visibility", viewMode === "3d" ? "visible" : "none");
-    map.easeTo({
-      pitch: viewMode === "3d" ? PITCH_3D : 0,
-      bearing: viewMode === "3d" ? BEARING_3D : 0,
-      duration: 500,
-    });
-  }, [viewMode]);
+    map.setLayoutProperty(BLYR, "visibility", viewMode === "3d" && layers.buildings ? "visible" : "none");
+    map.easeTo({ pitch: viewMode === "3d" ? PITCH_3D : 0, bearing: viewMode === "3d" ? BEARING_3D : 0, duration: 500 });
+  }, [viewMode, layers.buildings]);
 
-  // filter -> visible parcels + buildings
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !readyRef.current) return;
+    applyLayerVisibility(map, layers);
+  }, [layers]);
+
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !readyRef.current) return;
     applyFilter(map, visibleIds);
   }, [visibleIds]);
 
-  // search focus
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !readyRef.current || !focusBounds) return;
-    map.fitBounds(focusBounds, { padding: 120, maxZoom: 18, duration: 500 });
+    map.fitBounds(focusBounds, { padding: 130, maxZoom: 18.5, duration: 600 });
   }, [focusBounds]);
 
-  // resize when the info panel opens/closes
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
@@ -303,17 +344,12 @@ export default function MapView({
     const map = mapRef.current;
     if (!map || !homeRef.current) return;
     const is3D = viewModeRef.current === "3d";
-    map.fitBounds(homeRef.current, {
-      padding: 44,
-      duration: 500,
-      pitch: is3D ? PITCH_3D : 0,
-      bearing: is3D ? BEARING_3D : 0,
-    });
+    map.fitBounds(homeRef.current, { padding: 40, duration: 500, pitch: is3D ? PITCH_3D : 0, bearing: is3D ? BEARING_3D : 0 });
   };
 
   return (
     <div className="map-wrap">
-      <div ref={containerRef} className="map-canvas" role="application" aria-label="Parcel map" />
+      <div ref={containerRef} className="map-canvas" role="application" aria-label="Land Twin map" />
       <button type="button" className="map-home" onClick={resetView} title="Reset camera to full extent">
         Reset view
       </button>
@@ -326,4 +362,28 @@ function applyFilter(map: maplibregl.Map, visibleIds: string[] | null) {
     ? (["in", ["get", "parcel_id"], ["literal", visibleIds]] as FilterSpecification)
     : null;
   for (const layer of [FILL, LINE, BLYR]) map.setFilter(layer, f);
+  // AI layer keeps its own predicate AND the visibility filter
+  const aiBase: unknown[] = [
+    "any",
+    ["!=", ["coalesce", ["get", "encroachment_status"], "None"], "None"],
+    [">=", ["coalesce", ["get", "discrepancy_pct"], 0], 5],
+  ];
+  map.setFilter(
+    AILYR,
+    (visibleIds ? ["all", aiBase, ["in", ["get", "parcel_id"], ["literal", visibleIds]]] : aiBase) as FilterSpecification,
+  );
+}
+
+function applyLayerVisibility(map: maplibregl.Map, v: LayerVisibility) {
+  const set = (id: string, on: boolean) => {
+    if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", on ? "visible" : "none");
+  };
+  set(FILL, v.parcels && v.landuse);
+  set(LINE, v.parcels);
+  set(AILYR, v.ai);
+  // buildings visibility also gated by 3D in its own effect
+  if (map.getLayer(BLYR)) {
+    const in3d = map.getPitch() > 1;
+    set(BLYR, v.buildings && in3d);
+  }
 }

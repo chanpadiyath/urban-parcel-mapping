@@ -1,47 +1,83 @@
 import type { FeatureCollection, Feature, Polygon, MultiPolygon } from "geojson";
 
+/** Time-series snapshot carried on each parcel (demo history). */
+export interface ParcelSnapshot {
+  observed_on?: string;
+  built_up_area_sqm?: number;
+  vegetation_pct?: number;
+  encroachment_area_sqm?: number;
+}
+
 /**
- * Internal parcel attribute schema. Real datasets are normalised to these
- * field names during data prep. Every parcel must have a stable unique
- * `parcel_id`. Derived metrics (built-up %, open area, encroachment %, FAR,
- * ground coverage) are NOT stored — see `metrics.ts`.
+ * Land Twin attribute schema. Real datasets are normalised to these names.
+ * Every parcel has a stable unique `parcel_id`. Derived metrics live in
+ * `metrics.ts` and are computed at runtime.
  */
 export interface ParcelProperties {
   parcel_id: string;
-  address?: string;
-  locality?: string;
-  ward?: string;
-  zone?: string;
 
+  // identity
+  survey_no?: string;
+  subdivision_no?: string;
+  state?: string;
+  district?: string;
+  taluk?: string;
+  village_ward?: string;
+  local_body?: string;
+  pin_code?: string;
+  city?: string;
+  locality?: string;
+  address?: string;
+
+  // classification
   land_use?: string;
+  observed_use?: string;
   zoning_code?: string;
   zoning_description?: string;
-  permitted_use?: string;
   development_status?: string;
+  tenure_class?: string;
+  agri_status?: string;
 
+  // ownership (no personal data in this dataset)
+  ownership_status?: string;
+  owner_record_available?: boolean;
+  ownership_type?: string;
+  last_verified?: string;
+
+  // geometry / area
   area_sqm?: number;
-  area_acres?: number;
+  area_sqft?: number;
+  perimeter_m?: number;
+  reference_area_sqm?: number;
+  reference_area_sqft?: number;
+  discrepancy_area_sqm?: number;
+  discrepancy_pct?: number;
+  boundary_confidence?: number;
+  boundary_confidence_label?: string;
+  boundary_source?: string;
+
+  // built form / land intelligence
   built_up_area_sqm?: number;
+  built_up_pct?: number;
   floors?: number;
-  row_area_sqm?: number;
+  vegetation_pct?: number;
   encroachment_area_sqm?: number;
   encroachment_status?: string;
 
-  assessed_value_usd?: number;
-  owner?: string;
-  jurisdiction?: string;
+  previous?: ParcelSnapshot;
+
+  assessed_value_inr?: number;
   last_updated?: string;
   data_source?: string;
   data_quality?: string;
 
-  [key: string]: string | number | boolean | null | undefined;
+  [key: string]: unknown;
 }
 
 export type ParcelGeometry = Polygon | MultiPolygon;
 export type ParcelFeature = Feature<ParcelGeometry, ParcelProperties>;
 export type ParcelCollection = FeatureCollection<ParcelGeometry, ParcelProperties>;
 
-/** Estimated building footprints (demo geometry — not surveyed). */
 export interface BuildingProperties {
   parcel_id: string;
   floors?: number;
@@ -49,117 +85,109 @@ export interface BuildingProperties {
   height_basis?: string;
   footprint_area_sqm?: number;
   land_use?: string;
-  [key: string]: string | number | boolean | null | undefined;
+  [key: string]: unknown;
 }
 export type BuildingCollection = FeatureCollection<Polygon, BuildingProperties>;
 
-/** Map camera mode. */
 export type ViewMode = "2d" | "3d";
+export type BasemapId = "map" | "satellite";
 
-/** Land-use categories and their map / legend colours (muted, print-safe). */
+/** Toggleable map layers. `available: false` => shown disabled (needs data). */
+export interface LayerDef {
+  id: string;
+  label: string;
+  available: boolean;
+  defaultOn: boolean;
+  note?: string;
+}
+export const MAP_LAYERS: LayerDef[] = [
+  { id: "parcels", label: "Parcels", available: true, defaultOn: true },
+  { id: "buildings", label: "Buildings (3D)", available: true, defaultOn: true, note: "Estimated massing" },
+  { id: "ai", label: "AI detections", available: true, defaultOn: true, note: "Potential discrepancies" },
+  { id: "landuse", label: "Land-use fill", available: true, defaultOn: true },
+  { id: "roads", label: "Roads", available: false, defaultOn: false, note: "Needs OSM feature extraction" },
+  { id: "water", label: "Water bodies", available: false, defaultOn: false, note: "Needs hydrology layer" },
+  { id: "vegetation", label: "Vegetation", available: false, defaultOn: false, note: "Needs NDVI / imagery" },
+  { id: "admin", label: "Administrative boundaries", available: false, defaultOn: false, note: "Needs ward boundary data" },
+];
+
+/** Land-use categories → map / legend colours (muted). */
 export const LAND_USE_COLORS: Record<string, string> = {
-  Residential: "#8fb3d9",
-  Commercial: "#e0a458",
-  "Mixed Use": "#b493c9",
-  Industrial: "#9aa0a6",
-  Institutional: "#6cae9e",
-  "Public/Semi-Public": "#c7b56b",
-  Recreational: "#8fc08a",
-  Vacant: "#cbd0d6",
+  Residential: "#5b8dc9",
+  "Mixed Residential": "#7d9bd1",
+  Commercial: "#d99a4e",
+  Institutional: "#5aa79a",
+  Industrial: "#8a8f98",
+  "Public/Semi-Public": "#b7a75f",
+  "Open Space": "#6faf6a",
+  Vacant: "#9aa3ad",
 };
-export const LAND_USE_FALLBACK_COLOR = "#c2c7cd";
+export const LAND_USE_FALLBACK_COLOR = "#8b93a0";
 
-/** Encroachment severity → colour, ordered least→most severe. */
-export const ENCROACHMENT_LEVELS = [
-  "None",
-  "Minor",
-  "Moderate",
-  "Significant",
-  "Critical",
-] as const;
+export const ENCROACHMENT_LEVELS = ["None", "Minor", "Moderate", "Significant", "Critical"] as const;
 export type EncroachmentLevel = (typeof ENCROACHMENT_LEVELS)[number];
-
 export const ENCROACHMENT_COLORS: Record<EncroachmentLevel, string> = {
-  None: "#a7c9a3",
-  Minor: "#e8d288",
-  Moderate: "#e6b166",
-  Significant: "#d98a5a",
-  Critical: "#c65f4e",
+  None: "#3f7d52",
+  Minor: "#c9b458",
+  Moderate: "#d9902f",
+  Significant: "#d1642e",
+  Critical: "#c0392b",
 };
 
-export const DEVELOPMENT_STATUSES = [
-  "Developed",
-  "Partially Developed",
-  "Under Development",
-  "Vacant",
-  "Encroached",
-  "Requires Review",
-] as const;
-
-/** Map colouring modes. */
-export type StyleMode = "land_use" | "encroachment";
+export type StyleMode = "land_use" | "encroachment" | "confidence";
 
 export type FilterKey =
   | "land_use"
   | "zoning_code"
   | "development_status"
-  | "encroachment_status";
+  | "encroachment_status"
+  | "tenure_class";
 
 export const FILTER_FIELDS: Array<{ key: FilterKey; label: string }> = [
   { key: "land_use", label: "Land use" },
   { key: "zoning_code", label: "Zoning" },
   { key: "development_status", label: "Development status" },
-  { key: "encroachment_status", label: "Encroachment" },
+  { key: "encroachment_status", label: "Potential encroachment" },
+  { key: "tenure_class", label: "Tenure" },
 ];
 
-export type Filters = Record<FilterKey, string> & { minArea: number };
+export type Filters = Record<FilterKey, string> & { minConfidence: number };
 export const EMPTY_FILTERS: Filters = {
   land_use: "",
   zoning_code: "",
   development_status: "",
   encroachment_status: "",
-  minArea: 0,
+  tenure_class: "",
+  minConfidence: 0,
 };
 
-export const AREA_THRESHOLDS = [
-  { label: "Any size", value: 0 },
-  { label: "≥ 1,000 m²", value: 1000 },
-  { label: "≥ 2,000 m²", value: 2000 },
-  { label: "≥ 2,400 m²", value: 2400 },
-];
+// --- Local Land AI ------------------------------------------------
+export type AiCategory =
+  | "boundary"
+  | "area"
+  | "change"
+  | "landuse"
+  | "encroachment"
+  | "confidence"
+  | "context";
 
-/** Info-panel layout: sections and the fields within them. */
-export const INFO_SECTIONS: Array<{
-  title: string;
-  rows: Array<{ key: keyof ParcelProperties; label: string }>;
-}> = [
-  {
-    title: "Parcel overview",
-    rows: [
-      { key: "address", label: "Address" },
-      { key: "locality", label: "Locality" },
-      { key: "ward", label: "Ward" },
-      { key: "zone", label: "Zone" },
-      { key: "land_use", label: "Land use" },
-      { key: "development_status", label: "Development status" },
-    ],
-  },
-  {
-    title: "Planning",
-    rows: [
-      { key: "zoning_code", label: "Zoning code" },
-      { key: "zoning_description", label: "Zoning" },
-      { key: "permitted_use", label: "Permitted use" },
-      { key: "floors", label: "Floors (approx.)" },
-    ],
-  },
-  {
-    title: "Assessment",
-    rows: [
-      { key: "assessed_value_usd", label: "Assessed value" },
-      { key: "owner", label: "Owner / jurisdiction" },
-      { key: "last_updated", label: "Last updated" },
-      { key: "data_source", label: "Data source" },
-    ],
-  },
-];
+export interface AiInsight {
+  id: string;
+  parcelId: string;
+  category: AiCategory;
+  text: string;
+  confidence: number; // 0..1
+  basis: string;
+  source: string;
+  requiresVerification: boolean;
+  ts: number;
+}
+
+export interface TwinEvent {
+  id: string;
+  ts: number;
+  kind: "sync" | "analysis" | "detection" | "data" | "ai";
+  text: string;
+}
+
+export type AiRuntimeState = "running" | "fallback" | "idle";
