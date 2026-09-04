@@ -12,6 +12,9 @@
     "predev": "node scripts/generate-demo-parcels.mjs",
     "prebuild": "node scripts/generate-demo-parcels.mjs",
     "dev": "vite",
+    "server": "node server/index.mjs",
+    "dev:all": "node scripts/dev-all.mjs",
+    "start": "node server/index.mjs",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview"
   },

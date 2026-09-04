@@ -10,6 +10,7 @@ interface ImportMetaEnv {
   readonly VITE_DEMO_LON?: string;
   readonly VITE_DEMO_ZOOM?: string;
   readonly VITE_SYNC_INTERVAL_MS?: string;
+  readonly VITE_SIM_API?: string;
 }
 
 interface ImportMeta {

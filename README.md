@@ -22,22 +22,28 @@ Requires Node 20.19+.
 
 ```bash
 npm install
-npm run dev        # http://localhost:5173
+npm run dev          # front end only — http://localhost:5173
+npm run dev:all      # front end + real-time simulation backend (recommended)
 ```
 
+`npm run dev:all` runs Vite and the simulation server (`server/`, port 8787)
+together; `/api` is proxied to it. Without the backend the app still works —
+the Land Simulation page falls back to its in-browser engine.
+
 `npm run gen:data` regenerates the demo GeoJSON (runs automatically before
-`dev` / `build`). Location is configurable — see `.env.example`
-(`VITE_DEMO_LAT/LON/CITY/STATE`, and `DEMO_LAT/…` for the generator).
+`dev` / `build`). Location is configurable — see `.env.example`.
 
 ## Production build
 
 ```bash
-npm run build      # tsc --noEmit + vite build -> dist/
-npm run preview
+npm run build        # tsc --noEmit + vite build -> dist/
+npm run server       # Node server: serves dist/ + the /api simulation backend (port 8787)
+# or `npm run preview` for the static front end only (client-side sim)
 ```
 
-Static bundle, no backend. `dist/` also emits a small Web Worker chunk
-(`localLandAI.worker-*.js`).
+Front end is a static bundle (also emits a small Web Worker chunk). The
+**simulation backend** (`server/index.mjs`) is a **zero-dependency `node:http`
+server** — no framework — that also serves the built SPA in production.
 
 ## What works
 
@@ -121,12 +127,31 @@ the real parcel geometry:
   infrastructure (Institutional / Public), max depth, sim clock.
 - **Click a flooded parcel** → depth, impact level, land use, building present,
   encroachment, sim time — showing Parcel Mapping → Land Twin → Simulation.
-- Labelled **SIMULATION / DEMO MODE** throughout. No backend (none exists) —
-  runs deterministically in the browser (fallback Level 3).
+- Labelled **SIMULATION / DEMO MODE** throughout — the flood *event* is a
+  deterministic model over a synthesised elevation surface (no hydrology).
 
-Files: `src/sim/flood.ts` (elevation model + impact maths, pure),
-`src/sim/useFloodSim.ts` (timer/state), `src/components/SimMap.tsx` (2D map,
-depth-ramp fill via `feature-state`), `src/pages/SimulationPage.tsx`.
+### Real-time backend (`server/`)
+
+- **`server/index.mjs`** — zero-dependency `node:http` server. Owns the
+  authoritative simulation state, advances it on its own 500 ms timer, and
+  **streams every update over SSE** to all connected clients. Also serves
+  `dist/` + `public/` in production.
+- **`server/flood-engine.mjs`** — stateful engine (elevation surface + impact
+  maths from the real parcel geometry), mirrors `src/sim/flood.ts`.
+- **API:** `GET /api/health` · `GET /api/simulation/state` ·
+  `GET /api/simulation/stream` (SSE) · `POST /api/simulation/{start,pause,reset}` ·
+  `POST /api/simulation/flood` `{ speed?, levelDeltaM?, cycleSpeed? }`.
+- **`src/sim/useServerSim.ts`** — `EventSource` client; the Simulation page
+  uses server state when connected (**LIVE · backend** badge) and
+  automatically drops to `src/sim/useFloodSim.ts` (**LOCAL · fallback**) when
+  the server is unreachable (e.g. static-only hosting). Controls dispatch to
+  the server or the local engine transparently.
+- What's real: the server process, the shared state, the SSE transport, the
+  impact maths over real geometry. What's a model: the flood itself.
+
+Front-end sim files: `src/sim/flood.ts` (pure), `src/sim/useFloodSim.ts`
+(local timer/state), `src/sim/useServerSim.ts` (SSE client),
+`src/components/SimMap.tsx`, `src/pages/SimulationPage.tsx`.
 
 ## Architecture
 
