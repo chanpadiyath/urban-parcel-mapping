@@ -59,6 +59,7 @@ function overpassToGeoJSON(raw) {
       const ring = coords[0][0] === coords[coords.length - 1][0] && coords[0][1] === coords[coords.length - 1][1]
         ? coords
         : [...coords, coords[0]];
+      const addr = [t["addr:housenumber"], t["addr:street"]].filter(Boolean).join(" ") || null;
       feats.push({
         type: "Feature",
         id: `osm-way-${el.id}`,
@@ -70,6 +71,10 @@ function overpassToGeoJSON(raw) {
           landuse: kind === "landuse" ? t.landuse : undefined,
           name: t.name ?? null,
           levels: t["building:levels"] ? Number(t["building:levels"]) : undefined,
+          addr,
+          shop: t.shop ?? undefined,
+          office: t.office ?? undefined,
+          amenity: t.amenity ?? undefined,
         },
       });
     }

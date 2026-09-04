@@ -84,6 +84,7 @@ function LandTwinPanel({
   if (!parcel) return null;
   const m = deriveMetrics(parcel);
   const prev = parcel.previous;
+  const isOsm = String(parcel.data_quality ?? "").startsWith("OSM");
 
   const changeCount = [m.builtUpChangeSqm, m.vegetationChangePct, m.encroachmentChangeSqm].filter(
     (d) => d != null && Math.abs(d) >= 1,
@@ -112,13 +113,30 @@ function LandTwinPanel({
 
       <div className="tw__badges">
         {parcel.development_status && <span className="pill pill--blue">{String(parcel.development_status)}</span>}
-        <span className={encPill(m.encroachmentLevel)}>Encroachment: {m.encroachmentLevel}</span>
-        <span className={confPill(parcel.boundary_confidence_label)}>
-          Confidence: {parcel.boundary_confidence_label ?? "—"}
-          {m.boundaryConfidence != null ? ` (${Math.round(m.boundaryConfidence * 100)}%)` : ""}
-        </span>
-        <span className="pill pill--demo">{String(parcel.data_quality ?? "DEMO")}</span>
+        {isOsm ? (
+          <>
+            <span className="pill pill--green">Live · OpenStreetMap</span>
+            {parcel.name && <span className="pill">{String(parcel.name)}</span>}
+          </>
+        ) : (
+          <>
+            <span className={encPill(m.encroachmentLevel)}>Encroachment: {m.encroachmentLevel}</span>
+            <span className={confPill(parcel.boundary_confidence_label)}>
+              Confidence: {parcel.boundary_confidence_label ?? "—"}
+              {m.boundaryConfidence != null ? ` (${Math.round(m.boundaryConfidence * 100)}%)` : ""}
+            </span>
+            <span className="pill pill--demo">{String(parcel.data_quality ?? "DEMO")}</span>
+          </>
+        )}
       </div>
+
+      {isOsm && (
+        <p className="tw__muted" style={{ padding: "8px 14px 0" }}>
+          Real OpenStreetMap building footprint. Ownership, survey number,
+          encroachment, guideline value and tenure have <strong>no public data
+          source</strong> and are not shown.
+        </p>
+      )}
 
       <Section title="Live status">
         <Row label="Last twin sync" value={rel(lastSyncTs, now)} />
@@ -142,17 +160,27 @@ function LandTwinPanel({
         <Row label="Flood / water risk" value="Data unavailable" />
       </Section>
 
-      <Section title="Area & discrepancy" tag="derived geometry">
-        <Row label="Mapped area" value={fmtSqft(m.parcelAreaSqft)} sub={fmtSqm(m.parcelAreaSqm)} />
-        <Row label="Reference area" value={fmtSqft(parcel.reference_area_sqft)} sub={fmtSqm(m.referenceAreaSqm)} />
-        <Row
-          label="Potential discrepancy"
-          value={`${fmtSqm(m.discrepancyAreaSqm)} · ${fmtPct(m.discrepancyPct)}`}
-          sub="mapped vs reference — indicative only"
-        />
-        <Row label="Boundary confidence" value={m.boundaryConfidence != null ? `${Math.round(m.boundaryConfidence * 100)}%` : "—"} sub={parcel.boundary_confidence_label} />
-        <Row label="Perimeter" value={parcel.perimeter_m != null ? `${parcel.perimeter_m} m` : "—"} />
-        <Row label="Boundary source" value={parcel.boundary_source ?? "—"} />
+      <Section title={isOsm ? "Footprint & geometry" : "Area & discrepancy"} tag={isOsm ? "real · OSM" : "derived geometry"}>
+        <Row label={isOsm ? "Footprint area" : "Mapped area"} value={fmtSqft(m.parcelAreaSqft)} sub={fmtSqm(m.parcelAreaSqm)} />
+        {isOsm ? (
+          <>
+            <Row label="Reference / cadastral area" value="Not available" sub="no public source" />
+            <Row label="Nearest mapped road" value={parcel.nearest_road_m != null ? `${parcel.nearest_road_m} m` : "—"} sub={(parcel.nearest_road_name as string) ?? (parcel.nearest_road_class as string) ?? undefined} />
+            <Row label="OSM way" value={parcel.osm_id != null ? `way/${parcel.osm_id}` : "—"} />
+          </>
+        ) : (
+          <>
+            <Row label="Reference area" value={fmtSqft(parcel.reference_area_sqft)} sub={fmtSqm(m.referenceAreaSqm)} />
+            <Row
+              label="Potential discrepancy"
+              value={`${fmtSqm(m.discrepancyAreaSqm)} · ${fmtPct(m.discrepancyPct)}`}
+              sub="mapped vs reference — indicative only"
+            />
+            <Row label="Boundary confidence" value={m.boundaryConfidence != null ? `${Math.round(m.boundaryConfidence * 100)}%` : "—"} sub={parcel.boundary_confidence_label} />
+            <Row label="Perimeter" value={parcel.perimeter_m != null ? `${parcel.perimeter_m} m` : "—"} />
+            <Row label="Boundary source" value={parcel.boundary_source ?? "—"} />
+          </>
+        )}
       </Section>
 
       <Section title="Built form" tag="estimated">
@@ -220,6 +248,7 @@ function LandTwinPanel({
         </ul>
       </section>
 
+      {!isOsm && (
       <section className="tw__section">
         <h3 className="tw__section-title">
           Cross-check — OpenStreetMap
@@ -268,9 +297,13 @@ function LandTwinPanel({
           overlap is indicative.
         </p>
       </section>
+      )}
 
       <Section title="Data sources">
-        <Row label="Parcel geometry" value="Derived — regular grid at a real location (not cadastral)" />
+        <Row
+          label="Parcel geometry"
+          value={isOsm ? "Real — OpenStreetMap building footprint (live via Overpass)" : "Derived — regular grid at a real location (not cadastral)"}
+        />
         <Row label="Attributes" value="Demonstration data (synthetic)" />
         <Row label="Imagery" value="Esri / OSM base tiles — no analysis feed" />
         <Row label="Intelligence" value="Local Land AI — deterministic heuristics, on device" />

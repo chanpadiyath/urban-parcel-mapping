@@ -36,9 +36,10 @@ export interface LandDataProvider {
 }
 
 const BASE = import.meta.env.BASE_URL;
+const SIM_API = (import.meta.env.VITE_SIM_API as string | undefined) ?? "/api";
 
-async function fetchJson<T>(url: string): Promise<T> {
-  const res = await fetch(url);
+async function fetchJson<T>(url: string, timeoutMs?: number): Promise<T> {
+  const res = await fetch(url, timeoutMs ? { signal: AbortSignal.timeout(timeoutMs) } : undefined);
   if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
   return (await res.json()) as T;
 }
@@ -57,6 +58,53 @@ export const demoDataProvider: LandDataProvider = {
     kind: "demo",
     state: "demo",
     detail: "144 synthetic parcels + estimated buildings, T. Nagar, Chennai.",
+  }),
+};
+
+/**
+ * LIVE parcels derived from real OpenStreetMap building footprints, served by
+ * the simulation backend (`/api/parcels`). Real geometry / area / land-use /
+ * roads; fields with no public source (ownership, survey no, encroachment)
+ * are absent, not faked. Available only when the backend is reachable.
+ */
+interface OsmParcelsResponse {
+  parcels: ParcelCollection;
+  buildings: BuildingCollection;
+  meta: { parcel_count: number; attribute_coverage: Record<string, number>; fetched_at: string | null };
+}
+let osmCache: OsmParcelsResponse | null = null;
+
+export const osmLiveProvider: LandDataProvider = {
+  id: "osm-live",
+  label: "OpenStreetMap — live building footprints",
+  kind: "geospatial",
+  isAvailable: async () => {
+    try {
+      osmCache = await fetchJson<OsmParcelsResponse>(`${SIM_API}/parcels`, 7000);
+      return (osmCache?.parcels?.features?.length ?? 0) > 0;
+    } catch {
+      osmCache = null;
+      return false;
+    }
+  },
+  getParcels: async () => {
+    if (osmCache) return osmCache.parcels;
+    osmCache = await fetchJson<OsmParcelsResponse>(`${SIM_API}/parcels`, 15000);
+    return osmCache.parcels;
+  },
+  getBuildings: async () => {
+    if (osmCache) return osmCache.buildings;
+    osmCache = await fetchJson<OsmParcelsResponse>(`${SIM_API}/parcels`, 15000);
+    return osmCache.buildings;
+  },
+  describe: () => ({
+    id: "osm-live",
+    label: "OpenStreetMap — live footprints",
+    kind: "geospatial",
+    state: osmCache ? "live" : "unavailable",
+    detail: osmCache
+      ? `${osmCache.meta.parcel_count} real building footprints · land-use tagged on ${osmCache.meta.attribute_coverage.land_use_pct ?? 0}% · via Overpass`
+      : "Backend /api/parcels not reachable — falls back to the synthetic dataset.",
   }),
 };
 
@@ -103,6 +151,7 @@ export const weatherProvider = stubProvider(
 
 export const ALL_PROVIDERS: LandDataProvider[] = [
   officialLandProvider,
+  osmLiveProvider,
   openMapProvider,
   satelliteProvider,
   weatherProvider,

@@ -8,13 +8,20 @@ time-series change, and a continuously running **on-device AI** intelligence
 layer, all behind a pluggable data-provider architecture with an explicit
 live / cached / demo mode indicator.
 
-> **This build runs in MODE C (Demonstration).** No official Indian
-> land-record API, satellite change-detection feed, or weather feed is
-> connected (there is no lawful public endpoint configured). Parcel geometry
-> is a **derived regular grid at a real location**, not verified cadastral
-> boundary. Survey numbers, ownership status, encroachment, valuations,
-> confidence and timestamps are **synthetic**. Every such value is labelled in
-> the UI. See [`DATA.md`](./DATA.md).
+> **Data modes.** With the backend running (`npm run dev:all` / `npm run
+> server`) the app loads **real, live OpenStreetMap building footprints** for
+> the area (via the Overpass API) as the parcel dataset — **MODE B**. Real
+> geometry, area, land-use tags, road distances, names/storeys where OSM has
+> them. Fields with **no public data source** — ownership, survey number,
+> encroachment, guideline value, tenure — are shown as *not available*, never
+> fabricated. Without the backend it falls back to the **synthetic MODE C**
+> dataset (a derived grid; clearly labelled).
+>
+> **What has no real source, anywhere:** India has **no public API for
+> cadastral parcel geometry** — state land-record portals are CAPTCHA-gated,
+> per-record web forms. So "real parcels" here means real *OSM building
+> footprints*, not official plot boundaries. See [`DATA.md`](./DATA.md) for
+> the six production paths to authoritative cadastral data.
 
 ## Quick start
 

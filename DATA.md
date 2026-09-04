@@ -54,6 +54,29 @@ Nothing in this prototype is an official record or a legal determination.
   official land record"` and `data_quality = "DEMO"`; both files carry a
   `metadata.disclaimer`.
 
+## Primary parcels — REAL OpenStreetMap footprints (MODE B)
+
+When the backend is running, the app's parcel dataset is **real OpenStreetMap
+building footprints**, not the synthetic grid:
+
+- `server/osm-parcels.mjs` turns each OSM building way from the reference fetch
+  into a Land-Twin record — **real polygon, real area (geodesic), real
+  land-use** where an OSM `landuse`/`shop`/`amenity` tag applies, **real
+  nearest-road distance + name**, and OSM `name` / `addr:*` / `building:levels`
+  where present (~40 % land-use, ~5 % address, ~2 % storeys in T. Nagar — OSM
+  tagging is sparse in Indian neighbourhoods, but the geometry is real).
+- Served at `GET /api/parcels`; consumed by `osmLiveProvider` in
+  `src/data/providers.ts`, which sits ahead of the synthetic provider.
+  `resolveDataStack()` → **MODE B (Hybrid — partial live)**.
+- **Left unset on purpose** (no public source, never fabricated):
+  `survey_no`, `ownership_*`, `encroachment_*`, `reference_area_*`,
+  `discrepancy_*`, `boundary_confidence`, `tenure_class`,
+  `assessed_value_inr`, `previous` (time-series). The Land Twin panel shows
+  these as *"Not available — OpenStreetMap has no cadastral/ownership
+  record"*, and hides the encroachment/discrepancy analysis for OSM parcels.
+- Fallback: if `/api/parcels` is unreachable (no backend, offline), the app
+  uses the synthetic dataset below and shows **MODE C**.
+
 ## Reference data & cross-check — REAL (OpenStreetMap)
 
 There is **no public API for Indian cadastral parcel geometry**. State

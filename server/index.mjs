@@ -19,6 +19,7 @@ import { dirname, extname, join, normalize, resolve } from "node:path";
 import { createEngine } from "./flood-engine.mjs";
 import { ReferenceStore } from "./reference.mjs";
 import { reconcile } from "./reconcile.mjs";
+import { buildOsmParcels } from "./osm-parcels.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.SIM_PORT ?? 8787);
@@ -27,7 +28,8 @@ const PUBLIC = resolve(__dirname, "../public");
 
 const engine = createEngine();
 const refStore = new ReferenceStore(engine.parcels);
-let reconcileCache = null; // { at, refLoadedAt, result }
+let reconcileCache = null; // { refLoadedAt, result }
+let osmParcelsCache = null; // { refLoadedAt, result }
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -120,10 +122,22 @@ const server = createServer(async (req, res) => {
     try {
       await refStore.refresh();
       reconcileCache = null;
+      osmParcelsCache = null;
       return sendJson(res, 200, refStore.status());
     } catch (err) {
       return sendJson(res, 502, { error: String(err && err.message || err), status: refStore.status() });
     }
+  }
+
+  // --- LIVE parcels derived from real OSM building footprints ---
+  if (p === "/api/parcels") {
+    if (!refStore.fc) return sendJson(res, 503, { error: "reference not loaded", status: refStore.status() });
+    const refAt = refStore.fc.meta?.fetched_at ?? refStore.loadedAt;
+    if (!osmParcelsCache || osmParcelsCache.refLoadedAt !== refAt) {
+      osmParcelsCache = { refLoadedAt: refAt, result: buildOsmParcels(refStore.fc) };
+    }
+    const { parcels, buildings, meta } = osmParcelsCache.result;
+    return sendJson(res, 200, { parcels, buildings, meta, reference_state: refStore.state });
   }
 
   // --- reconciliation: our synthetic parcels vs OSM ---
