@@ -25,11 +25,10 @@ services:
       - key: OSM_LIVE_REFRESH
         value: "0"
       # Set after the frontend is deployed (its exact origin, no trailing slash).
+      # You'll be prompted for a value during setup since sync is false.
       - key: CORS_ORIGINS
-        value: "http://localhost:5173"
         sync: false
       # Optional — see backend/.env.example. Leave unset and the Google-backed
       # search/places features just report "unavailable".
       - key: GOOGLE_MAPS_API_KEY
-        value: ""
         sync: false
