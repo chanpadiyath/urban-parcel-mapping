@@ -6,4 +6,10 @@ dist/
 *.local
 .DS_Store
 npm-debug.log*
-server/.cache/
+
+# backend
+backend/.venv/
+backend/.cache/
+__pycache__/
+*.pyc
+.pytest_cache/
