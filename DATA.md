@@ -4,15 +4,15 @@
 official Indian land-record system, cadastral dataset, satellite
 change-detection service, or weather feed. There is no lawful public API for
 those configured here. The application is architected so such sources can be
-added later (`src/data/providers.ts`), and the UI always states the current
+added later (`frontend/src/data/providers.ts`), and the UI always states the current
 mode and the state of every source.
 
 Nothing in this prototype is an official record or a legal determination.
 
 ## Parcel data — DERIVED geometry + SYNTHETIC attributes
 
-- **Files:** `public/demo-parcels.geojson` (144), `public/demo-buildings.geojson` (122).
-- **Generator:** `scripts/generate-demo-parcels.mjs` (`npm run gen:data`),
+- **Files:** `backend/data/demo-parcels.geojson` (144), `backend/data/demo-buildings.geojson` (122), served at `/api/demo/*`.
+- **Generator:** `backend/jobs/generate_demo_parcels.py` (`npm run gen:data`),
   deterministic. Location via env: `DEMO_LAT DEMO_LON DEMO_CITY DEMO_STATE
   DEMO_LOCALITY` (default: **13.0418, 80.2341 — T. Nagar, Chennai, Tamil Nadu**).
 - **Geometry:** a regular grid of ~2,000 sq ft plots on a road grid, placed at
@@ -59,14 +59,14 @@ Nothing in this prototype is an official record or a legal determination.
 When the backend is running, the app's parcel dataset is **real OpenStreetMap
 building footprints**, not the synthetic grid:
 
-- `server/osm-parcels.mjs` turns each OSM building way from the reference fetch
+- `backend/app/osm_parcels.py` turns each OSM building way from the reference fetch
   into a Land-Twin record — **real polygon, real area (geodesic), real
   land-use** where an OSM `landuse`/`shop`/`amenity` tag applies, **real
   nearest-road distance + name**, and OSM `name` / `addr:*` / `building:levels`
   where present (~40 % land-use, ~5 % address, ~2 % storeys in T. Nagar — OSM
   tagging is sparse in Indian neighbourhoods, but the geometry is real).
 - Served at `GET /api/parcels`; consumed by `osmLiveProvider` in
-  `src/data/providers.ts`, which sits ahead of the synthetic provider.
+  `frontend/src/data/providers.ts`, which sits ahead of the synthetic provider.
   `resolveDataStack()` → **MODE B (Hybrid — partial live)**.
 - **Left unset on purpose** (no public source, never fabricated):
   `survey_no`, `ownership_*`, `encroachment_*`, `reference_area_*`,
@@ -74,8 +74,10 @@ building footprints**, not the synthetic grid:
   `assessed_value_inr`, `previous` (time-series). The Land Twin panel shows
   these as *"Not available — OpenStreetMap has no cadastral/ownership
   record"*, and hides the encroachment/discrepancy analysis for OSM parcels.
-- Fallback: if `/api/parcels` is unreachable (no backend, offline), the app
-  uses the synthetic dataset below and shows **MODE C**.
+- Fallback: if `/api/parcels` returns nothing (OSM reference not loaded), the
+  backend still serves the synthetic dataset at `/api/demo/*` and the app
+  shows **MODE C**. If the backend itself is down the app shows "data
+  unavailable" — there is no in-browser copy of the data.
 
 ## Reference data & cross-check — REAL (OpenStreetMap)
 
@@ -88,12 +90,16 @@ would mean defeating access controls, which this project does not do.
 The closest lawful, automatable reference is **OpenStreetMap**, pulled
 server-side via the **Overpass API**:
 
-- **`server/reference.mjs`** fetches `building`, `landuse` and `highway` ways
+- **`backend/app/reference.py`** fetches `building`, `landuse` and `highway` ways
   for the demo bbox (T. Nagar). Tries several Overpass mirrors; caches to
-  `server/.cache/` (24 h TTL, gitignored); ships a committed snapshot at
-  **`server/data/osm-reference.json`** (~206 buildings, ~15 land-use polygons,
+  `backend/.cache/` (24 h TTL, gitignored); ships a committed snapshot at
+  **`backend/data/osm-reference.json`** (~206 buildings, ~15 land-use polygons,
   ~45 roads) so the feature works offline and is reviewable in git.
-- **`server/reconcile.mjs`** compares every synthetic parcel against that
+- The `highway` ways are also served on their own at **`GET
+  /api/reference/roads`** and rendered as a toggleable **"Roads"** map layer
+  (`frontend/src/components/MapView.tsx`) — real OpenStreetMap road geometry, not a
+  synthesised grid. Off by default; enable it in the layer manager.
+- **`backend/app/reconcile.py`** compares every synthetic parcel against that
   reference: is a real OSM building on it, OSM footprint area vs our built-up
   estimate, does OSM's `landuse` tag agree with ours, true distance to the
   nearest mapped road.
@@ -113,6 +119,102 @@ how far the synthetic geometry is from reality.
 **OSM caveats.** Community-contributed; completeness and tagging vary by area;
 building polygons can lag the ground; no ownership or legal-boundary data.
 It is a sanity reference, not an authoritative record.
+
+## Elevation & terrain — REAL (Open Topo Data DEM)
+
+The Land Simulation page's flood model now runs over **real elevation data**,
+not a synthesised surface:
+
+- **Source:** [Open Topo Data](https://www.opentopodata.org) (public, keyless
+  REST API), dataset **`mapzen`** (Mapzen/Tilezen composite DEM), falling
+  back to **`srtm30m`** (SRTM, void-filled) if `mapzen` is unreachable.
+- **Fetched by:** `backend/app/elevation.py`, run manually via `npm run
+  gen:elevation -- --site <site>` (`backend/jobs/fetch_elevation.py`) — a
+  one-time data-prep step, not part of `dev`/`build`, since DEM data for a
+  fixed site doesn't change run to run.
+- **Committed snapshot:** `backend/data/elevation-<site>.json` — a coarse
+  24×24 elevation grid over the site's bounding box plus a real elevation
+  value at every parcel centroid, reviewable in git like
+  `backend/data/osm-reference.json`.
+- **Consumed by:** `backend/app/flood.py` — the only place the flood model
+  runs. Parcels without a snapshot entry (e.g. the live OSM footprints, whose
+  ids differ from the demo grid) are bilinear-sampled from the snapshot's
+  24×24 grid at their centroid. The old synthesised gradient+noise surface
+  is gone.
+- **Resolution & accuracy:** ~30 m-class horizontal resolution, SRTM's
+  published vertical accuracy is approx. ±10 m. A parcel's "elevation" is a
+  spatial average over roughly a 30 m cell, **not a surveyed spot height** —
+  shown as such in the UI (`meta.vertical_accuracy_note` in the snapshot).
+- **What's still a demo:** the flood **event** — the rising water level
+  itself — remains a deterministic timer-driven simulation, not a
+  rainfall/hydrology model. Real terrain, simulated flood.
+- **T. Nagar, Chennai is real-world nearly flat** (coastal plain, roughly
+  11–17 m across the demo area per this DEM) — so flood/landslide variation
+  there is genuinely small. That is the correct, honest result, not a bug.
+- **Future path:** this is the exact seam a drone-derived DEM (photogrammetry
+  from real drone imagery) would replace — same snapshot shape
+  (`grid` + `parcelElevations`), different `source` label. See the project
+  goal in `CLAUDE.md` / commit history: drone topography → real elevation →
+  landscape/disaster prediction is the intended end state; Open Topo Data is
+  the interim stand-in while no drone data exists yet.
+
+## Weather — REAL (Open-Meteo)
+
+The Land Simulation page shows a **"Real weather"** card: current
+temperature/precipitation plus a 3-day precipitation forecast for the demo
+location, from [Open-Meteo](https://open-meteo.com) (public, keyless, open
+CORS — called directly from the browser, `frontend/src/data/weather.ts`). A simple,
+explicitly-labeled heuristic (`deriveRainOutlook`) buckets the forecast into
+a Low/Elevated/High "today's rain outlook" from precipitation probability
+and sum thresholds.
+
+**This does not drive the simulated flood event.** The water level on that
+same page is still a fixed-rate timer (`RISE_RATE_M_PER_S` in `backend/app/flood.py`) — real terrain (see
+above), simulated rise, real weather shown alongside as context, not as an
+input. Conflating the two would overclaim a rainfall-runoff/hydrology model
+this app doesn't have. `frontend/src/data/providers.ts`'s `weatherProvider` now
+reports genuine live/unavailable state in the "Data sources" panel (a real
+Open-Meteo reachability check), rather than a permanent stub — but a live
+weather source does **not** upgrade the parcel-data MODE indicator (A/B/C),
+since that's specifically about parcel-geometry provenance, not weather.
+
+## Flood-risk guidance — illustrative, not official
+
+The Land Simulation page's **"How this works"** card maps each impact level
+(Low/Moderate/High/Severe, from `impact_from_depth` in `backend/app/flood.py`) to
+general guidance text (`IMPACT_GUIDANCE`). This is **illustrative only** — a
+depth-threshold heuristic over a simulated water level, not an official
+hazard assessment, evacuation order, or emergency-management product. It
+explicitly directs the reader to their local municipal/disaster-management
+authority for real decisions, and never uses "confirmed" or directive
+legal/safety language.
+
+## Places & geocoding — REAL (Google Maps Platform, optional)
+
+Two things OpenStreetMap genuinely can't cover well for this area — search
+for a real-world address, and business/POI names near a parcel (OSM
+name/address tagging is sparse here, ~5% coverage) — can optionally be
+backed by **Google Maps Platform**, proxied server-side so the API key never
+reaches the browser:
+
+- **`backend/app/google.py`** — `geocode(query)` (Geocoding API) and
+  `nearbyPlaces(lat, lon)` (Places API — Nearby Search, New), each with a
+  1h in-memory cache to avoid duplicate billed calls for the same
+  query/parcel. Routes: `GET /api/geocode?q=`, `GET /api/places/nearby?lat=&lon=`.
+- **Opt-in, needs your own key.** Set `GOOGLE_MAPS_API_KEY` in
+  `backend/.env` (see `backend/.env.example`) — a billing-enabled Google Cloud project with
+  the "Geocoding API" and "Places API (New)" turned on. Without it, both
+  routes return a clean `503` and the UI simply omits the affected
+  features (a "Search address instead" link in the Search card when no
+  local parcel matches; a "Nearby (Google Places)" section in the Land Twin
+  panel) — every other feature in this app is unaffected.
+- **Why not Roads API too:** real OSM road geometry is already fetched
+  server-side (see above) and rendered as a free layer — paying Google for
+  the same thing would be redundant, so only Places + Geocoding are wired
+  up.
+- **Config:** `backend/app/config.py` loads `backend/.env` (then a repo-root
+  `.env`) via python-dotenv; real environment variables win. Set
+  `GOOGLE_MAPS_API_KEY` there — see `backend/.env.example`.
 
 ## Getting real cadastral data (production paths)
 
@@ -138,7 +240,7 @@ None of these is a drop-in API; all need process, not just code.
    arrangements, if budget allows.
 
 To wire any of these in: implement `LandDataProvider` in
-`src/data/providers.ts` (or a server-side fetch + `/api` endpoint for
+`frontend/src/data/providers.ts` (or a server-side fetch + `/api` endpoint for
 CAPTCHA/rate-limited sources) returning geometry normalised to
 `ParcelProperties`, and place it ahead of `demoDataProvider`. The mode
 indicator then reports MODE A/B and the reconciliation compares against it
@@ -159,7 +261,7 @@ over it; "satellite-derived" change values in the UI are demonstration data.
 
 ## Local Land AI
 
-- `src/ai/analyze.ts` is a **deterministic rule/heuristic engine**, not a
+- `frontend/src/ai/analyze.ts` is a **deterministic rule/heuristic engine**, not a
   machine-learning model — there are no model weights, and it does not call
   any external service. It runs on-device (Web Worker, or inline fallback).
 - Output is shaped like a model-backed analyser would be (insight text +
@@ -182,9 +284,9 @@ not a claim of new authoritative data.
 
 ## For production integration
 
-1. Implement `LandDataProvider` for a real source in `src/data/providers.ts`
+1. Implement `LandDataProvider` for a real source in `frontend/src/data/providers.ts`
    (`isAvailable`, `getParcels`, `getBuildings`), returning geometry
-   normalised to `ParcelProperties` (`src/types.ts`). Add it to
+   normalised to `ParcelProperties` (`frontend/src/types.ts`). Add it to
    `ALL_PROVIDERS` ahead of `demoDataProvider`.
 2. Reproject to EPSG:4326, validate geometry, drop/repair invalid polygons.
 3. Redact any personal ownership data before it reaches the client.

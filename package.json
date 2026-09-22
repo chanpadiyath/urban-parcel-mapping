@@ -1,34 +1,19 @@
 {
   "name": "urban-parcel-mapping",
   "private": true,
-  "version": "0.1.0",
-  "type": "module",
-  "description": "Urban Parcel Mapping — P0 MVP prototype",
+  "version": "0.2.0",
+  "description": "Urban Parcel Intelligence — monorepo: frontend (TypeScript/React/MapLibre) + backend (Python/FastAPI)",
   "engines": {
     "node": ">=20.19"
   },
   "scripts": {
-    "gen:data": "node scripts/generate-demo-parcels.mjs",
-    "predev": "node scripts/generate-demo-parcels.mjs",
-    "prebuild": "node scripts/generate-demo-parcels.mjs",
-    "dev": "vite",
-    "server": "node server/index.mjs",
-    "dev:all": "node scripts/dev-all.mjs",
-    "start": "node server/index.mjs",
-    "build": "tsc --noEmit && vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "maplibre-gl": "^4.7.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-  },
-  "devDependencies": {
-    "@types/geojson": "^7946.0.14",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-react": "^4.7.0",
-    "typescript": "^5.6.3",
-    "vite": "^7.1.12"
+    "setup": "node scripts/setup.mjs",
+    "dev": "node scripts/dev.mjs",
+    "dev:web": "npm --prefix frontend run dev",
+    "dev:api": "node scripts/api.mjs",
+    "build": "npm --prefix frontend run build",
+    "test": "node scripts/api.mjs test",
+    "gen:data": "node scripts/api.mjs job generate_demo_parcels",
+    "gen:elevation": "node scripts/api.mjs job fetch_elevation"
   }
 }

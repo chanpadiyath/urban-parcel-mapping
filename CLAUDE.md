@@ -61,10 +61,10 @@ Locked for the MVP unless the user approves a change:
 | Base map | Free raster/vector tiles that need no key for dev (e.g. OSM raster). Document the tile source and its usage terms. |
 | Styling | Plain CSS or a single lightweight utility layer. No heavy component library. |
 | State | React state / context. No Redux. |
-| Backend | **None for MVP.** Serve GeoJSON as a static asset. Add a thin API (FastAPI or Express) only if dataset size forces it. |
+| Backend | **Python + FastAPI** (`backend/`), added 2026-09-20 with user approval — see the README tech decisions log. Owns all data logic and models (flood engine, OSM reference, elevation, Google proxy); the frontend is a separate static build that only calls `/api/*`. Python 3.12+, venv in `backend/.venv`, pytest for tests. |
 | Data store | Flat GeoJSON files in the repo for the sample; larger data via a documented download script. Introduce PostGIS only if a backend becomes necessary. |
-| Package manager | npm (committed `package-lock.json`). |
-| Node | Use an LTS release; pin it in `.nvmrc` and `package.json` engines. |
+| Package manager | npm for the frontend (committed `frontend/package-lock.json`); pip + `backend/requirements*.txt` for the backend. |
+| Node | Frontend only. LTS release; pinned in `frontend/.nvmrc` and `engines`. |
 
 Record any deviation from this table in a short "Tech decisions log" section of the README with the date and reason.
 
@@ -75,9 +75,9 @@ Record any deviation from this table in a short "Tech decisions log" section of 
 - **Interchange format:** GeoJSON (RFC 7946). Coordinate order is `[longitude, latitude]`.
 - **CRS:** Store and serve data in EPSG:4326 (WGS84). Reproject at ingest time, not at render time. If source data is in a local projection (e.g. a state plane or UTM zone), convert it in the data prep script and note the original CRS.
 - **Area/measurements:** Compute areas using an equal-area projection or a geodesic method — never from raw degrees. Label units explicitly (m² / hectares / acres).
-- **Data prep:** All transforms (clip to study area, reproject, simplify, trim attributes) live in a committed, re-runnable script under `scripts/`. Raw source data is not committed; the script downloads or points to it. Commit a small clipped sample (a few hundred parcels) so the app runs offline.
+- **Data prep:** All transforms (clip to study area, reproject, simplify, trim attributes) live in a committed, re-runnable job under `backend/jobs/`. Raw source data is not committed; the script downloads or points to it. Commit a small clipped sample (a few hundred parcels) so the app runs offline.
 - **Geometry hygiene:** Expect invalid/self-intersecting polygons and multipolygons in real parcel data. Validate on ingest, fix or drop broken geometries, and log what was dropped. Simplify geometry for rendering (tolerance documented) but keep an unsimplified copy if precise area matters.
-- **Attribute schema:** Define a TypeScript type for parcel properties. Normalize field names to a documented internal schema; keep a mapping from source field names. Every parcel needs a stable unique ID.
+- **Attribute schema:** Define a TypeScript type for parcel properties (`frontend/src/types.ts`; the backend emits the matching JSON). Normalize field names to a documented internal schema; keep a mapping from source field names. Every parcel needs a stable unique ID.
 - **Size limits:** Keep the bundled GeoJSON small enough to load fast (target < 5 MB, ideally < 2 MB). If the real dataset is larger, tile it (vector tiles / PMTiles) or paginate by viewport — do not ship a giant blob.
 - **Licensing:** Record the data source, license, and attribution requirements in `DATA.md`. Display required attribution in the UI.
 - **Privacy:** Treat owner names and any personal information as sensitive — see Security.
@@ -158,12 +158,12 @@ Exit deadline mode only on an explicit instruction from the user.
 
 ---
 
-## Repository Conventions (to be established)
+## Repository Conventions
 
-- `src/` — application code
-- `scripts/` — data download and prep (re-runnable)
-- `data/` — small committed sample GeoJSON only
-- `public/` — static assets served as-is
-- `tests/` or co-located `*.test.ts` — tests
+- `frontend/` — TypeScript/React/Vite app (`src/`, `index.html`, its own `package.json`)
+- `backend/` — Python/FastAPI (`app/` API + models, `jobs/` data prep, `data/` small committed snapshots, `tests/` pytest)
+- `scripts/` — Node helpers so `npm run dev|setup|test|gen:*` at the repo root drive both sides
+- `frontend/src/**` co-located tests when added (Vitest); backend tests in `backend/tests/`
 - `DATA.md` — data sources, licenses, attribution, PII notes
 - `README.md` — quick start, run commands, tech decisions log
+- Secrets: `backend/.env` (gitignored); never `VITE_*` — those ship to the browser

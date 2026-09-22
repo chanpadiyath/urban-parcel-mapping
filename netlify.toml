@@ -1,0 +1,13 @@
+# Netlify deploy config for the frontend (a monorepo subdirectory).
+# In the Netlify dashboard: Add new site -> Import an existing project -> pick
+# this repo. Netlify reads this file automatically; no manual "base directory"
+# setup needed. Then set VITE_SIM_API in Site settings -> Environment
+# variables to your deployed backend's URL + "/api" (see DEPLOY.md).
+
+[build]
+base = "frontend"
+command = "npm run build"
+publish = "dist"
+
+[build.environment]
+NODE_VERSION = "20.19"

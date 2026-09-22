@@ -1,0 +1,35 @@
+# Render Blueprint — deploys the backend (FastAPI) as a web service.
+# In the Render dashboard: New + -> Blueprint -> pick this repo -> Apply.
+# The frontend is a separate static site, deployed on Netlify/Vercel (see DEPLOY.md).
+#
+# After the frontend is deployed, come back and set CORS_ORIGINS below (or in
+# the dashboard) to its URL, e.g. https://your-site.netlify.app — otherwise
+# the browser will block requests to this API.
+
+services:
+  - type: web
+    name: urban-parcel-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.6"
+      # Skip the startup live refresh from Overpass — a committed snapshot is
+      # already bundled, and public Overpass mirrors rate-limit shared cloud
+      # IPs more aggressively than residential ones. Flip to "1" once deployed
+      # if you want live refresh; refresh on demand with POST /api/reference/refresh.
+      - key: OSM_LIVE_REFRESH
+        value: "0"
+      # Set after the frontend is deployed (its exact origin, no trailing slash).
+      - key: CORS_ORIGINS
+        value: "http://localhost:5173"
+        sync: false
+      # Optional — see backend/.env.example. Leave unset and the Google-backed
+      # search/places features just report "unavailable".
+      - key: GOOGLE_MAPS_API_KEY
+        value: ""
+        sync: false

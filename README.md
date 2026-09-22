@@ -8,13 +8,12 @@ time-series change, and a continuously running **on-device AI** intelligence
 layer, all behind a pluggable data-provider architecture with an explicit
 live / cached / demo mode indicator.
 
-> **Data modes.** With the backend running (`npm run dev:all` / `npm run
-> server`) the app loads **real, live OpenStreetMap building footprints** for
+> **Data modes.** With the backend running (`npm run dev`) the app loads **real, live OpenStreetMap building footprints** for
 > the area (via the Overpass API) as the parcel dataset — **MODE B**. Real
 > geometry, area, land-use tags, road distances, names/storeys where OSM has
 > them. Fields with **no public data source** — ownership, survey number,
 > encroachment, guideline value, tenure — are shown as *not available*, never
-> fabricated. Without the backend it falls back to the **synthetic MODE C**
+> fabricated. If OpenStreetMap can't be loaded, the backend serves the **synthetic MODE C**
 > dataset (a derived grid; clearly labelled).
 >
 > **What has no real source, anywhere:** India has **no public API for
@@ -23,34 +22,62 @@ live / cached / demo mode indicator.
 > footprints*, not official plot boundaries. See [`DATA.md`](./DATA.md) for
 > the six production paths to authoritative cadastral data.
 
+## Project layout
+
+Two independent apps in one repo:
+
+```
+frontend/   TypeScript · React · Vite · MapLibre GL — the browser app (static build)
+backend/    Python 3.12+ · FastAPI — the API: simulation engine, OSM + elevation data, Google proxy
+scripts/    tiny Node helpers so one command runs both (no dependencies)
+DATA.md     data sources, provenance, limits        CLAUDE.md   project rules
+```
+
+The frontend only talks to the backend over `/api/*` (REST + Server-Sent
+Events). All models and data logic live in the backend; the frontend renders
+and controls them.
+
 ## Quick start
 
-Requires Node 20.19+.
+Requires **Node 20.19+** (frontend) and **Python 3.12+** (backend).
 
 ```bash
-npm install
-npm run dev          # front end only — http://localhost:5173
-npm run dev:all      # front end + real-time simulation backend (recommended)
+npm run setup      # one time: frontend npm install + backend venv + pip install
+npm run dev        # frontend http://localhost:5173  +  backend http://localhost:8787
 ```
 
-`npm run dev:all` runs Vite and the simulation server (`server/`, port 8787)
-together; `/api` is proxied to it. Without the backend the app still works —
-the Land Simulation page falls back to its in-browser engine.
+Other commands (all from the repo root):
 
-`npm run gen:data` regenerates the demo GeoJSON (runs automatically before
-`dev` / `build`). Location is configurable — see `.env.example`.
+| Command | What it does |
+|---|---|
+| `npm run dev:web` / `npm run dev:api` | run just one side |
+| `npm test` | backend tests (pytest) |
+| `npm run build` | type-check + production build of the frontend → `frontend/dist/` |
+| `npm run gen:data` | regenerate the synthetic demo GeoJSON (`backend/data/`) |
+| `npm run gen:elevation -- --site chennai` | fetch real DEM elevation from Open Topo Data → `backend/data/elevation-<site>.json` (manual, one-time — DEM data doesn't change) |
 
-## Production build
+Configuration is by environment: frontend `VITE_*` in `frontend/.env.local`
+(see `frontend/.env.example`), backend in `backend/.env` (see
+`backend/.env.example` — port, CORS, optional `GOOGLE_MAPS_API_KEY`). The
+backend also reads a repo-root `.env`.
+
+The frontend needs the backend running — without it the app shows a
+"data unavailable" state with Retry (there is no in-browser fallback engine).
+
+## Deploying (two pieces)
+
+See **[`DEPLOY.md`](./DEPLOY.md)** for step-by-step free hosting (Netlify +
+Render, config already committed as [`netlify.toml`](./netlify.toml) /
+[`render.yaml`](./render.yaml)). The short version, for any static host +
+Python host:
 
 ```bash
-npm run build        # tsc --noEmit + vite build -> dist/
-npm run server       # Node server: serves dist/ + the /api simulation backend (port 8787)
-# or `npm run preview` for the static front end only (client-side sim)
+npm run build                      # frontend/dist/ — host as static files anywhere
+cd backend && .venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8787   # or a container / Python host
 ```
 
-Front end is a static bundle (also emits a small Web Worker chunk). The
-**simulation backend** (`server/index.mjs`) is a **zero-dependency `node:http`
-server** — no framework — that also serves the built SPA in production.
+Set `VITE_SIM_API` to the backend's public URL (+ `/api`) at frontend build
+time, and add the frontend's origin to the backend's `CORS_ORIGINS`.
 
 ## What works
 
@@ -67,9 +94,10 @@ server** — no framework — that also serves the built SPA in production.
 - **AI detections layer** — dashed red outline on parcels carrying a potential
   encroachment / discrepancy flag. Metric-only — no fabricated encroachment
   geometry.
-- **Layer manager** — parcels, land-use fill, buildings, AI detections
-  toggle independently; roads / water / vegetation / admin boundaries are
-  listed **disabled** ("needs external data source").
+- **Layer manager** — parcels, land-use fill, buildings, AI detections,
+  **roads** (real OpenStreetMap geometry, off by default) toggle
+  independently; water / vegetation / admin boundaries remain **disabled**
+  ("needs external data source").
 
 ### Land Twin panel (on select)
 Badges (development status, encroachment level, boundary confidence, DEMO),
@@ -83,7 +111,31 @@ ground coverage) · **Time series** (current → previous for built-up,
 vegetation, encroachment) · **Planning** (zoning, tenure, agri status,
 assessed value in ₹) · **Identity** (survey no, sub-division, ward, taluk,
 local body, PIN, state) · **Ownership** ("Ownership data unavailable" — no
-names) · **Local AI insights** (list) · **Data sources** · disclaimer.
+names) · **Local AI insights** (list) · **Nearby (Google Places)** — real
+business/POI names near the parcel, opt-in, needs `GOOGLE_MAPS_API_KEY` (see
+below) · **Data sources** · disclaimer.
+
+### Land Simulation page
+Real elevation (DEM) feeding a simulated flood event — see
+[`DATA.md`](./DATA.md#elevation--terrain--real-open-topo-data-dem) for the
+full picture. Also shows: a **"Real weather"** card (live current + 3-day
+precipitation forecast, Open-Meteo, keyless) and a **"How this works"** card
+explaining the model and giving illustrative per-impact-level guidance.
+
+### Search
+Local parcel-ID/address/ward/lat,lng match first; if nothing matches, a
+**"Search address instead (Google)"** fallback geocodes a real-world address
+and pans the map there — opt-in, needs `GOOGLE_MAPS_API_KEY`.
+
+### Google Maps Platform (optional)
+Two features — address search fallback and nearby-places parcel enrichment —
+use Google's Geocoding + Places APIs, proxied server-side
+(`backend/app/google.py`) so the key never reaches the browser. Everything else
+in this app works without it. To enable: create a Google Cloud project with
+billing, enable "Geocoding API" and "Places API (New)", generate a
+restricted API key, and set `GOOGLE_MAPS_API_KEY` in `backend/.env` (copy
+from `backend/.env.example`). Without a key, both features degrade cleanly to
+"unavailable" — see [`DATA.md`](./DATA.md#places--geocoding--real-google-maps-platform-optional).
 
 ### Local Land AI
 - `src/ai/analyze.ts` — a **deterministic heuristic engine** (not an ML
@@ -125,58 +177,60 @@ parcel map is untouched. A **client-side deterministic flood simulation** over
 the real parcel geometry:
 
 - **Controls:** Start / Pause / Reset, Speed ×1/×2/×5, ± Water level, timeline bar.
-- Rising water level vs a **synthesised demo elevation surface** (gradient from
-  a low SW "river/coast" corner + gentle noise — *not* a real DEM). A parcel
-  floods when the level exceeds its demo elevation; depth = level − elevation.
-  Water visibly spreads outward from the low ground as the level rises.
+- Rising water level over **real elevation data** (Open Topo Data DEM — see
+  [`DATA.md`](./DATA.md#elevation--terrain--real-open-topo-data-dem)). A parcel
+  floods when the level exceeds its ground elevation; depth = level − elevation.
+  The rise itself is a fixed-rate timer, *not* a rainfall/hydrology model.
 - **Impact analytics** (from real geometry/attributes): affected parcels,
-  buildings, roads (grid rows/cols touched, approx), area (ha + %), critical
-  infrastructure (Institutional / Public), max depth, sim clock.
-- **Click a flooded parcel** → depth, impact level, land use, building present,
-  encroachment, sim time — showing Parcel Mapping → Land Twin → Simulation.
-- Labelled **SIMULATION / DEMO MODE** throughout — the flood *event* is a
-  deterministic model over a synthesised elevation surface (no hydrology).
+  buildings, roads (distinct named roads beside flooded parcels), area (ha + %),
+  critical infrastructure (Institutional / Public), max depth, sim clock.
+- **Click a flooded parcel** → depth, impact level, elevation, land use,
+  building present, encroachment, sim time.
+- Labelled **SIMULATION / DEMO MODE** throughout.
 
-### Real-time backend (`server/`)
+### Backend (`backend/`, FastAPI)
 
-- **`server/index.mjs`** — zero-dependency `node:http` server. Owns the
-  authoritative simulation state, advances it on its own 500 ms timer, and
-  **streams every update over SSE** to all connected clients. Also serves
-  `dist/` + `public/` in production.
-- **`server/flood-engine.mjs`** — stateful engine (elevation surface + impact
-  maths from the real parcel geometry), mirrors `src/sim/flood.ts`.
-- **API:** `GET /api/health` · `GET /api/simulation/state` ·
-  `GET /api/simulation/stream` (SSE) · `POST /api/simulation/{start,pause,reset}` ·
-  `POST /api/simulation/flood` `{ speed?, levelDeltaM?, cycleSpeed? }`.
-- **`src/sim/useServerSim.ts`** — `EventSource` client; the Simulation page
-  uses server state when connected (**LIVE · backend** badge) and
-  automatically drops to `src/sim/useFloodSim.ts` (**LOCAL · fallback**) when
-  the server is unreachable (e.g. static-only hosting). Controls dispatch to
-  the server or the local engine transparently.
-- What's real: the server process, the shared state, the SSE transport, the
-  impact maths over real geometry. What's a model: the flood itself.
-
-Front-end sim files: `src/sim/flood.ts` (pure), `src/sim/useFloodSim.ts`
-(local timer/state), `src/sim/useServerSim.ts` (SSE client),
-`src/components/SimMap.tsx`, `src/pages/SimulationPage.tsx`.
+- **`app/main.py`** — routes. Owns the authoritative simulation state, advances
+  it on a 500 ms timer, and **streams every update over SSE** to all clients.
+- **`app/flood.py`** — the flood engine (real elevation + impact maths). It runs
+  over the *same parcels the API serves* (real OSM footprints), so the map and
+  the simulation always agree.
+- **`app/elevation.py`** · **`reference.py`** · **`osm_parcels.py`** ·
+  **`reconcile.py`** · **`google.py`** — DEM snapshot, OSM reference (Overpass),
+  OSM→parcels, demo-vs-OSM cross-check, optional Google proxy.
+- **`jobs/`** — re-runnable data prep: `generate_demo_parcels.py`,
+  `fetch_elevation.py`. **`data/`** — small committed snapshots.
+- **API:** `GET /api/health` · `/api/parcels` · `/api/demo/{parcels,buildings}` ·
+  `/api/elevation/{site}` · `/api/reference/{status,osm,roads}` ·
+  `POST /api/reference/refresh` · `/api/reconcile` ·
+  `/api/simulation/{state,elevations,stream}` ·
+  `POST /api/simulation/{start,pause,reset,flood}` ·
+  `/api/geocode` · `/api/places/nearby`. Interactive docs at
+  `http://localhost:8787/docs` while it runs.
+- **Frontend side:** `frontend/src/sim/useServerSim.ts` (`EventSource` client),
+  `useParcelElevations.ts`, `flood.ts` (types + guidance text only),
+  `components/SimMap.tsx`, `pages/SimulationPage.tsx`.
 
 ## Architecture
 
 ```
-public/demo-parcels.geojson     144 derived Indian parcels (Chennai), synthetic attributes + time-series
-public/demo-buildings.geojson   122 estimated building footprints / heights
-src/config.ts                   DEMO location + basemap URLs + sync cadence (env-driven, Chennai defaults)
-src/data/providers.ts           LandDataProvider interface, demo provider, API stubs, resolveDataStack()
-src/realtime/useLandTwinSync.ts controlled real-time loop + event feed
-src/ai/analyze.ts               deterministic Land-AI engine + NL query parser
-src/ai/localLandAI.worker.ts    Web Worker wrapper
-src/ai/useLocalLandAI.ts        worker orchestration + inline fallback + status
-src/metrics.ts                  runtime-derived metrics (area, discrepancy, deltas, FAR…) + ₹/sq-ft formatters, all guarded
-src/components/MapView.tsx      MapLibre map: parcel fill/line, AI-detection line, 3D buildings, basemap swap, layers, camera
-src/components/Sidebar.tsx      mode banner, data sources, dashboard, Local AI + command bar, view, layers, search, filters, legend, event stream
-src/components/LandTwinPanel.tsx  the Land Twin record
-src/App.tsx                     data-stack load, all state, wiring, dashboard/stats, neighbours, command handling
-scripts/generate-demo-parcels.mjs  re-runnable generator (env-configurable location)
+backend/app/main.py                FastAPI routes + SSE
+backend/app/flood.py               flood engine (real DEM + impact maths)
+backend/app/elevation.py           real DEM snapshot loader / Open Topo Data fetcher
+backend/app/reference.py           OSM reference store (Overpass, cache, committed snapshot)
+backend/data/                      demo-parcels/buildings.geojson, osm-reference.json, elevation-<site>.json
+backend/jobs/                      generate_demo_parcels.py, fetch_elevation.py
+frontend/src/config.ts             DEMO location + basemap URLs + sync cadence (env-driven, Chennai defaults)
+frontend/src/data/providers.ts     LandDataProvider interface, providers, resolveDataStack()
+frontend/src/realtime/useLandTwinSync.ts  controlled real-time loop + event feed
+frontend/src/ai/analyze.ts         deterministic Land-AI engine + NL query parser
+frontend/src/ai/localLandAI.worker.ts     Web Worker wrapper
+frontend/src/ai/useLocalLandAI.ts  worker orchestration + inline fallback + status
+frontend/src/metrics.ts            runtime-derived metrics (area, discrepancy, deltas, FAR…) + ₹/sq-ft formatters
+frontend/src/components/MapView.tsx       MapLibre map: parcels, AI detections, roads, 3D buildings, basemap swap, layers, camera
+frontend/src/components/Sidebar.tsx       mode banner, data sources, dashboard, Local AI, view, layers, search, filters, legend, events
+frontend/src/components/LandTwinPanel.tsx the Land Twin record
+frontend/src/App.tsx               data-stack load, all state, wiring, dashboard/stats, neighbours, command handling
 ```
 
 ## Data provenance (what is what)
@@ -195,11 +249,12 @@ scripts/generate-demo-parcels.mjs  re-runnable generator (env-configurable locat
 
 ## Fallbacks (all automatic)
 
-- **Live APIs unavailable →** provider stack falls through to bundled demo data; MODE C shown.
+- **Live OSM unavailable →** the backend serves the bundled demo dataset; MODE C shown.
 - **Web Worker unavailable →** Local AI runs inline; status shows `FALLBACK`.
 - **AI error →** app keeps working; deterministic filters still serve the command bar.
 - **3D unstable →** the 2D toggle is a pure MapLibre 2D view, no reload.
-- **Missing env vars →** Chennai defaults in `src/config.ts`.
+- **Missing env vars →** Chennai defaults in `frontend/src/config.ts`.
+- **Backend unreachable →** the frontend shows "data unavailable" / "OFFLINE" with Retry; there is no in-browser engine.
 
 ## Checkpoints / rollback
 
@@ -220,7 +275,13 @@ scripts/generate-demo-parcels.mjs  re-runnable generator (env-configurable locat
   were not verified here** — no browser tooling in the build environment.
 - JS bundle ~996 KB (~280 KB gzip), mostly MapLibre. Worker chunk ~5 KB.
 - To integrate a real land-record source: implement `LandDataProvider` in
-  `src/data/providers.ts` (`isAvailable`, `getParcels`, `getBuildings`) and
+  `frontend/src/data/providers.ts` (`isAvailable`, `getParcels`, `getBuildings`) and
   add it to `ALL_PROVIDERS` before the demo provider — the UI and mode
   indicator adapt automatically.
-- No automated `lint` / `test` npm scripts.
+- Backend has a pytest suite (`npm test`); the frontend has no automated tests yet.
+
+## Tech decisions log
+
+| Date | Decision | Why |
+|---|---|---|
+| 2026-09-20 | Split into `frontend/` (TypeScript) + `backend/` (Python/FastAPI); Node backend removed | Drone photogrammetry and terrain analysis tooling (OpenDroneMap, rasterio, GDAL, numpy) is Python-first; one owner for all models removes duplicated frontend/backend flood logic. Supersedes CLAUDE.md's "Backend: none for MVP". |
