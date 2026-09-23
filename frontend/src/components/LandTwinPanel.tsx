@@ -12,6 +12,14 @@ import type { AnalyzeResult } from "../ai/analyze";
 import type { AiRuntimeState } from "../types";
 import type { ParcelReconcile } from "../data/reconcile";
 import { nearbyPlaces, type NearbyPlace } from "../data/google";
+import { useWhatIf } from "../sim/useWhatIf";
+
+const PLINTH_OPTIONS = [0, 0.3, 0.5, 1.0];
+const REDUCTION_OPTIONS: Array<[number, string]> = [
+  [0, "None"],
+  [0.15, "Minor drainage"],
+  [0.3, "Retention basin"],
+];
 
 function rel(ts: number | null | undefined, now: number): string {
   if (!ts) return "—";
@@ -87,6 +95,14 @@ function LandTwinPanel({
     status: "idle",
     list: [],
   });
+  const [plinthRaiseM, setPlinthRaiseM] = useState(0);
+  const [levelReductionM, setLevelReductionM] = useState(0);
+  useEffect(() => {
+    setPlinthRaiseM(0);
+    setLevelReductionM(0);
+  }, [parcel?.parcel_id]);
+  const whatIf = useWhatIf(parcel?.parcel_id ?? null, plinthRaiseM, levelReductionM);
+
   useEffect(() => {
     if (!parcel || !centroid) {
       setPlaces({ status: "idle", list: [] });
@@ -179,8 +195,82 @@ function LandTwinPanel({
         <Row label="Potential encroachment" value={`${fmtSqm(m.encroachmentAreaSqm)} · ${fmtPct(m.encroachmentPct)}`} sub={m.encroachmentLevel} />
         <Row label="Construction activity" value={construction} />
         <Row label="Access / road change" value="Data unavailable" />
-        <Row label="Flood / water risk" value="Data unavailable" />
+        <Row
+          label="Flood / water risk"
+          value={whatIf.data ? `${whatIf.data.baseline.depthM.toFixed(2)} m · ${whatIf.data.baseline.impact}` : whatIf.loading ? "Loading…" : "—"}
+          sub="at the current simulated water level — see below"
+        />
       </Section>
+
+      <section className="tw__section">
+        <h3 className="tw__section-title">
+          Flood vulnerability &amp; what-if
+          <span className="tw__tag">real elevation + roads</span>
+        </h3>
+        {whatIf.error && <p className="tw__muted">Unavailable ({whatIf.error}).</p>}
+        {whatIf.data && (
+          <>
+            <dl className="tw__list">
+              <Row label="Elevation (real)" value={`${whatIf.data.elevationM.toFixed(2)} m`} />
+              <Row
+                label="Nearest road"
+                value={
+                  whatIf.data.road.distanceM != null
+                    ? `${whatIf.data.road.name ?? "Unnamed road"} · ${whatIf.data.road.distanceM.toFixed(0)} m`
+                    : "Data unavailable"
+                }
+              />
+              <Row label="Simulated water level" value={`${whatIf.data.waterLevelM.toFixed(2)} m`} sub="set on the Terrain Mapping page" />
+              <Row label="Current depth" value={`${whatIf.data.baseline.depthM.toFixed(2)} m`} sub={whatIf.data.baseline.impact} />
+            </dl>
+
+            <p className="tw__label" style={{ margin: "14px 0 6px" }}>Raise plinth (real recalculation)</p>
+            <div className="seg">
+              {PLINTH_OPTIONS.map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  className={"seg__btn" + (plinthRaiseM === v ? " is-active" : "")}
+                  onClick={() => setPlinthRaiseM(v)}
+                >
+                  {v === 0 ? "None" : `+${v} m`}
+                </button>
+              ))}
+            </div>
+            <p className="tw__label" style={{ margin: "10px 0 6px" }}>Drainage / retention (assumed reduction)</p>
+            <div className="seg">
+              {REDUCTION_OPTIONS.map(([v, label]) => (
+                <button
+                  key={v}
+                  type="button"
+                  className={"seg__btn" + (levelReductionM === v ? " is-active" : "")}
+                  onClick={() => setLevelReductionM(v)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {whatIf.data.baseline.impact === "None" ? (
+              <p className="tw__muted" style={{ marginTop: 10 }}>
+                Not currently flooded at this water level — bump the water level on the Terrain
+                Mapping page to test interventions against an active flood.
+              </p>
+            ) : (
+              <dl className="tw__list" style={{ marginTop: 10 }}>
+                <Row label="Scenario depth" value={`${whatIf.data.scenario.depthM.toFixed(2)} m`} sub={whatIf.data.scenario.impact} />
+                <Row label="Depth reduced by" value={`${whatIf.data.deltaDepthM.toFixed(2)} m`} />
+              </dl>
+            )}
+            <p className="tw__muted" style={{ marginTop: 8 }}>
+              Raising the plinth recomputes real depth from real elevation. The drainage/retention
+              figure is an assumed local water-level reduction you chose — illustrative, not a
+              drainage-network or hydraulic simulation. The water level itself is a demonstration
+              timer, not rainfall/hydrology — start or bump it on the Terrain Mapping page.
+            </p>
+          </>
+        )}
+      </section>
 
       <Section title={isOsm ? "Footprint & geometry" : "Area & discrepancy"} tag={isOsm ? "real · OSM" : "derived geometry"}>
         <Row label={isOsm ? "Footprint area" : "Mapped area"} value={fmtSqft(m.parcelAreaSqft)} sub={fmtSqm(m.parcelAreaSqm)} />

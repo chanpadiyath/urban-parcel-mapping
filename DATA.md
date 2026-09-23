@@ -122,7 +122,7 @@ It is a sanity reference, not an authoritative record.
 
 ## Elevation & terrain — REAL (Open Topo Data DEM)
 
-The Land Simulation page's flood model now runs over **real elevation data**,
+The Terrain Mapping page's flood model now runs over **real elevation data**,
 not a synthesised surface:
 
 - **Source:** [Open Topo Data](https://www.opentopodata.org) (public, keyless
@@ -160,7 +160,7 @@ not a synthesised surface:
 
 ## Weather — REAL (Open-Meteo)
 
-The Land Simulation page shows a **"Real weather"** card: current
+The Terrain Mapping page shows a **"Real weather"** card: current
 temperature/precipitation plus a 3-day precipitation forecast for the demo
 location, from [Open-Meteo](https://open-meteo.com) (public, keyless, open
 CORS — called directly from the browser, `frontend/src/data/weather.ts`). A simple,
@@ -180,7 +180,7 @@ since that's specifically about parcel-geometry provenance, not weather.
 
 ## Flood-risk guidance — illustrative, not official
 
-The Land Simulation page's **"How this works"** card maps each impact level
+The Terrain Mapping page's **"How this works"** card maps each impact level
 (Low/Moderate/High/Severe, from `impact_from_depth` in `backend/app/flood.py`) to
 general guidance text (`IMPACT_GUIDANCE`). This is **illustrative only** — a
 depth-threshold heuristic over a simulated water level, not an official
@@ -191,10 +191,12 @@ legal/safety language.
 
 ## Per-parcel what-if mitigation — mixed real physics + illustrative assumption
 
-The Land Simulation page's **"Parcel impact"** card, on selecting a parcel,
-shows why it's vulnerable and lets you test two kinds of intervention. The
-two are computed differently and must stay visually distinguished — this is
-the core "so what" of the whole flood feature, so the honesty boundary here
+Selecting a parcel — on **either** the Terrain Mapping page's "Parcel
+impact" card, or the main Parcel Mapping page's Land Twin panel ("Flood
+vulnerability & what-if" section, sharing the same `useWhatIf` hook) — shows
+why it's vulnerable and lets you test two kinds of intervention. The two are
+computed differently and must stay visually distinguished — this is the
+core "so what" of the whole flood feature, so the honesty boundary here
 matters more than almost anywhere else in the app:
 
 - **Real elevation, real road distance, real current depth.** `GET

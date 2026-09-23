@@ -144,7 +144,7 @@ export const satelliteProvider = stubProvider(
 /**
  * Real current + forecast precipitation (Open-Meteo, keyless). Only reports
  * availability here — the actual data is fetched where it's used
- * (`src/sim/useWeather.ts`, Land Simulation page), since this provider's
+ * (`src/sim/useWeather.ts`, Terrain Mapping page), since this provider's
  * `LandDataProvider` shape is parcels/buildings-oriented and weather isn't.
  */
 let weatherLastOk: string | null = null;
@@ -169,7 +169,7 @@ export const weatherProvider: LandDataProvider = {
     kind: "weather",
     state: weatherLastOk ? "live" : "unavailable",
     detail: weatherLastOk
-      ? `Real current + 3-day precipitation forecast (Open-Meteo, keyless) — shown on the Land Simulation page.`
+      ? `Real current + 3-day precipitation forecast (Open-Meteo, keyless) — shown on the Terrain Mapping page.`
       : "Open-Meteo (keyless) not reachable right now.",
   }),
 };

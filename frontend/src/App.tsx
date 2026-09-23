@@ -357,7 +357,7 @@ export default function App() {
         </div>
         <nav className="app__nav">
           <button type="button" className={"app__nav-btn" + (page === "map" ? " is-active" : "")} onClick={() => go("map")}>Parcel Mapping</button>
-          <button type="button" className={"app__nav-btn" + (page === "sim" ? " is-active" : "")} onClick={() => go("sim")}>Land Simulation</button>
+          <button type="button" className={"app__nav-btn" + (page === "sim" ? " is-active" : "")} onClick={() => go("sim")}>Terrain Mapping</button>
         </nav>
         <div className="app__status-pills">
           <span className="spill"><i className="dot" /> LAND DATA <b>{ready ? "DEMO" : "…"}</b></span>
@@ -373,6 +373,7 @@ export default function App() {
         <SimulationPage
           parcels={stack.parcels}
           buildings={stack.buildings}
+          roads={roads}
           center={[DEMO.lon, DEMO.lat]}
           zoom={DEMO.zoom}
         />
@@ -486,7 +487,7 @@ export default function App() {
       <footer className="app__statusbar">
         {page === "sim" ? (
           <>
-            <span>LAND SIMULATION</span>
+            <span>TERRAIN MAPPING</span>
             <span className="sep">·</span>
             <span>Server-side flood simulation over real elevation · SIMULATION / DEMO MODE</span>
             <span className="push">© OpenStreetMap contributors</span>

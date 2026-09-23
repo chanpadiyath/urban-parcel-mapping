@@ -104,18 +104,23 @@ Badges (development status, encroachment level, boundary confidence, DEMO),
 then sections: **Live status** (last sync, local-AI state, last analysis,
 detected-change count) · **Land intelligence** (observed use, built-footprint
 change, vegetation change, potential encroachment, construction-activity
-inference; road/flood = "Data unavailable") · **Area & discrepancy** (mapped
-vs reference area, potential discrepancy m²/%, boundary confidence, perimeter)
-· **Built form** (built-up sq ft/m²/%, open area, floors, est. height, FAR,
-ground coverage) · **Time series** (current → previous for built-up,
-vegetation, encroachment) · **Planning** (zoning, tenure, agri status,
-assessed value in ₹) · **Identity** (survey no, sub-division, ward, taluk,
-local body, PIN, state) · **Ownership** ("Ownership data unavailable" — no
-names) · **Local AI insights** (list) · **Nearby (Google Places)** — real
-business/POI names near the parcel, opt-in, needs `GOOGLE_MAPS_API_KEY` (see
-below) · **Data sources** · disclaimer.
+inference; road/change history = "Data unavailable", flood risk = real, see
+below) · **Flood vulnerability & what-if** — real elevation, real
+nearest-road distance, current simulated depth/impact, and the same
+plinth-raise / drainage-retention what-if tool as the Terrain Mapping page
+(see below), available for every parcel from this primary panel, not gated
+behind a separate page · **Area & discrepancy** (mapped vs reference area,
+potential discrepancy m²/%, boundary confidence, perimeter) · **Built form**
+(built-up sq ft/m²/%, open area, floors, est. height, FAR, ground coverage)
+· **Time series** (current → previous for built-up, vegetation,
+encroachment) · **Planning** (zoning, tenure, agri status, assessed value in
+₹) · **Identity** (survey no, sub-division, ward, taluk, local body, PIN,
+state) · **Ownership** ("Ownership data unavailable" — no names) · **Local
+AI insights** (list) · **Nearby (Google Places)** — real business/POI names
+near the parcel, opt-in, needs `GOOGLE_MAPS_API_KEY` (see below) · **Data
+sources** · disclaimer.
 
-### Land Simulation page
+### Terrain Mapping page
 Real elevation (DEM) feeding a simulated flood event — see
 [`DATA.md`](./DATA.md#elevation--terrain--real-open-topo-data-dem) for the
 full picture. Also shows: a **"Real weather"** card (live current + 3-day
@@ -179,9 +184,9 @@ from `backend/.env.example`). Without a key, both features degrade cleanly to
 - **States** — loading spinner, error + **Retry**, empty results.
 - Status bar — cursor lat/lng, zoom, tilt°, 2D/3D, visible/total, MODE.
 
-## Land Simulation page (`#/simulation`)
+## Terrain Mapping page (`#/simulation`)
 
-A separate view (header nav: **Parcel Mapping** / **Land Simulation**) — the
+A separate view (header nav: **Parcel Mapping** / **Terrain Mapping**) — the
 parcel map is untouched. A **client-side deterministic flood simulation** over
 the real parcel geometry:
 

@@ -5,12 +5,18 @@ import maplibregl, {
 } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { BASEMAPS, BASEMAP_ATTRIBUTION } from "../config";
-import type { ParcelCollection, ParcelProperties } from "../types";
+import type { BuildingCollection, ParcelCollection, ParcelProperties } from "../types";
 import type { FloodImpact } from "../sim/flood";
+import { EMPTY_ROADS, type RoadCollection } from "../data/roads";
 
 const SRC = "parcels";
 const LINE = "p-line";
 const FLOOD = "p-flood";
+const BSRC = "buildings";
+const BLYR = "buildings-fill";
+const BLINE = "buildings-outline";
+const RSRC = "roads";
+const RLYR = "roads-line";
 
 const style: StyleSpecification = {
   version: 8,
@@ -37,6 +43,8 @@ const depthColor = [
 
 interface Props {
   parcels: ParcelCollection;
+  buildings?: BuildingCollection;
+  roads?: RoadCollection;
   center: [number, number];
   zoom: number;
   impact: FloodImpact;
@@ -44,7 +52,7 @@ interface Props {
   onSelect: (p: ParcelProperties | null) => void;
 }
 
-export default function SimMap({ parcels, center, zoom, impact, selectedId, onSelect }: Props) {
+export default function SimMap({ parcels, buildings, roads, center, zoom, impact, selectedId, onSelect }: Props) {
   const boxRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const readyRef = useRef(false);
@@ -62,6 +70,16 @@ export default function SimMap({ parcels, center, zoom, impact, selectedId, onSe
 
     map.on("load", () => {
       map.addSource(SRC, { type: "geojson", data: parcels, promoteId: "parcel_id" });
+      map.addSource(RSRC, { type: "geojson", data: roads ?? EMPTY_ROADS });
+      map.addSource(BSRC, { type: "geojson", data: buildings ?? { type: "FeatureCollection", features: [] }, promoteId: "parcel_id" });
+
+      // roads first (context), under everything else
+      map.addLayer({
+        id: RLYR,
+        type: "line",
+        source: RSRC,
+        paint: { "line-color": "#5c6b7e", "line-width": ["interpolate", ["linear"], ["zoom"], 13, 0.5, 18, 2] },
+      });
       map.addLayer({
         id: FLOOD,
         type: "fill",
@@ -80,6 +98,30 @@ export default function SimMap({ parcels, center, zoom, impact, selectedId, onSe
           "line-width": ["case", ["boolean", ["feature-state", "selected"], false], 3, 0.6],
         },
       });
+      // real building footprints, drawn on top so they're visible over the flood tint
+      map.addLayer({
+        id: BLYR,
+        type: "fill",
+        source: BSRC,
+        paint: {
+          // flooded buildings pick up the same depth tint as their parcel (the
+          // building is literally what's flooding) — dry buildings stay neutral
+          "fill-color": [
+            "case",
+            ["boolean", ["feature-state", "flooded"], false], depthColor,
+            ["boolean", ["feature-state", "selected"], false], "#e8c99a",
+            "#d8d2c4",
+          ] as unknown as ExpressionSpecification,
+          "fill-opacity": 0.88,
+        },
+      });
+      map.addLayer({
+        id: BLINE,
+        type: "line",
+        source: BSRC,
+        paint: { "line-color": "#4a4030", "line-width": 0.8 },
+      });
+
       const b = new maplibregl.LngLatBounds();
       for (const f of parcels.features) {
         const g = f.geometry;
@@ -88,18 +130,27 @@ export default function SimMap({ parcels, center, zoom, impact, selectedId, onSe
       if (!b.isEmpty()) map.fitBounds(b, { padding: 44, duration: 0 });
       readyRef.current = true;
       syncFlood(map, impact, appliedRef.current);
-      if (selRef.current) map.setFeatureState({ source: SRC, id: selRef.current }, { selected: true });
+      if (selRef.current) {
+        map.setFeatureState({ source: SRC, id: selRef.current }, { selected: true });
+        map.setFeatureState({ source: BSRC, id: selRef.current }, { selected: true });
+      }
     });
 
-    map.on("click", FLOOD, (e) => {
+    const pick = (e: maplibregl.MapLayerMouseEvent) => {
       const f = e.features?.[0];
       if (f) onSelRef.current(f.properties as ParcelProperties);
-    });
+    };
+    map.on("click", FLOOD, pick);
+    map.on("click", BLYR, pick);
     map.on("click", (e) => {
-      if (map.queryRenderedFeatures(e.point, { layers: [FLOOD] }).length === 0) onSelRef.current(null);
+      if (map.queryRenderedFeatures(e.point, { layers: [FLOOD, BLYR] }).length === 0) onSelRef.current(null);
     });
-    map.on("mouseenter", FLOOD, () => { map.getCanvas().style.cursor = "pointer"; });
-    map.on("mouseleave", FLOOD, () => { map.getCanvas().style.cursor = ""; });
+    const hoverOn = () => { map.getCanvas().style.cursor = "pointer"; };
+    const hoverOff = () => { map.getCanvas().style.cursor = ""; };
+    map.on("mouseenter", FLOOD, hoverOn);
+    map.on("mouseleave", FLOOD, hoverOff);
+    map.on("mouseenter", BLYR, hoverOn);
+    map.on("mouseleave", BLYR, hoverOff);
 
     return () => { readyRef.current = false; appliedRef.current = new Set(); map.remove(); mapRef.current = null; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -113,25 +164,43 @@ export default function SimMap({ parcels, center, zoom, impact, selectedId, onSe
 
   useEffect(() => {
     const map = mapRef.current;
+    if (!map || !readyRef.current) return;
+    const src = map.getSource(RSRC) as maplibregl.GeoJSONSource | undefined;
+    src?.setData(roads ?? EMPTY_ROADS);
+  }, [roads]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !readyRef.current || !buildings) return;
+    const src = map.getSource(BSRC) as maplibregl.GeoJSONSource | undefined;
+    src?.setData(buildings);
+  }, [buildings]);
+
+  useEffect(() => {
+    const map = mapRef.current;
     selRef.current = selectedId;
     if (!map || !readyRef.current) return;
-    map.removeFeatureState({ source: SRC }, "selected");
-    if (selectedId) map.setFeatureState({ source: SRC, id: selectedId }, { selected: true });
+    for (const s of [SRC, BSRC]) {
+      map.removeFeatureState({ source: s }, "selected");
+      if (selectedId) map.setFeatureState({ source: s, id: selectedId }, { selected: true });
+    }
   }, [selectedId]);
 
   return <div ref={boxRef} className="map-canvas" role="application" aria-label="Flood simulation map" />;
 }
 
 function syncFlood(map: maplibregl.Map, impact: FloodImpact, applied: Set<string>) {
-  // clear parcels no longer flooded
+  // clear parcels no longer flooded (buildings share the same id, see BSRC's promoteId)
   for (const id of applied) {
     if (!impact.affectedParcelIds.has(id)) {
       map.setFeatureState({ source: SRC, id }, { flooded: false, depth: 0 });
+      map.setFeatureState({ source: BSRC, id }, { flooded: false, depth: 0 });
       applied.delete(id);
     }
   }
   for (const [id, st] of impact.perParcel) {
     map.setFeatureState({ source: SRC, id }, { flooded: true, depth: st.depthM });
+    map.setFeatureState({ source: BSRC, id }, { flooded: true, depth: st.depthM });
     applied.add(id);
   }
 }

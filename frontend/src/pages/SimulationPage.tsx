@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import SimMap from "../components/SimMap";
 import type { BuildingCollection, ParcelCollection, ParcelProperties } from "../types";
+import type { RoadCollection } from "../data/roads";
 import { useServerSim } from "../sim/useServerSim";
 import { useWeather } from "../sim/useWeather";
 import { useWhatIf } from "../sim/useWhatIf";
@@ -19,11 +20,12 @@ const REDUCTION_OPTIONS: Array<[number, string]> = [
 interface Props {
   parcels: ParcelCollection;
   buildings: BuildingCollection;
+  roads?: RoadCollection;
   center: [number, number];
   zoom: number;
 }
 
-export default function SimulationPage({ parcels, buildings, center, zoom }: Props) {
+export default function SimulationPage({ parcels, buildings, roads, center, zoom }: Props) {
   const server = useServerSim();
   const weather = useWeather(center[1], center[0]);
   const [selected, setSelected] = useState<ParcelProperties | null>(null);
@@ -78,6 +80,8 @@ export default function SimulationPage({ parcels, buildings, center, zoom }: Pro
         <div className="sim__map">
           <SimMap
             parcels={parcels}
+            buildings={buildings}
+            roads={roads}
             center={center}
             zoom={zoom}
             impact={impact}
@@ -235,11 +239,18 @@ export default function SimulationPage({ parcels, buildings, center, zoom }: Pro
                 ))}
               </div>
 
-              <dl className="sim__metrics" style={{ marginTop: 10 }}>
-                <div><dt>Scenario depth</dt><dd>{whatIf.data.scenario.depthM.toFixed(2)} m</dd></div>
-                <div><dt>Scenario impact</dt><dd>{whatIf.data.scenario.impact}</dd></div>
-                <div><dt>Depth reduced by</dt><dd>{whatIf.data.deltaDepthM.toFixed(2)} m</dd></div>
-              </dl>
+              {whatIf.data.baseline.impact === "None" ? (
+                <p className="sim__muted" style={{ marginTop: 10 }}>
+                  Not currently flooded at this water level — bump the water level above to test
+                  interventions against an active flood.
+                </p>
+              ) : (
+                <dl className="sim__metrics" style={{ marginTop: 10 }}>
+                  <div><dt>Scenario depth</dt><dd>{whatIf.data.scenario.depthM.toFixed(2)} m</dd></div>
+                  <div><dt>Scenario impact</dt><dd>{whatIf.data.scenario.impact}</dd></div>
+                  <div><dt>Depth reduced by</dt><dd>{whatIf.data.deltaDepthM.toFixed(2)} m</dd></div>
+                </dl>
+              )}
               <p className="sim__foot">
                 Raising the plinth recomputes real depth from real elevation. The drainage/retention
                 figure is an assumed local water-level reduction you chose — illustrative, not a
