@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
-import SimMap from "../components/SimMap";
-import type { BuildingCollection, ParcelCollection, ParcelProperties } from "../types";
+import { useEffect, useMemo, useRef, useState } from "react";
+import SimMap, { type SimBasemap } from "../components/SimMap";
+import type { BuildingCollection, ParcelCollection, ParcelProperties, ViewMode } from "../types";
 import type { RoadCollection } from "../data/roads";
 import { useServerSim } from "../sim/useServerSim";
 import { useWeather } from "../sim/useWeather";
@@ -9,6 +9,8 @@ import { EMPTY_IMPACT, fmtClock, IMPACT_GUIDANCE, type ImpactLevel } from "../si
 
 const IMPACT_LEVELS: ImpactLevel[] = ["Low", "Moderate", "High", "Severe"];
 const OUTLOOK_DOT: Record<string, string> = { Low: "dot--ok", Elevated: "dot--warn", High: "dot--bad" };
+
+const BASEMAP_OPTIONS: Array<[SimBasemap, string]> = [["map", "Map"], ["satellite", "Satellite"], ["drone", "Drone"]];
 
 const PLINTH_OPTIONS = [0, 0.3, 0.5, 1.0];
 const REDUCTION_OPTIONS: Array<[number, string]> = [
@@ -31,6 +33,24 @@ export default function SimulationPage({ parcels, buildings, roads, center, zoom
   const [selected, setSelected] = useState<ParcelProperties | null>(null);
   const [plinthRaiseM, setPlinthRaiseM] = useState(0);
   const [levelReductionM, setLevelReductionM] = useState(0);
+  const [viewMode, setViewMode] = useState<ViewMode>("2d");
+  const [basemap, setBasemap] = useState<SimBasemap>("map");
+  const [droneImageUrl, setDroneImageUrl] = useState<string | null>(null);
+  const [showTerrain, setShowTerrain] = useState(false);
+  const droneImageUrlRef = useRef<string | null>(null);
+  droneImageUrlRef.current = droneImageUrl;
+
+  useEffect(() => {
+    // revoke the object URL on unmount so the blob isn't kept alive
+    return () => { if (droneImageUrlRef.current) URL.revokeObjectURL(droneImageUrlRef.current); };
+  }, []);
+
+  const handleDroneUpload = (file: File | undefined) => {
+    if (!file) return;
+    if (droneImageUrlRef.current) URL.revokeObjectURL(droneImageUrlRef.current);
+    setDroneImageUrl(URL.createObjectURL(file));
+    setBasemap("drone");
+  };
 
   useEffect(() => {
     setPlinthRaiseM(0);
@@ -86,6 +106,10 @@ export default function SimulationPage({ parcels, buildings, roads, center, zoom
             zoom={zoom}
             impact={impact}
             selectedId={selected?.parcel_id ?? null}
+            viewMode={viewMode}
+            basemap={basemap}
+            droneImageUrl={droneImageUrl}
+            showTerrain={showTerrain}
             onSelect={setSelected}
           />
         </div>
@@ -100,6 +124,55 @@ export default function SimulationPage({ parcels, buildings, roads, center, zoom
       </div>
 
       <aside className="sim__side">
+        <section className="sim__card">
+          <h3 className="sim__h3">View</h3>
+          <p className="sim__muted" style={{ margin: "0 0 6px" }}>Camera</p>
+          <div className="seg">
+            <button type="button" className={"seg__btn" + (viewMode === "2d" ? " is-active" : "")} onClick={() => setViewMode("2d")}>2D</button>
+            <button type="button" className={"seg__btn" + (viewMode === "3d" ? " is-active" : "")} onClick={() => setViewMode("3d")}>3D</button>
+          </div>
+          <p className="sim__muted" style={{ margin: "10px 0 6px" }}>Basemap</p>
+          <div className="seg">
+            {BASEMAP_OPTIONS.map(([id, label]) => {
+              const disabled = id === "drone" && !droneImageUrl;
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  disabled={disabled}
+                  title={disabled ? "Unavailable — no drone imagery uploaded yet" : undefined}
+                  className={"seg__btn" + (basemap === id ? " is-active" : "")}
+                  onClick={() => setBasemap(id)}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+          <label className="sim__muted" style={{ display: "flex", alignItems: "center", gap: 6, margin: "10px 0 0", cursor: "pointer" }}>
+            <input type="checkbox" checked={showTerrain} onChange={(e) => setShowTerrain(e.target.checked)} />
+            Terrain shading <span className="sim__tag">real elevation</span>
+          </label>
+          <p className="sim__foot" style={{ padding: "6px 0 0" }}>
+            Real topographic relief from the same free, keyless elevation-tile source (Mapzen/
+            Tilezen) behind this page's flood model — not drone imagery, but a genuine
+            topographical view while none exists yet.
+          </p>
+          <label className="sim__muted" style={{ display: "block", margin: "10px 0 4px" }}>
+            Upload drone photo/orthophoto (optional)
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => handleDroneUpload(e.target.files?.[0])}
+          />
+          <p className="sim__foot">
+            Placed over this area's bounding box as a rough overlay — not orthorectified or
+            precisely georeferenced. No real drone imagery has been captured for this project yet;
+            this is the seam it will drop into once it has.
+          </p>
+        </section>
+
         <section className="sim__card">
           <div className="sim__card-head">
             <h2>Flood simulation</h2>

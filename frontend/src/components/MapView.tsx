@@ -35,8 +35,8 @@ const DEFAULT_LINE = "#c7d2e0";
 const AI_LINE = "#e0533b";
 const ROAD_LINE = "#8a94a6";
 
-const PITCH_3D = 45;
-const BEARING_3D = -18;
+export const PITCH_3D = 45;
+export const BEARING_3D = -18;
 
 function baseStyle(basemap: BasemapId): StyleSpecification {
   return {
@@ -266,7 +266,13 @@ export default function MapView(props: MapViewProps) {
 
     const pick = (e: maplibregl.MapLayerMouseEvent) => {
       const f = e.features?.[0];
-      if (f) onSelectRef.current(f.properties as ParcelProperties);
+      if (!f) return;
+      // clicking the already-selected parcel again deselects it (toggle)
+      if (typeof f.id === "string" && f.id === selRef.current) {
+        onSelectRef.current(null);
+      } else {
+        onSelectRef.current(f.properties as ParcelProperties);
+      }
     };
     map.on("click", FILL, pick);
     map.on("click", BLYR, pick);

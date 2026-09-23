@@ -157,6 +157,23 @@ not a synthesised surface:
   goal in `CLAUDE.md` / commit history: drone topography → real elevation →
   landscape/disaster prediction is the intended end state; Open Topo Data is
   the interim stand-in while no drone data exists yet.
+- **Real topographic (hillshade) view, today.** The Terrain Mapping page's
+  "Terrain shading" toggle (`frontend/src/components/SimMap.tsx`) renders
+  real relief shading from AWS's public, keyless `elevation-tiles-prod`
+  Terrarium tiles (`s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png`)
+  — the same Mapzen/Tilezen DEM family as the elevation numbers above, so the
+  visual and the math agree. This is a genuine topographical view, not a
+  drone substitute dressed up to look like one — on T. Nagar's flat terrain
+  it correctly shows almost no relief (see above); it will show real
+  structure once pointed at a site with real hills.
+- **Drone-image slot.** The same page also has a plain image-upload control
+  (`SimulationPage.tsx`). Uploading a photo places it over the demo site's
+  bounding box using MapLibre's `image` source — client-side only (an object
+  URL, never uploaded anywhere), and explicitly labeled a rough placement,
+  **not** orthorectified or georeferenced (no ground-control points, no
+  photogrammetry). This is the concrete, working version of the seam above:
+  once real drone captures exist, this is where they'd go, with real
+  georeferencing replacing the rough bounding-box placement.
 
 ## Weather — REAL (Open-Meteo)
 

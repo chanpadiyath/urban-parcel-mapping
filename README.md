@@ -127,6 +127,13 @@ full picture. Also shows: a **"Real weather"** card (live current + 3-day
 precipitation forecast, Open-Meteo, keyless) and a **"How this works"** card
 explaining the model and giving illustrative per-impact-level guidance.
 
+**View controls.** 2D/3D camera and Map/Satellite/Drone basemap, matching
+the main map's — plus real **"Terrain shading"** (hillshade from free,
+keyless AWS Terrarium DEM tiles, the same data family as the elevation
+numbers) and a **drone-image upload** slot: place your own photo/orthophoto
+over the site as a rough, client-side-only overlay (not georeferenced) —
+the working stand-in for real drone capture, until there is one.
+
 **Parcel impact / what-if.** Selecting a parcel shows why it's vulnerable
 (real elevation, relative ground level, real nearest-road distance, current
 simulated depth) and two testable interventions — raising the plinth (real
