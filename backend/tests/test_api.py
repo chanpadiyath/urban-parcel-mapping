@@ -86,6 +86,32 @@ def test_speed_cycle_and_empty_flood_body(client):
     assert client.post("/api/simulation/flood").status_code == 200  # no body is fine
 
 
+def test_whatif_baseline_matches_elevations_and_scenario_improves_with_intervention(client):
+    parcel_id = next(iter(client.get("/api/simulation/elevations").json()))
+    client.post("/api/simulation/flood", json={"levelDeltaM": 5})  # force a real flooded baseline
+
+    baseline = client.get("/api/simulation/whatif", params={"parcel_id": parcel_id}).json()
+    assert baseline["parcelId"] == parcel_id
+    assert baseline["scenario"]["depthM"] == baseline["baseline"]["depthM"]  # zero intervention == baseline
+    assert baseline["baseline"]["impact"] in ("None", "Low", "Moderate", "High", "Severe")
+
+    raised = client.get(
+        "/api/simulation/whatif", params={"parcel_id": parcel_id, "plinth_raise_m": 1.0}
+    ).json()
+    assert raised["scenario"]["depthM"] < baseline["baseline"]["depthM"] + 1e-9
+    assert raised["deltaDepthM"] >= 0  # raising the plinth never makes it worse
+
+    reduced = client.get(
+        "/api/simulation/whatif", params={"parcel_id": parcel_id, "level_reduction_m": 0.5}
+    ).json()
+    assert reduced["deltaDepthM"] >= 0
+
+    assert client.get("/api/simulation/whatif", params={"parcel_id": "nope-not-real"}).status_code == 404
+    assert client.get(
+        "/api/simulation/whatif", params={"parcel_id": parcel_id, "plinth_raise_m": 5}
+    ).status_code == 422  # out of the 0-2m allowed range
+
+
 def test_google_routes_degrade_to_503_without_key(client, monkeypatch):
     monkeypatch.delenv("GOOGLE_MAPS_API_KEY", raising=False)
     assert client.get("/api/geocode", params={"q": "T Nagar"}).status_code == 503

@@ -1,13 +1,20 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import SimMap from "../components/SimMap";
 import type { BuildingCollection, ParcelCollection, ParcelProperties } from "../types";
 import { useServerSim } from "../sim/useServerSim";
-import { useParcelElevations } from "../sim/useParcelElevations";
 import { useWeather } from "../sim/useWeather";
+import { useWhatIf } from "../sim/useWhatIf";
 import { EMPTY_IMPACT, fmtClock, IMPACT_GUIDANCE, type ImpactLevel } from "../sim/flood";
 
 const IMPACT_LEVELS: ImpactLevel[] = ["Low", "Moderate", "High", "Severe"];
 const OUTLOOK_DOT: Record<string, string> = { Low: "dot--ok", Elevated: "dot--warn", High: "dot--bad" };
+
+const PLINTH_OPTIONS = [0, 0.3, 0.5, 1.0];
+const REDUCTION_OPTIONS: Array<[number, string]> = [
+  [0, "None"],
+  [0.15, "Minor drainage"],
+  [0.3, "Retention basin"],
+];
 
 interface Props {
   parcels: ParcelCollection;
@@ -18,9 +25,17 @@ interface Props {
 
 export default function SimulationPage({ parcels, buildings, center, zoom }: Props) {
   const server = useServerSim();
-  const elevations = useParcelElevations();
   const weather = useWeather(center[1], center[0]);
   const [selected, setSelected] = useState<ParcelProperties | null>(null);
+  const [plinthRaiseM, setPlinthRaiseM] = useState(0);
+  const [levelReductionM, setLevelReductionM] = useState(0);
+
+  useEffect(() => {
+    setPlinthRaiseM(0);
+    setLevelReductionM(0);
+  }, [selected?.parcel_id]);
+
+  const whatIf = useWhatIf(selected?.parcel_id ?? null, plinthRaiseM, levelReductionM);
 
   // The simulation runs in the backend; this page only displays and controls it.
   const online = server.connected && server.snapshot != null && server.impact != null;
@@ -41,11 +56,13 @@ export default function SimulationPage({ parcels, buildings, center, zoom }: Pro
 
   const i = impact;
   const statusLabel = !online ? "OFFLINE" : status === "running" ? "ACTIVE" : status === "paused" ? "PAUSED" : "IDLE";
-  const sel = selected ? impact.perParcel.get(selected.parcel_id) : undefined;
   const progress = Math.min(1, waterLevelM / (maxLevel || 1));
-  const selElev = sel?.elevationM ?? elevations?.[selected?.parcel_id ?? ""];
   const elevSource = snap?.elevSource;
   const isRealElevation = !!elevSource;
+  const elevPercentile =
+    whatIf.data && snap && snap.elevMax > snap.elevMin
+      ? Math.round(((whatIf.data.elevationM - snap.elevMin) / (snap.elevMax - snap.elevMin)) * 100)
+      : null;
 
   return (
     <div className="sim">
@@ -163,21 +180,72 @@ export default function SimulationPage({ parcels, buildings, center, zoom }: Pro
         </section>
 
         <section className="sim__card">
-          <h3 className="sim__h3">Parcel impact</h3>
-          {!selected && <p className="sim__muted">Click a flooded parcel on the map.</p>}
-          {selected && (
-            <dl className="sim__metrics">
-              <div><dt>Parcel</dt><dd>{selected.parcel_id}</dd></div>
-              <div><dt>Flood status</dt><dd>{sel ? "AFFECTED" : "Not affected (yet)"}</dd></div>
-              <div><dt>{isRealElevation ? "Elevation (real)" : "Elevation"}</dt><dd>{selElev != null ? `${selElev.toFixed(2)} m` : "—"}</dd></div>
-              <div><dt>Estimated depth</dt><dd>{sel ? `${sel.depthM.toFixed(2)} m` : "0.00 m"}</dd></div>
-              <div><dt>Impact level</dt><dd>{sel ? sel.impact : "—"}</dd></div>
-              <div><dt>Land use</dt><dd>{selected.land_use ?? "—"}</dd></div>
-              <div><dt>Building present</dt><dd>{buildingIds.has(selected.parcel_id) ? "Yes" : "No"}</dd></div>
-              <div><dt>Road adjacent</dt><dd>Yes (grid)</dd></div>
-              <div><dt>Encroachment</dt><dd>{selected.encroachment_status ?? "—"}{typeof selected.encroachment_area_sqm === "number" ? ` · ${selected.encroachment_area_sqm} m²` : ""}</dd></div>
-              <div><dt>Simulation time</dt><dd>{fmtClock(tSeconds)}</dd></div>
-            </dl>
+          <h3 className="sim__h3">Parcel impact <span className="sim__tag">why it's vulnerable</span></h3>
+          {!selected && <p className="sim__muted">Click a parcel on the map.</p>}
+          {selected && whatIf.loading && !whatIf.data && <p className="sim__muted">Loading…</p>}
+          {selected && whatIf.error && <p className="sim__muted">Unavailable ({whatIf.error}).</p>}
+          {selected && whatIf.data && (
+            <>
+              <dl className="sim__metrics">
+                <div><dt>Parcel</dt><dd>{selected.parcel_id}</dd></div>
+                <div><dt>{isRealElevation ? "Elevation (real)" : "Elevation"}</dt><dd>{whatIf.data.elevationM.toFixed(2)} m</dd></div>
+                {elevPercentile != null && (
+                  <div><dt>Relative ground level</dt><dd>Lower than {elevPercentile}% of parcels here</dd></div>
+                )}
+                <div>
+                  <dt>Nearest road</dt>
+                  <dd>
+                    {whatIf.data.road.distanceM != null
+                      ? `${whatIf.data.road.name ?? "Unnamed road"} · ${whatIf.data.road.distanceM.toFixed(0)} m`
+                      : "Data unavailable"}
+                  </dd>
+                </div>
+                <div><dt>Land use</dt><dd>{selected.land_use ?? "—"}</dd></div>
+                <div><dt>Building present</dt><dd>{buildingIds.has(selected.parcel_id) ? "Yes" : "No"}</dd></div>
+                <div><dt>Encroachment</dt><dd>{selected.encroachment_status ?? "—"}{typeof selected.encroachment_area_sqm === "number" ? ` · ${selected.encroachment_area_sqm} m²` : ""}</dd></div>
+                <div><dt>Current depth</dt><dd>{whatIf.data.baseline.depthM.toFixed(2)} m</dd></div>
+                <div><dt>Current impact</dt><dd>{whatIf.data.baseline.impact}</dd></div>
+              </dl>
+
+              <h3 className="sim__h3" style={{ marginTop: 16 }}>What-if: reduce flood risk</h3>
+              <p className="sim__muted" style={{ margin: "0 0 6px" }}>Raise plinth (real recalculation)</p>
+              <div className="seg">
+                {PLINTH_OPTIONS.map((v) => (
+                  <button
+                    key={v}
+                    type="button"
+                    className={"seg__btn" + (plinthRaiseM === v ? " is-active" : "")}
+                    onClick={() => setPlinthRaiseM(v)}
+                  >
+                    {v === 0 ? "None" : `+${v} m`}
+                  </button>
+                ))}
+              </div>
+              <p className="sim__muted" style={{ margin: "10px 0 6px" }}>Drainage / retention (assumed reduction)</p>
+              <div className="seg">
+                {REDUCTION_OPTIONS.map(([v, label]) => (
+                  <button
+                    key={v}
+                    type="button"
+                    className={"seg__btn" + (levelReductionM === v ? " is-active" : "")}
+                    onClick={() => setLevelReductionM(v)}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+
+              <dl className="sim__metrics" style={{ marginTop: 10 }}>
+                <div><dt>Scenario depth</dt><dd>{whatIf.data.scenario.depthM.toFixed(2)} m</dd></div>
+                <div><dt>Scenario impact</dt><dd>{whatIf.data.scenario.impact}</dd></div>
+                <div><dt>Depth reduced by</dt><dd>{whatIf.data.deltaDepthM.toFixed(2)} m</dd></div>
+              </dl>
+              <p className="sim__foot">
+                Raising the plinth recomputes real depth from real elevation. The drainage/retention
+                figure is an assumed local water-level reduction you chose — illustrative, not a
+                drainage-network or hydraulic simulation.
+              </p>
+            </>
           )}
         </section>
 

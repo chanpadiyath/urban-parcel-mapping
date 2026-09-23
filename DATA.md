@@ -189,6 +189,37 @@ explicitly directs the reader to their local municipal/disaster-management
 authority for real decisions, and never uses "confirmed" or directive
 legal/safety language.
 
+## Per-parcel what-if mitigation — mixed real physics + illustrative assumption
+
+The Land Simulation page's **"Parcel impact"** card, on selecting a parcel,
+shows why it's vulnerable and lets you test two kinds of intervention. The
+two are computed differently and must stay visually distinguished — this is
+the core "so what" of the whole flood feature, so the honesty boundary here
+matters more than almost anywhere else in the app:
+
+- **Real elevation, real road distance, real current depth.** `GET
+  /api/simulation/whatif` (`backend/app/flood.py`'s `FloodEngine.what_if`)
+  recomputes depth from the parcel's actual elevation (see "Elevation &
+  terrain" above) and the live simulated water level — this is the same real
+  arithmetic `compute_impact()` uses, just for one parcel on demand. Nearest
+  road name/distance is real OpenStreetMap road geometry (see "Reference
+  data" above); for the synthetic demo dataset this is computed at server
+  startup against the same real Overpass road data used for the Roads layer
+  (`backend/app/roads.py` + `main.py`'s `_with_nearest_road`), not
+  fabricated — OSM-derived parcels already carry it natively.
+- **"Raise plinth" is real, defensible physics.** `depth = water_level −
+  (elevation + raise)`. No assumption beyond "the structure's base is now
+  physically higher," which is exactly what the arithmetic computes.
+- **"Drainage / retention" is a user-chosen assumption, not a simulation.**
+  This app has no drainage-network, soil, or rainfall-runoff data, so it
+  cannot honestly simulate what a real drainage upgrade or retention basin
+  would do. The preset values (−0.15 m "minor drainage", −0.30 m "retention
+  basin") are illustrative local water-level reductions the user selects —
+  labeled as such in the UI, never presented as a hydraulic result.
+- Elevation percentile ("lower than X% of parcels here") is computed
+  client-side from the same real `elevMin`/`elevMax` already in the live
+  simulation snapshot.
+
 ## Places & geocoding — REAL (Google Maps Platform, optional)
 
 Two things OpenStreetMap genuinely can't cover well for this area — search

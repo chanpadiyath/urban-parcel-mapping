@@ -122,6 +122,15 @@ full picture. Also shows: a **"Real weather"** card (live current + 3-day
 precipitation forecast, Open-Meteo, keyless) and a **"How this works"** card
 explaining the model and giving illustrative per-impact-level guidance.
 
+**Parcel impact / what-if.** Selecting a parcel shows why it's vulnerable
+(real elevation, relative ground level, real nearest-road distance, current
+simulated depth) and two testable interventions — raising the plinth (real
+recalculation from real elevation) and an assumed drainage/retention water-
+level reduction (illustrative, not a hydraulic simulation) — with a
+baseline-vs-scenario comparison. See
+[`DATA.md`](./DATA.md#per-parcel-what-if-mitigation--mixed-real-physics--illustrative-assumption)
+for exactly which parts are real vs assumed.
+
 ### Search
 Local parcel-ID/address/ward/lat,lng match first; if nothing matches, a
 **"Search address instead (Google)"** fallback geocodes a real-world address

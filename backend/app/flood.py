@@ -71,12 +71,14 @@ class FloodEngine:
             elev = parcel_elev.get(pid)
             if not isinstance(elev, (int, float)):
                 elev = sample_grid(self.elevation["grid"], x, y)
+            road_m = p.get("nearest_road_m")
             rows.append(
                 {
                     "id": pid,
                     "area_sqm": p["area_sqm"] if isinstance(p.get("area_sqm"), (int, float)) else 0,
                     "land_use": str(p.get("land_use") or ""),
                     "road": p.get("nearest_road_name"),
+                    "road_m": road_m if isinstance(road_m, (int, float)) else None,
                     "elev": elev,
                 }
             )
@@ -136,6 +138,44 @@ class FloodEngine:
             "affectedAreaPct": (area / self.total_area) * 100 if self.total_area > 0 else 0,
             "criticalInfrastructure": critical,
             "maxDepthM": round_to(max_depth, 2),
+        }
+
+    def row_by_id(self, parcel_id: str) -> dict | None:
+        for r in self.rows:
+            if r["id"] == parcel_id:
+                return r
+        return None
+
+    def what_if(self, parcel_id: str, plinth_raise_m: float = 0.0, level_reduction_m: float = 0.0) -> dict | None:
+        """
+        Real recomputation of depth for one parcel under a hypothetical
+        intervention — NOT a re-run of the shared simulation, doesn't touch
+        engine state. `plinth_raise_m` is real physics (raises the ground/
+        building elevation the water is compared against). `level_reduction_m`
+        is a user-chosen assumed local water-level reduction standing in for
+        drainage/retention interventions this app has no real model for —
+        callers must label it as illustrative, not simulated.
+        """
+        row = self.row_by_id(parcel_id)
+        if row is None:
+            return None
+        level = self.water_level_m
+        baseline_depth = level - row["elev"]
+        scenario_depth = (level - level_reduction_m) - (row["elev"] + plinth_raise_m)
+        bucket = lambda d: "None" if d <= 0 else impact_from_depth(d)  # noqa: E731
+        return {
+            "parcelId": row["id"],
+            "elevationM": round_to(row["elev"], 2),
+            "waterLevelM": round_to(level, 2),
+            "road": {"name": row["road"], "distanceM": None if row["road_m"] is None else round_to(row["road_m"], 1)},
+            "baseline": {"depthM": round_to(max(0.0, baseline_depth), 2), "impact": bucket(baseline_depth)},
+            "scenario": {
+                "depthM": round_to(max(0.0, scenario_depth), 2),
+                "impact": bucket(scenario_depth),
+                "plinthRaiseM": plinth_raise_m,
+                "levelReductionM": level_reduction_m,
+            },
+            "deltaDepthM": round_to(baseline_depth - scenario_depth, 2),
         }
 
     def snapshot(self) -> dict:

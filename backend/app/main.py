@@ -9,6 +9,7 @@
   GET  /api/reconcile                     demo parcels vs OSM cross-check
   GET  /api/simulation/state              current flood-simulation snapshot
   GET  /api/simulation/elevations         real elevation per simulated parcel
+  GET  /api/simulation/whatif?parcel_id=&plinth_raise_m=&level_reduction_m=   what-if depth for one parcel
   GET  /api/simulation/stream             Server-Sent Events, one snapshot per tick
   POST /api/simulation/start|pause|reset
   POST /api/simulation/flood              body: { speed?: 1|2|5, levelDeltaM?: number, cycleSpeed?: true }
@@ -31,9 +32,11 @@ from . import demo_data, google
 from .config import CORS_ORIGINS, LIVE_REFRESH, SITE
 from .elevation import ElevationUnavailable, load_snapshot
 from .flood import FloodEngine
+from .geo import bbox_center
 from .osm_parcels import build_osm_parcels
 from .reconcile import reconcile
 from .reference import ReferenceStore
+from .roads import nearest_road
 
 
 class FloodBody(BaseModel):
@@ -64,13 +67,35 @@ def _osm_parcels() -> dict | None:
     return state.osm_cache[1]
 
 
+def _with_nearest_road(parcels: dict) -> dict:
+    """Annotate parcels missing nearest_road_* with the real distance to the nearest OSM road
+    (OSM-derived parcels already carry this from osm_parcels.py). Never mutates the cached input —
+    demo_data.load_parcels() is @lru_cache'd, so this returns a shallow copy instead."""
+    roads = (state.ref.fc or {}).get("features") if state.ref.fc else None
+    if not roads:
+        return parcels
+    features = []
+    for f in parcels["features"]:
+        p = f["properties"]
+        if p.get("nearest_road_name") is not None:
+            features.append(f)
+            continue
+        lon, lat = bbox_center(f["geometry"])
+        dist_m, name, cls = nearest_road(lon, lat, roads)
+        if dist_m is None:
+            features.append(f)
+            continue
+        features.append({**f, "properties": {**p, "nearest_road_m": round(dist_m, 1), "nearest_road_name": name, "nearest_road_class": cls}})
+    return {**parcels, "features": features}
+
+
 def _sync_engine() -> None:
     """Point the flood engine at the same parcels the API serves (OSM when available, else demo)."""
     osm = _osm_parcels()
     if osm and osm["parcels"]["features"]:
         state.engine.set_parcels(osm["parcels"], osm["buildings"])
     else:
-        state.engine.set_parcels(demo_data.load_parcels(), demo_data.load_buildings())
+        state.engine.set_parcels(_with_nearest_road(demo_data.load_parcels()), demo_data.load_buildings())
 
 
 async def _background_refresh() -> None:
@@ -187,6 +212,22 @@ def sim_state():
 def sim_elevations():
     """Real elevation (metres) for every parcel the simulation runs over."""
     return {r["id"]: round(r["elev"], 2) for r in state.engine.rows}
+
+
+@app.get("/api/simulation/whatif")
+def sim_whatif(
+    parcel_id: str,
+    plinth_raise_m: float = Query(0.0, ge=0, le=2),
+    level_reduction_m: float = Query(0.0, ge=0, le=2),
+):
+    """Real depth recomputation for one parcel under a hypothetical intervention
+    (plinth raise = real physics; level_reduction_m = an assumed drainage/retention
+    effect this app has no real model for — the response doesn't claim otherwise,
+    callers must label it as illustrative)."""
+    result = state.engine.what_if(parcel_id, plinth_raise_m, level_reduction_m)
+    if result is None:
+        raise HTTPException(404, f"unknown parcel_id '{parcel_id}'")
+    return result
 
 
 @app.get("/api/simulation/stream")
