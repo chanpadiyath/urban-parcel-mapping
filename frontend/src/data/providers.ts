@@ -72,6 +72,17 @@ interface OsmParcelsResponse {
   meta: { parcel_count: number; attribute_coverage: Record<string, number>; fetched_at: string | null };
 }
 let osmCache: OsmParcelsResponse | null = null;
+let osmFromSnapshot = false;
+
+async function loadOsm(): Promise<OsmParcelsResponse> {
+  try {
+    osmFromSnapshot = false;
+    return await fetchJson<OsmParcelsResponse>(`${SIM_API}/parcels`, 6000);
+  } catch {
+    osmFromSnapshot = true;
+    return await fetchJson<OsmParcelsResponse>("/data/osm-parcels.json", 6000);
+  }
+}
 
 export const osmLiveProvider: LandDataProvider = {
   id: "osm-live",
@@ -79,7 +90,7 @@ export const osmLiveProvider: LandDataProvider = {
   kind: "geospatial",
   isAvailable: async () => {
     try {
-      osmCache = await fetchJson<OsmParcelsResponse>(`${SIM_API}/parcels`, 60000);
+      osmCache = await loadOsm();
       return (osmCache?.parcels?.features?.length ?? 0) > 0;
     } catch {
       osmCache = null;
@@ -88,12 +99,12 @@ export const osmLiveProvider: LandDataProvider = {
   },
   getParcels: async () => {
     if (osmCache) return osmCache.parcels;
-    osmCache = await fetchJson<OsmParcelsResponse>(`${SIM_API}/parcels`, 60000);
+    osmCache = await loadOsm();
     return osmCache.parcels;
   },
   getBuildings: async () => {
     if (osmCache) return osmCache.buildings;
-    osmCache = await fetchJson<OsmParcelsResponse>(`${SIM_API}/parcels`, 60000);
+    osmCache = await loadOsm();
     return osmCache.buildings;
   },
   describe: () => ({
@@ -102,7 +113,7 @@ export const osmLiveProvider: LandDataProvider = {
     kind: "geospatial",
     state: osmCache ? "live" : "unavailable",
     detail: osmCache
-      ? `${osmCache.meta.parcel_count} real building footprints · land-use tagged on ${osmCache.meta.attribute_coverage.land_use_pct ?? 0}% · via Overpass`
+      ? `${osmCache.meta.parcel_count} real building footprints · land-use tagged on ${osmCache.meta.attribute_coverage.land_use_pct ?? 0}% · via Overpass${osmFromSnapshot ? " · bundled snapshot (backend waking up)" : ""}`
       : "Backend /api/parcels not reachable — falls back to the synthetic dataset.",
   }),
 };
