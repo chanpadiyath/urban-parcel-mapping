@@ -79,7 +79,7 @@ export const osmLiveProvider: LandDataProvider = {
   kind: "geospatial",
   isAvailable: async () => {
     try {
-      osmCache = await fetchJson<OsmParcelsResponse>(`${SIM_API}/parcels`, 7000);
+      osmCache = await fetchJson<OsmParcelsResponse>(`${SIM_API}/parcels`, 60000);
       return (osmCache?.parcels?.features?.length ?? 0) > 0;
     } catch {
       osmCache = null;
@@ -88,12 +88,12 @@ export const osmLiveProvider: LandDataProvider = {
   },
   getParcels: async () => {
     if (osmCache) return osmCache.parcels;
-    osmCache = await fetchJson<OsmParcelsResponse>(`${SIM_API}/parcels`, 15000);
+    osmCache = await fetchJson<OsmParcelsResponse>(`${SIM_API}/parcels`, 60000);
     return osmCache.parcels;
   },
   getBuildings: async () => {
     if (osmCache) return osmCache.buildings;
-    osmCache = await fetchJson<OsmParcelsResponse>(`${SIM_API}/parcels`, 15000);
+    osmCache = await fetchJson<OsmParcelsResponse>(`${SIM_API}/parcels`, 60000);
     return osmCache.buildings;
   },
   describe: () => ({
