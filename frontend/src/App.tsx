@@ -70,7 +70,7 @@ export default function App() {
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
   const [styleMode, setStyleMode] = useState<StyleMode>("land_use");
   const [viewMode, setViewMode] = useState<ViewMode>("3d");
-  const [basemap, setBasemap] = useState<BasemapId>("map");
+  const [basemap, setBasemap] = useState<BasemapId>("satellite");
   const [layerState, setLayerState] = useState<Record<string, boolean>>(DEFAULT_LAYERS);
   const [focusBounds, setFocusBounds] = useState<BBox | null>(null);
   const [view, setView] = useState<ViewState | null>(null);

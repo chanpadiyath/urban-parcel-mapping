@@ -33,8 +33,8 @@ export default function SimulationPage({ parcels, buildings, roads, center, zoom
   const [selected, setSelected] = useState<ParcelProperties | null>(null);
   const [plinthRaiseM, setPlinthRaiseM] = useState(0);
   const [levelReductionM, setLevelReductionM] = useState(0);
-  const [viewMode, setViewMode] = useState<ViewMode>("2d");
-  const [basemap, setBasemap] = useState<SimBasemap>("map");
+  const [viewMode, setViewMode] = useState<ViewMode>("3d");
+  const [basemap, setBasemap] = useState<SimBasemap>("satellite");
   const [droneImageUrl, setDroneImageUrl] = useState<string | null>(null);
   const [showTerrain, setShowTerrain] = useState(false);
   const droneImageUrlRef = useRef<string | null>(null);
