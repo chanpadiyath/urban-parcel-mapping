@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import maplibregl, {
   type StyleSpecification,
   type ExpressionSpecification,
@@ -123,6 +123,7 @@ export default function SimMap({
   showTerrainRef.current = showTerrain;
   const onSelRef = useRef(onSelect);
   onSelRef.current = onSelect;
+  const [mapError, setMapError] = useState<string | null>(null);
 
   function addLayers(map: maplibregl.Map) {
     map.addSource(SRC, { type: "geojson", data: parcels, promoteId: "parcel_id" });
@@ -188,57 +189,91 @@ export default function SimMap({
   }
 
   useEffect(() => {
-    if (!boxRef.current) return;
-    const start3D = viewModeRef.current === "3d";
-    const map = new maplibregl.Map({
-      container: boxRef.current,
-      style: baseStyle(basemap, droneImageUrl, parcels),
-      center,
-      zoom,
-      pitch: start3D ? PITCH_3D : 0,
-      bearing: start3D ? BEARING_3D : 0,
-      maxPitch: 70,
-      attributionControl: { compact: false },
-    });
-    mapRef.current = map;
-    map.addControl(new maplibregl.NavigationControl({ showZoom: true, visualizePitch: true }), "top-right");
-    map.addControl(new maplibregl.ScaleControl({ unit: "metric" }), "bottom-left");
+    const el = boxRef.current;
+    if (!el) return;
+    let cancelled = false;
+    let cleanupMap: (() => void) | null = null;
 
-    map.on("load", () => {
-      addLayers(map);
-      const b = boundsOf(parcels);
-      if (!b.isEmpty()) map.fitBounds(b, { padding: 44, duration: 0, pitch: map.getPitch(), bearing: map.getBearing() });
-      readyRef.current = true;
-      syncFlood(map, impact, appliedRef.current);
-      if (selRef.current) {
-        map.setFeatureState({ source: SRC, id: selRef.current }, { selected: true });
-        map.setFeatureState({ source: BSRC, id: selRef.current }, { selected: true });
-      }
-    });
+    const init = () => {
+      if (cancelled || mapRef.current) return;
+      // Safari can refuse to create a WebGL context on a canvas that still
+      // has zero size while layout is settling — wait for real dimensions.
+      const { width, height } = el.getBoundingClientRect();
+      if (width === 0 || height === 0) return;
+      ro.disconnect();
 
-    const pick = (e: maplibregl.MapLayerMouseEvent) => {
-      const f = e.features?.[0];
-      if (!f) return;
-      // clicking the already-selected parcel again deselects it (toggle)
-      if (typeof f.id === "string" && f.id === selRef.current) {
-        onSelRef.current(null);
-      } else {
-        onSelRef.current(f.properties as ParcelProperties);
+      const start3D = viewModeRef.current === "3d";
+      let map: maplibregl.Map;
+      try {
+        map = new maplibregl.Map({
+          container: el,
+          style: baseStyle(basemap, droneImageUrl, parcels),
+          center,
+          zoom,
+          pitch: start3D ? PITCH_3D : 0,
+          bearing: start3D ? BEARING_3D : 0,
+          maxPitch: 70,
+          attributionControl: { compact: false },
+        });
+      } catch (err) {
+        setMapError(err instanceof Error ? err.message : "Map unavailable — WebGL failed to initialize.");
+        return;
       }
+      mapRef.current = map;
+      map.addControl(new maplibregl.NavigationControl({ showZoom: true, visualizePitch: true }), "top-right");
+      map.addControl(new maplibregl.ScaleControl({ unit: "metric" }), "bottom-left");
+
+      map.on("load", () => {
+        addLayers(map);
+        const b = boundsOf(parcels);
+        if (!b.isEmpty()) map.fitBounds(b, { padding: 44, duration: 0, pitch: map.getPitch(), bearing: map.getBearing() });
+        readyRef.current = true;
+        syncFlood(map, impact, appliedRef.current);
+        if (selRef.current) {
+          map.setFeatureState({ source: SRC, id: selRef.current }, { selected: true });
+          map.setFeatureState({ source: BSRC, id: selRef.current }, { selected: true });
+        }
+      });
+
+      const pick = (e: maplibregl.MapLayerMouseEvent) => {
+        const f = e.features?.[0];
+        if (!f) return;
+        // clicking the already-selected parcel again deselects it (toggle)
+        if (typeof f.id === "string" && f.id === selRef.current) {
+          onSelRef.current(null);
+        } else {
+          onSelRef.current(f.properties as ParcelProperties);
+        }
+      };
+      map.on("click", FLOOD, pick);
+      map.on("click", BLYR, pick);
+      map.on("click", (e) => {
+        if (map.queryRenderedFeatures(e.point, { layers: [FLOOD, BLYR] }).length === 0) onSelRef.current(null);
+      });
+      const hoverOn = () => { map.getCanvas().style.cursor = "pointer"; };
+      const hoverOff = () => { map.getCanvas().style.cursor = ""; };
+      map.on("mouseenter", FLOOD, hoverOn);
+      map.on("mouseleave", FLOOD, hoverOff);
+      map.on("mouseenter", BLYR, hoverOn);
+      map.on("mouseleave", BLYR, hoverOff);
+
+      cleanupMap = () => {
+        readyRef.current = false;
+        appliedRef.current = new Set();
+        map.remove();
+        mapRef.current = null;
+      };
     };
-    map.on("click", FLOOD, pick);
-    map.on("click", BLYR, pick);
-    map.on("click", (e) => {
-      if (map.queryRenderedFeatures(e.point, { layers: [FLOOD, BLYR] }).length === 0) onSelRef.current(null);
-    });
-    const hoverOn = () => { map.getCanvas().style.cursor = "pointer"; };
-    const hoverOff = () => { map.getCanvas().style.cursor = ""; };
-    map.on("mouseenter", FLOOD, hoverOn);
-    map.on("mouseleave", FLOOD, hoverOff);
-    map.on("mouseenter", BLYR, hoverOn);
-    map.on("mouseleave", BLYR, hoverOff);
 
-    return () => { readyRef.current = false; appliedRef.current = new Set(); map.remove(); mapRef.current = null; };
+    const ro = new ResizeObserver(init);
+    ro.observe(el);
+    init();
+
+    return () => {
+      cancelled = true;
+      ro.disconnect();
+      cleanupMap?.();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -304,7 +339,18 @@ export default function SimMap({
     }
   }, [selectedId]);
 
-  return <div ref={boxRef} className="map-canvas" role="application" aria-label="Flood simulation map" />;
+  return (
+    <div className="map-wrap">
+      <div ref={boxRef} className="map-canvas" role="application" aria-label="Flood simulation map" />
+      {mapError && (
+        <div className="map-error">
+          <strong>Map unavailable</strong>
+          <p>This browser couldn't start WebGL, which the map needs to render.{" "}
+            {mapError}</p>
+        </div>
+      )}
+    </div>
+  );
 }
 
 function syncFlood(map: maplibregl.Map, impact: FloodImpact, applied: Set<string>) {

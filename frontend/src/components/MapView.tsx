@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import maplibregl, {
   type StyleSpecification,
   type FilterSpecification,
@@ -150,6 +150,7 @@ export default function MapView(props: MapViewProps) {
   const onViewStateRef = useRef(onViewState);
   onSelectRef.current = onSelect;
   onViewStateRef.current = onViewState;
+  const [mapError, setMapError] = useState<string | null>(null);
 
   function addParcelLayers(map: maplibregl.Map) {
     map.addSource(SRC, { type: "geojson", data: parcels, promoteId: "parcel_id" });
@@ -223,82 +224,111 @@ export default function MapView(props: MapViewProps) {
 
   // --- init (once) -------------------------------------------------
   useEffect(() => {
-    if (!containerRef.current) return;
-    const start3D = viewModeRef.current === "3d";
-    const map = new maplibregl.Map({
-      container: containerRef.current,
-      style: baseStyle(basemap),
-      center,
-      zoom,
-      pitch: start3D ? PITCH_3D : 0,
-      bearing: start3D ? BEARING_3D : 0,
-      maxPitch: 70,
-      attributionControl: { compact: false },
-    });
-    mapRef.current = map;
-    map.addControl(new maplibregl.NavigationControl({ showZoom: true, visualizePitch: true }), "top-right");
-    map.addControl(new maplibregl.FullscreenControl(), "top-right");
-    map.addControl(new maplibregl.ScaleControl({ unit: "metric" }), "bottom-left");
+    const el = containerRef.current;
+    if (!el) return;
+    let cancelled = false;
+    let cleanupMap: (() => void) | null = null;
 
-    const setHover = (id: string | null) => {
-      if (hoverRef.current === id) return;
-      for (const s of [SRC, BSRC]) {
-        if (hoverRef.current) map.setFeatureState({ source: s, id: hoverRef.current }, { hover: false });
-        if (id) map.setFeatureState({ source: s, id }, { hover: true });
+    const init = () => {
+      if (cancelled || mapRef.current) return;
+      // Safari can refuse to create a WebGL context on a canvas that still
+      // has zero size while layout is settling — wait for real dimensions.
+      const { width, height } = el.getBoundingClientRect();
+      if (width === 0 || height === 0) return;
+      ro.disconnect();
+
+      const start3D = viewModeRef.current === "3d";
+      let map: maplibregl.Map;
+      try {
+        map = new maplibregl.Map({
+          container: el,
+          style: baseStyle(basemap),
+          center,
+          zoom,
+          pitch: start3D ? PITCH_3D : 0,
+          bearing: start3D ? BEARING_3D : 0,
+          maxPitch: 70,
+          attributionControl: { compact: false },
+        });
+      } catch (err) {
+        setMapError(err instanceof Error ? err.message : "Map unavailable — WebGL failed to initialize.");
+        return;
       }
-      hoverRef.current = id;
-    };
-    const emitView = () => {
-      const c = map.getCenter();
-      onViewStateRef.current?.({ lng: c.lng, lat: c.lat, zoom: map.getZoom(), pitch: map.getPitch(), bearing: map.getBearing() });
+      mapRef.current = map;
+      map.addControl(new maplibregl.NavigationControl({ showZoom: true, visualizePitch: true }), "top-right");
+      map.addControl(new maplibregl.FullscreenControl(), "top-right");
+      map.addControl(new maplibregl.ScaleControl({ unit: "metric" }), "bottom-left");
+
+      const setHover = (id: string | null) => {
+        if (hoverRef.current === id) return;
+        for (const s of [SRC, BSRC]) {
+          if (hoverRef.current) map.setFeatureState({ source: s, id: hoverRef.current }, { hover: false });
+          if (id) map.setFeatureState({ source: s, id }, { hover: true });
+        }
+        hoverRef.current = id;
+      };
+      const emitView = () => {
+        const c = map.getCenter();
+        onViewStateRef.current?.({ lng: c.lng, lat: c.lat, zoom: map.getZoom(), pitch: map.getPitch(), bearing: map.getBearing() });
+      };
+
+      map.on("load", () => {
+        addParcelLayers(map);
+        const b = featuresBounds(parcels.features);
+        homeRef.current = b;
+        if (b) map.fitBounds(b, { padding: 40, duration: 0, pitch: map.getPitch(), bearing: map.getBearing() });
+        readyRef.current = true;
+        if (visibleIds) applyFilter(map, visibleIds);
+        if (selRef.current) for (const s of [SRC, BSRC]) map.setFeatureState({ source: s, id: selRef.current }, { selected: true });
+        emitView();
+      });
+
+      const pick = (e: maplibregl.MapLayerMouseEvent) => {
+        const f = e.features?.[0];
+        if (!f) return;
+        // clicking the already-selected parcel again deselects it (toggle)
+        if (typeof f.id === "string" && f.id === selRef.current) {
+          onSelectRef.current(null);
+        } else {
+          onSelectRef.current(f.properties as ParcelProperties);
+        }
+      };
+      map.on("click", FILL, pick);
+      map.on("click", BLYR, pick);
+      map.on("click", (e) => {
+        if (map.queryRenderedFeatures(e.point, { layers: [FILL, BLYR] }).length === 0) onSelectRef.current(null);
+      });
+      const move = (e: maplibregl.MapLayerMouseEvent) => {
+        map.getCanvas().style.cursor = "pointer";
+        const f = e.features?.[0];
+        setHover(typeof f?.id === "string" ? f.id : null);
+      };
+      map.on("mousemove", FILL, move);
+      map.on("mousemove", BLYR, move);
+      const leave = () => {
+        map.getCanvas().style.cursor = "";
+        setHover(null);
+      };
+      map.on("mouseleave", FILL, leave);
+      map.on("mouseleave", BLYR, leave);
+      map.on("move", emitView);
+
+      cleanupMap = () => {
+        readyRef.current = false;
+        hoverRef.current = null;
+        map.remove();
+        mapRef.current = null;
+      };
     };
 
-    map.on("load", () => {
-      addParcelLayers(map);
-      const b = featuresBounds(parcels.features);
-      homeRef.current = b;
-      if (b) map.fitBounds(b, { padding: 40, duration: 0, pitch: map.getPitch(), bearing: map.getBearing() });
-      readyRef.current = true;
-      if (visibleIds) applyFilter(map, visibleIds);
-      if (selRef.current) for (const s of [SRC, BSRC]) map.setFeatureState({ source: s, id: selRef.current }, { selected: true });
-      emitView();
-    });
-
-    const pick = (e: maplibregl.MapLayerMouseEvent) => {
-      const f = e.features?.[0];
-      if (!f) return;
-      // clicking the already-selected parcel again deselects it (toggle)
-      if (typeof f.id === "string" && f.id === selRef.current) {
-        onSelectRef.current(null);
-      } else {
-        onSelectRef.current(f.properties as ParcelProperties);
-      }
-    };
-    map.on("click", FILL, pick);
-    map.on("click", BLYR, pick);
-    map.on("click", (e) => {
-      if (map.queryRenderedFeatures(e.point, { layers: [FILL, BLYR] }).length === 0) onSelectRef.current(null);
-    });
-    const move = (e: maplibregl.MapLayerMouseEvent) => {
-      map.getCanvas().style.cursor = "pointer";
-      const f = e.features?.[0];
-      setHover(typeof f?.id === "string" ? f.id : null);
-    };
-    map.on("mousemove", FILL, move);
-    map.on("mousemove", BLYR, move);
-    const leave = () => {
-      map.getCanvas().style.cursor = "";
-      setHover(null);
-    };
-    map.on("mouseleave", FILL, leave);
-    map.on("mouseleave", BLYR, leave);
-    map.on("move", emitView);
+    const ro = new ResizeObserver(init);
+    ro.observe(el);
+    init();
 
     return () => {
-      readyRef.current = false;
-      hoverRef.current = null;
-      map.remove();
-      mapRef.current = null;
+      cancelled = true;
+      ro.disconnect();
+      cleanupMap?.();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -384,9 +414,18 @@ export default function MapView(props: MapViewProps) {
   return (
     <div className="map-wrap">
       <div ref={containerRef} className="map-canvas" role="application" aria-label="Land Twin map" />
-      <button type="button" className="map-home" onClick={resetView} title="Reset camera to full extent">
-        Reset view
-      </button>
+      {mapError && (
+        <div className="map-error">
+          <strong>Map unavailable</strong>
+          <p>This browser couldn't start WebGL, which the map needs to render.{" "}
+            {mapError}</p>
+        </div>
+      )}
+      {!mapError && (
+        <button type="button" className="map-home" onClick={resetView} title="Reset camera to full extent">
+          Reset view
+        </button>
+      )}
     </div>
   );
 }
